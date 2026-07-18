@@ -32,6 +32,8 @@ integration.
 - Repository-wide `pnpm typecheck`, `pnpm test`, and `pnpm build` are blocked by the root
   `vitest.config.ts` importing undeclared `@vitejs/plugin-react`.
 - Repository-wide `pnpm lint` is blocked by the obsolete `next lint` script on Next.js 16.
+- GitHub ownership CI checks a detached merge ref as branch `HEAD`.
+- GitHub quality CI stops at the invalid/empty pnpm workspace package list.
 - These require shared-file changes outside Task 2 ownership; see Task 2 integration requests.
 
 ## Tests currently passing
@@ -44,7 +46,7 @@ integration.
 ## Known failures
 
 - No known Task 2-local test, type, or lint failures.
-- Shared repository gates fail as listed under Blocked.
+- Shared repository and CI gates fail as listed under Blocked; CI does not reach finance tests.
 
 ## Last verified commit
 

@@ -72,6 +72,8 @@ Failing shared gates:
 
 - `pnpm typecheck`, `pnpm test`, and `pnpm build`: missing `@vitejs/plugin-react`.
 - `pnpm lint`: obsolete `next lint` script.
+- PR ownership check: detached pull-request merge checkout is identified as branch `HEAD`.
+- PR quality check: `pnpm install` rejects the workspace config before tests run.
 
 ## Known assumptions
 
@@ -86,7 +88,7 @@ Failing shared gates:
 
 ## External requests
 
-- IR-2-001 through IR-2-004 in `docs/integration-requests/task-2-requests.md`.
+- IR-2-001 through IR-2-006 in `docs/integration-requests/task-2-requests.md`.
 
 ## Golden fixture status
 

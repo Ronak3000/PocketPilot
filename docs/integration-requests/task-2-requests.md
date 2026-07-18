@@ -59,3 +59,36 @@ Requests from Task 2 to other workstreams.
 - Suggested backward-compatible solution: prefer declaring the missing dependency so tests and build
   share one valid root configuration.
 - Temporary workaround: none for the repository build; Task 2 compiles independently.
+
+## IR-2-005 — Make ownership CI aware of pull-request branches
+
+- Requested change: make the ownership workflow pass the pull request head branch to the checker, or
+  make the checker use `GITHUB_HEAD_REF` when Git is on a detached merge ref.
+- Exact reason: PR #1's ownership job checks out `refs/pull/1/merge`; `git rev-parse --abbrev-ref
+  HEAD` returns `HEAD`, which the script rejects as an unknown workstream.
+- Current limitation: ownership CI fails even though local `pnpm check:ownership` passes and the diff
+  contains only Task 2-owned paths.
+- Required behavior: pull-request ownership checks must evaluate the actual head workstream.
+- Affected workstream: repository integration owner.
+- Affected files: `.github/workflows/ownership-check.yml`, `scripts/check-ownership.mjs`.
+- Blocks Task 2: It blocks the PR ownership check, not Task 2 calculations.
+- Suggested backward-compatible solution: resolve the branch from
+  `process.env.GITHUB_HEAD_REF || gitBranch` and keep the existing allowlists unchanged.
+- Temporary workaround: local `pnpm check:ownership` on `task-2-finance-engine`.
+
+## IR-2-006 — Add a valid pnpm workspace package list
+
+- Requested change: add a non-empty `packages` list to `pnpm-workspace.yaml`, or remove workspace mode
+  if this repository is intentionally a single package.
+- Exact reason: PR #1's quality job stops at `pnpm install` with
+  `ERR_PNPM_INVALID_WORKSPACE_CONFIGURATION packages field missing or empty`.
+- Current limitation: CI never reaches typecheck or tests.
+- Required behavior: the clean CI install must succeed with the committed pnpm configuration.
+- Affected workstream: repository integration owner.
+- Affected files: `pnpm-workspace.yaml`; possibly `.github/workflows/quality.yml` if workspace mode is
+  intentionally unused.
+- Blocks Task 2: It blocks all GitHub quality checks, not local Task 2 verification.
+- Suggested backward-compatible solution: declare the repository root package using the pnpm syntax
+  supported by the selected pnpm version, then retain the existing build dependency settings.
+- Temporary workaround: local dependency installation completed with the newer repository-selected
+  package manager, and Task 2 checks pass locally.

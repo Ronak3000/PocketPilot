@@ -1,0 +1,38 @@
+# Replace these placeholders with real GitHub usernames.
+
+# Task 1
+/src/app/                       @TASK1_OWNER
+/src/components/                @TASK1_OWNER
+/src/features/                  @TASK1_OWNER
+/src/mocks/                     @TASK1_OWNER
+/src/styles/                    @TASK1_OWNER
+/public/                        @TASK1_OWNER
+/tests/e2e/                     @TASK1_OWNER
+/docs/workstreams/task-1/       @TASK1_OWNER
+
+# Task 2
+/src/core/finance/              @TASK2_OWNER
+/tests/finance/                 @TASK2_OWNER
+/tests/fixtures/                @TASK2_OWNER
+/docs/workstreams/task-2/       @TASK2_OWNER
+
+# Task 3
+/src/contracts/                 @TASK3_OWNER
+/src/core/ai/                   @TASK3_OWNER
+/src/server/                    @TASK3_OWNER
+/src/app/api/                   @TASK3_OWNER
+/supabase/                      @TASK3_OWNER
+/tests/ai/                      @TASK3_OWNER
+/tests/integration/             @TASK3_OWNER
+/docs/workstreams/task-3/       @TASK3_OWNER
+
+# Shared files
+/package.json                   @TASK1_OWNER @TASK2_OWNER @TASK3_OWNER
+/pnpm-lock.yaml                 @TASK1_OWNER @TASK2_OWNER @TASK3_OWNER
+/tsconfig.json                  @TASK1_OWNER @TASK2_OWNER @TASK3_OWNER
+/next.config.ts                 @TASK1_OWNER @TASK2_OWNER @TASK3_OWNER
+/vitest.config.ts               @TASK1_OWNER @TASK2_OWNER @TASK3_OWNER
+/playwright.config.ts           @TASK1_OWNER @TASK2_OWNER @TASK3_OWNER
+/.env.example                   @TASK1_OWNER @TASK2_OWNER @TASK3_OWNER
+/docs/CONTRACT_SPEC.md          @TASK1_OWNER @TASK2_OWNER @TASK3_OWNER
+/docs/CONTRACT_CHANGELOG.md     @TASK1_OWNER @TASK2_OWNER @TASK3_OWNER

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import type { FutureReceipt } from "@/features/types";
 import { formatCurrency, formatDate, formatPercent } from "@/features/format";
 import Badge from "@/components/ui/Badge";
-import BalanceSparkline from "./BalanceSparkline";
+import BalanceSparkline from "@/features/receipt/BalanceSparkline";
 
 interface FutureReceiptCardProps {
   receipt: FutureReceipt;

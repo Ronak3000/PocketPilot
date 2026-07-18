@@ -1,0 +1,157 @@
+/* ─────────────────────────────────────────────
+   PocketPilot Design Tokens
+   Dark-mode-first, warm neutrals, teal accent
+   ───────────────────────────────────────────── */
+
+:root {
+  /* ── Spacing scale ── */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ── Radii ── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* ── Shadows (dark-mode optimized) ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow-teal: 0 0 20px rgba(20, 184, 166, 0.15);
+
+  /* ── Typography ── */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.8125rem;
+  --font-size-base: 0.9375rem;
+  --font-size-lg: 1.0625rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+
+  /* ── Z-index scale ── */
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+
+  /* ── Transitions ── */
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-slow: 350ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Sidebar ── */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 72px;
+  --topbar-height: 56px;
+  --mobile-nav-height: 64px;
+  --chat-input-height: 72px;
+}
+
+/* ── Dark mode palette (default) ── */
+:root {
+  --color-bg-primary: #09090b;
+  --color-bg-secondary: #131316;
+  --color-bg-surface: #18181b;
+  --color-bg-elevated: #1f1f23;
+  --color-bg-hover: #27272a;
+  --color-bg-active: #2d2d31;
+
+  --color-border-subtle: #27272a;
+  --color-border-default: #3f3f46;
+  --color-border-strong: #52525b;
+
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+  --color-text-disabled: #52525b;
+
+  --color-accent: #14b8a6;
+  --color-accent-hover: #0d9488;
+  --color-accent-subtle: rgba(20, 184, 166, 0.12);
+  --color-accent-text: #2dd4bf;
+
+  --color-safe: #22c55e;
+  --color-safe-subtle: rgba(34, 197, 94, 0.12);
+  --color-caution: #f59e0b;
+  --color-caution-subtle: rgba(245, 158, 11, 0.12);
+  --color-warning: #f97316;
+  --color-warning-subtle: rgba(249, 115, 22, 0.12);
+  --color-breach: #ef4444;
+  --color-breach-subtle: rgba(239, 68, 68, 0.12);
+
+  --color-input-bg: #1a1a1e;
+  --color-input-border: #3f3f46;
+  --color-input-focus: #14b8a6;
+}
+
+/* ── Light mode overrides ── */
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) {
+    --color-bg-primary: #fafafa;
+    --color-bg-secondary: #f5f5f5;
+    --color-bg-surface: #ffffff;
+    --color-bg-elevated: #ffffff;
+    --color-bg-hover: #f0f0f0;
+    --color-bg-active: #e5e5e5;
+
+    --color-border-subtle: #e5e5e5;
+    --color-border-default: #d4d4d8;
+    --color-border-strong: #a1a1aa;
+
+    --color-text-primary: #09090b;
+    --color-text-secondary: #52525b;
+    --color-text-muted: #71717a;
+    --color-text-disabled: #a1a1aa;
+
+    --color-accent: #0d9488;
+    --color-accent-hover: #0f766e;
+    --color-accent-subtle: rgba(13, 148, 136, 0.08);
+    --color-accent-text: #0d9488;
+
+    --color-safe: #16a34a;
+    --color-safe-subtle: rgba(22, 163, 74, 0.08);
+    --color-caution: #d97706;
+    --color-caution-subtle: rgba(217, 119, 6, 0.08);
+    --color-warning: #ea580c;
+    --color-warning-subtle: rgba(234, 88, 12, 0.08);
+    --color-breach: #dc2626;
+    --color-breach-subtle: rgba(220, 38, 38, 0.08);
+
+    --color-input-bg: #ffffff;
+    --color-input-border: #d4d4d8;
+    --color-input-focus: #0d9488;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.12);
+    --shadow-glow-teal: 0 0 20px rgba(13, 148, 136, 0.1);
+  }
+}

@@ -1,0 +1,117 @@
+import type { MoneyConstitution } from "@/features/types";
+
+/**
+ * Aarav's Money Constitution with starter rules
+ */
+export const demoConstitution: MoneyConstitution = {
+  id: "constitution-aarav-001",
+  profileId: "profile-aarav-001",
+  rules: [
+    {
+      id: "rule-balance-floor",
+      name: "Minimum Balance Floor",
+      description: "Never let my balance drop below this amount",
+      category: "floor",
+      enabled: true,
+      locked: false,
+      thresholdType: "amount_paise",
+      thresholdValue: 1_000_000, // ₹10,000
+      reasonCode: "BALANCE_BELOW_FLOOR",
+      icon: "🛡️",
+      createdAt: "2025-07-01T10:00:00Z",
+    },
+    {
+      id: "rule-emi-ratio",
+      name: "EMI-to-Income Cap",
+      description: "Total EMI payments should not exceed this percentage of my income",
+      category: "ratio",
+      enabled: true,
+      locked: false,
+      thresholdType: "percentage",
+      thresholdValue: 30, // 30%
+      reasonCode: "EMI_RATIO_EXCEEDED",
+      icon: "📊",
+      createdAt: "2025-07-01T10:00:00Z",
+    },
+    {
+      id: "rule-max-tenure",
+      name: "Maximum EMI Tenure",
+      description: "Don't commit to EMI plans longer than this",
+      category: "ceiling",
+      enabled: true,
+      locked: false,
+      thresholdType: "months",
+      thresholdValue: 18,
+      reasonCode: "TENURE_TOO_LONG",
+      icon: "📅",
+      createdAt: "2025-07-01T10:00:00Z",
+    },
+    {
+      id: "rule-savings-target",
+      name: "Monthly Savings Target",
+      description: "Protect this monthly savings amount",
+      category: "protection",
+      enabled: true,
+      locked: false,
+      thresholdType: "amount_paise",
+      thresholdValue: 800_000, // ₹8,000
+      reasonCode: "SAVINGS_TARGET_MISSED",
+      icon: "💰",
+      createdAt: "2025-07-01T10:00:00Z",
+    },
+    {
+      id: "rule-protected-rent",
+      name: "Protected Rent",
+      description: "Rent payment must never be at risk",
+      category: "protection",
+      enabled: true,
+      locked: true,
+      thresholdType: "amount_paise",
+      thresholdValue: 1_400_000, // ₹14,000
+      reasonCode: "RENT_AT_RISK",
+      icon: "🏠",
+      createdAt: "2025-07-01T10:00:00Z",
+    },
+    {
+      id: "rule-protected-family",
+      name: "Protected Family Transfer",
+      description: "Family transfer must never be at risk",
+      category: "protection",
+      enabled: true,
+      locked: true,
+      thresholdType: "amount_paise",
+      thresholdValue: 500_000, // ₹5,000
+      reasonCode: "FAMILY_TRANSFER_AT_RISK",
+      icon: "👨‍👩‍👧",
+      createdAt: "2025-07-01T10:00:00Z",
+    },
+    {
+      id: "rule-guilt-free",
+      name: "Guilt-Free Spending",
+      description: "Allow up to this amount per month for discretionary spending without guilt",
+      category: "ceiling",
+      enabled: true,
+      locked: false,
+      thresholdType: "amount_paise",
+      thresholdValue: 500_000, // ₹5,000
+      reasonCode: "GUILT_FREE_EXCEEDED",
+      icon: "🎉",
+      createdAt: "2025-07-01T10:00:00Z",
+    },
+    {
+      id: "rule-emergency-fund",
+      name: "Emergency Fund Goal",
+      description: "Don't delay emergency fund progress by more than this many days",
+      category: "goal",
+      enabled: true,
+      locked: false,
+      thresholdType: "days",
+      thresholdValue: 30,
+      reasonCode: "EMERGENCY_FUND_DELAYED",
+      icon: "🚨",
+      createdAt: "2025-07-01T10:00:00Z",
+    },
+  ],
+  createdAt: "2025-07-01T10:00:00Z",
+  updatedAt: "2025-07-01T10:00:00Z",
+};

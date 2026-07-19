@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppDispatch } from "@/features/app-state";
 import { pocketPilotClient } from "@/mocks/adapter";
 import { demoProfile } from "@/mocks/demo-profile";
@@ -15,8 +15,13 @@ type OnboardingData = Omit<FinancialProfile, "id" | "createdAt" | "updatedAt">;
 
 export default function OnboardingFlow() {
   const dispatch = useAppDispatch();
+  const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [data, setData] = useState<OnboardingData>({
     name: demoProfile.name,
     currentBalancePaise: demoProfile.currentBalancePaise,
@@ -244,6 +249,8 @@ export default function OnboardingFlow() {
       </div>
     </div>,
   ];
+
+  if (!mounted) return null;
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8">

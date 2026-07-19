@@ -1,25 +1,33 @@
-import { NextResponse } from 'next/server';
-import { db } from '../../../server/db';
-import { FinancialProfileSchema } from '../../../contracts';
+import { NextResponse } from "next/server";
+import { db } from "@/server/db";
 
 export async function GET() {
   const profile = db.getProfile();
   if (!profile) {
-    return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    return NextResponse.json({ error: "Profile not found. Run POST /api/reset to seed demo data." }, { status: 404 });
   }
   return NextResponse.json(profile);
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const updates = await request.json();
+    const updated = db.patchProfile(updates);
+    if (!updated) {
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    }
+    return NextResponse.json(updated);
+  } catch {
+    return NextResponse.json({ error: "Failed to update profile" }, { status: 500 });
+  }
 }
 
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
-    const result = FinancialProfileSchema.safeParse(body);
-    if (!result.success) {
-      return NextResponse.json({ error: 'Invalid profile data', details: result.error }, { status: 400 });
-    }
-    db.setProfile(result.data);
-    return NextResponse.json(result.data);
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });
+    db.setProfile(body);
+    return NextResponse.json(body);
+  } catch {
+    return NextResponse.json({ error: "Failed to save profile" }, { status: 500 });
   }
 }

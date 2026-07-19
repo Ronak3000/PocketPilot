@@ -61,8 +61,11 @@ function appReducer(state: AppState, action: AppAction): AppState {
     case "SET_CONSTITUTION":
       return { ...state, constitution: action.constitution };
 
-    case "ADD_MESSAGES":
-      return { ...state, messages: [...state.messages, ...action.messages] };
+    case "ADD_MESSAGES": {
+      const existingIds = new Set(state.messages.map((m) => m.id));
+      const newMsgs = action.messages.filter((m) => !existingIds.has(m.id));
+      return { ...state, messages: [...state.messages, ...newMsgs] };
+    }
 
     case "CLEAR_MESSAGES":
       return { ...state, messages: [] };

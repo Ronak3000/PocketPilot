@@ -270,6 +270,18 @@ export interface SafeToSpend {
   lastCalculatedAt: string;
 }
 
+// ── Post-Purchase Account Status ──
+
+export interface PostPurchaseStatus {
+  productName: string;
+  amountPaise: number;
+  newBalancePaise: number;
+  safeToSpend: SafeToSpend;
+  /** Actionable spending recommendations, e.g. "Don't spend > ₹5,000 for the next 2 months" */
+  recommendations: string[];
+}
+
+
 // ── Chat ──
 
 export type MessageRole = "user" | "assistant" | "system";

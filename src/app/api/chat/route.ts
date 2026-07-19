@@ -1,29 +1,67 @@
-import { google } from "@ai-sdk/google";
-import { streamText, tool } from "ai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import {
+  convertToModelMessages,
+  stepCountIs,
+  streamText,
+  tool,
+  type UIMessage,
+} from "ai";
 import { z } from "zod";
 import { db } from "@/server/db";
 import { runFullAnalysis } from "@/server/bridge";
 import type { ExtractedDecision } from "@/features/types";
-import * as fs from 'fs';
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+
+    if (!apiKey) {
+      return Response.json(
+        {
+          error:
+            "Google Generative AI is not configured. Add GOOGLE_GENERATIVE_AI_API_KEY to .env.local.",
+        },
+        { status: 503 },
+      );
+    }
+
+    const body: unknown = await req.json();
+    if (
+      typeof body !== "object" ||
+      body === null ||
+      !("messages" in body) ||
+      !Array.isArray(body.messages)
+    ) {
+      return Response.json(
+        { error: "The request must include a messages array." },
+        { status: 400 },
+      );
+    }
+
+    const messages = body.messages as UIMessage[];
 
     const profile = db.getProfile();
     const constitution = db.getConstitution();
 
     if (!profile || !constitution) {
-      return new Response("Profile or Constitution not found. Please complete onboarding.", { status: 400 });
+      return Response.json(
+        {
+          error:
+            "Profile or Constitution not found. Please complete onboarding.",
+        },
+        { status: 400 },
+      );
     }
 
+    const google = createGoogleGenerativeAI({ apiKey });
     const result = streamText({
-      model: google("gemini-flash-latest"),
-      messages,
+      model: google("gemini-2.5-flash"),
+      messages: await convertToModelMessages(messages),
+      stopWhen: stepCountIs(3),
       onError: ({ error }) => {
-        fs.writeFileSync("error-log.txt", String((error as any).stack || error));
+        console.error("Gemini chat stream failed:", error);
       },
       system: `You are PocketPilot, a friendly, hyper-intelligent financial pre-spend AI assistant.
 Your user's name is ${profile.name}.
@@ -36,10 +74,10 @@ Once you have the results, summarize them in a helpful, conversational, and dire
       tools: {
         calculatePurchase: tool({
           description: "Runs deterministic cash-flow calculations to see if a user can afford a purchase. Call this ONLY when you have extracted the productName and price from the user.",
-          parameters: z.object({
+          inputSchema: z.object({
             productName: z.string().describe("The name of the product the user wants to buy."),
-            pricePaise: z.number().describe("The total price of the product in Paise (INR * 100)."),
-            emiMonths: z.number().optional().describe("The preferred EMI tenure in months. Default to 12 if not provided."),
+            pricePaise: z.number().int().positive().describe("The total price of the product in Paise (INR * 100)."),
+            emiMonths: z.number().int().positive().optional().describe("The preferred EMI tenure in months. Default to 12 if not provided."),
           }),
           execute: async ({ productName, pricePaise, emiMonths }) => {
             const tenureMonths = emiMonths || 12;
@@ -82,9 +120,11 @@ Once you have the results, summarize them in a helpful, conversational, and dire
       },
     });
 
-    return result.toDataStreamResponse();
+    return result.toUIMessageStreamResponse();
   } catch (error) {
-    fs.writeFileSync("error-log.txt", String((error as any).stack || error));
-    return new Response(JSON.stringify({ error: String(error) }), { status: 500 });
+    console.error("Chat API request failed:", error);
+    const message =
+      error instanceof Error ? error.message : "Unknown chat API error";
+    return Response.json({ error: message }, { status: 500 });
   }
 }

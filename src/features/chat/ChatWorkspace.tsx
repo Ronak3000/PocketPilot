@@ -2,9 +2,56 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { pocketPilotClient } from "@/mocks/adapter";
+import type {
+  ActionPlan,
+  FutureReceipt,
+  SafeToSpend,
+  ScenarioComparison,
+} from "@/features/types";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
+
+interface PurchaseAnalysisOutput {
+  receipt: FutureReceipt;
+  comparison: ScenarioComparison;
+  plan: ActionPlan;
+  safeToSpend: SafeToSpend;
+}
+
+type PocketPilotMessage = UIMessage<
+  unknown,
+  never,
+  {
+    calculatePurchase: {
+      input: {
+        productName: string;
+        pricePaise: number;
+        emiMonths?: number;
+      };
+      output: PurchaseAnalysisOutput;
+    };
+  }
+>;
+
+function getChatErrorMessage(error: Error): string {
+  try {
+    const payload: unknown = JSON.parse(error.message);
+    if (
+      typeof payload === "object" &&
+      payload !== null &&
+      "error" in payload &&
+      typeof payload.error === "string"
+    ) {
+      return payload.error;
+    }
+  } catch {
+    // The SDK can also provide a normal plain-text error message.
+  }
+
+  return error.message;
+}
 
 export default function ChatWorkspace() {
   const [userName, setUserName] = useState<string>("");
@@ -19,9 +66,10 @@ export default function ChatWorkspace() {
     });
   }, []);
 
-  const { messages, status, sendMessage, setMessages } = useChat({
-    api: "/api/chat",
-  });
+  const { messages, status, sendMessage, setMessages, error } =
+    useChat<PocketPilotMessage>({
+      transport: new DefaultChatTransport({ api: "/api/chat" }),
+    });
 
   // Inject greeting once we have the username
   useEffect(() => {
@@ -29,7 +77,10 @@ export default function ChatWorkspace() {
       setMessages([{
         id: "greeting",
         role: "assistant",
-        content: `Hi ${userName}! I'm your pre-spend pilot. What are you thinking of buying today?`,
+        parts: [{
+          type: "text",
+          text: `Hi ${userName}! I'm your pre-spend pilot. What are you thinking of buying today?`,
+        }],
       }]);
     }
   }, [userName, messages.length, setMessages]);
@@ -43,8 +94,7 @@ export default function ChatWorkspace() {
 
   function handleDemoPurchase() {
     sendMessage({
-      role: "user",
-      content: "Can I afford a Samsung Galaxy S25 Ultra for ₹59,999 on 12-month EMI?"
+      text: "Can I afford a Samsung Galaxy S25 Ultra for ₹59,999 on 12-month EMI?",
     });
   }
 
@@ -54,10 +104,7 @@ export default function ChatWorkspace() {
 
   // A custom submit handler that adapts to our ChatInput
   const handleSend = (text: string) => {
-    sendMessage({
-      role: "user",
-      content: text,
-    });
+    sendMessage({ text });
   };
 
   return (
@@ -70,43 +117,66 @@ export default function ChatWorkspace() {
         <div className="max-w-2xl mx-auto space-y-4">
           {messages.map((m) => (
             <div key={m.id} className="space-y-4">
-              {/* Normal Text Content */}
-              {m.content && (
-                <MessageBubble
-                  message={{ id: m.id, role: m.role as any, type: "text", content: m.content, timestamp: "" }}
-                  onQuickFill={handleQuickFill}
-                />
-              )}
+              {m.parts.map((part, index) => {
+                if (part.type === "text" && part.text) {
+                  return (
+                    <MessageBubble
+                      key={`${m.id}-text-${index}`}
+                      message={{
+                        id: m.id,
+                        role: m.role,
+                        type: "text",
+                        content: part.text,
+                        timestamp: "",
+                      }}
+                      receipt={null}
+                      comparison={null}
+                      plan={null}
+                      safeToSpend={null}
+                      onQuickFill={handleQuickFill}
+                    />
+                  );
+                }
 
-              {/* Tool Invocations */}
-              {m.toolInvocations?.map(toolInvocation => {
-                if (toolInvocation.toolName === "calculatePurchase") {
-                  if (toolInvocation.state === "result") {
-                    const { receipt, comparison, plan, safeToSpend } = toolInvocation.result;
+                if (part.type === "tool-calculatePurchase") {
+                  if (part.state === "output-available") {
+                    const { receipt, comparison, plan, safeToSpend } =
+                      part.output;
                     return (
-                      <div key={toolInvocation.toolCallId} className="space-y-4">
-                        <MessageBubble 
-                          message={{ id: `${toolInvocation.toolCallId}-rcpt`, role: "assistant", type: "receipt", content: "", timestamp: "" }} 
+                      <div key={part.toolCallId} className="space-y-4">
+                        <MessageBubble
+                          message={{ id: `${part.toolCallId}-rcpt`, role: "assistant", type: "receipt", content: "", timestamp: "" }}
                           receipt={receipt}
-                          safeToSpend={safeToSpend} 
+                          comparison={null}
+                          plan={null}
+                          safeToSpend={safeToSpend}
+                          onQuickFill={handleQuickFill}
                         />
                         {comparison && comparison.scenarios.length > 0 && (
-                          <MessageBubble 
-                            message={{ id: `${toolInvocation.toolCallId}-scen`, role: "assistant", type: "scenarios", content: "", timestamp: "" }} 
-                            comparison={comparison} 
+                          <MessageBubble
+                            message={{ id: `${part.toolCallId}-scen`, role: "assistant", type: "scenarios", content: "", timestamp: "" }}
+                            receipt={null}
+                            comparison={comparison}
+                            plan={null}
+                            safeToSpend={null}
+                            onQuickFill={handleQuickFill}
                           />
                         )}
                         {plan && (
-                          <MessageBubble 
-                            message={{ id: `${toolInvocation.toolCallId}-plan`, role: "assistant", type: "safe-plan", content: "", timestamp: "" }} 
-                            plan={plan} 
+                          <MessageBubble
+                            message={{ id: `${part.toolCallId}-plan`, role: "assistant", type: "safe-plan", content: "", timestamp: "" }}
+                            receipt={null}
+                            comparison={null}
+                            plan={plan}
+                            safeToSpend={null}
+                            onQuickFill={handleQuickFill}
                           />
                         )}
                       </div>
                     );
                   } else {
                     return (
-                      <div key={toolInvocation.toolCallId} className="flex items-center gap-1.5 px-4 py-3 animate-fade-in">
+                      <div key={part.toolCallId} className="flex items-center gap-1.5 px-4 py-3 animate-fade-in">
                         <div className="flex gap-1">
                           <span className="w-2 h-2 rounded-full bg-[var(--color-text-muted)]" style={{ animation: "pp-dot-bounce 1.4s ease-in-out 0s infinite" }} />
                           <span className="w-2 h-2 rounded-full bg-[var(--color-text-muted)]" style={{ animation: "pp-dot-bounce 1.4s ease-in-out 0.2s infinite" }} />
@@ -121,6 +191,12 @@ export default function ChatWorkspace() {
               })}
             </div>
           ))}
+
+          {error && (
+            <p className="px-4 py-3 text-[13px] text-red-600" role="alert">
+              {getChatErrorMessage(error)}
+            </p>
+          )}
 
           {/* Fallback general loading state if waiting for response but not in tool invocation */}
           {(status === "submitted" || status === "streaming") && messages.length > 0 && messages[messages.length - 1].role === 'user' && (

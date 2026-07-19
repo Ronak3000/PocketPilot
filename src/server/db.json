@@ -13,7 +13,7 @@
     "emergencyFundGoalPaise": 15000000,
     "emergencyFundCurrentPaise": 2400000,
     "createdAt": "2026-07-19T07:16:14.687Z",
-    "updatedAt": "2026-07-19T07:45:22.445Z"
+    "updatedAt": "2026-07-19T12:33:58.173Z"
   },
   "constitution": {
     "id": "constitution-aarav",
@@ -89,20 +89,20 @@
     "updatedAt": "2026-07-19T07:16:14.687Z"
   },
   "lastDecision": {
-    "id": "decision-1784445485458",
-    "decisionInputId": "input-1784445485424",
-    "productName": "Purchase",
-    "pricePaise": 100,
-    "downPaymentPaise": 20,
-    "emiAmountPaise": 6,
+    "id": "decision-1784464469787",
+    "decisionInputId": "input-1784464469787",
+    "productName": "Samsung Galaxy S25 Ultra",
+    "pricePaise": 5999900,
+    "downPaymentPaise": 1199980,
+    "emiAmountPaise": 399993,
     "tenureMonths": 12,
-    "processingFeePaise": 2,
-    "confidence": 0.92,
+    "processingFeePaise": 119998,
+    "confidence": 1,
     "missingFields": [],
-    "createdAt": "2026-07-19T07:18:05.458Z"
+    "createdAt": "2026-07-19T12:34:29.787Z"
   },
   "lastComparison": {
-    "id": "comparison-1784445485502",
+    "id": "comparison-1784464469802",
     "scenarios": [
       {
         "id": "scenario-buy-now",
@@ -110,21 +110,21 @@
         "scenarioType": "buy_now",
         "label": "Buy Now",
         "status": "SAFE",
-        "lowestBalancePaise": 7199978,
+        "lowestBalancePaise": 5880022,
         "lowestBalanceDate": "2026-07-19",
         "lowBalanceDays": 0,
         "negativeBalanceDays": 0,
-        "goalDelayDays": 0,
-        "totalCommittedPaise": 94,
-        "emiToIncomeRatio": 7.29,
+        "goalDelayDays": 61,
+        "totalCommittedPaise": 6119894,
+        "emiToIncomeRatio": 15.62,
         "constitutionConflicts": [],
         "recommendation": "This purchase is safe. Your finances can handle it.",
         "dailyLedger": [
           {
             "date": "2026-07-19",
-            "label": "Purchase down payment, Purchase processing fee",
-            "amountPaise": -22,
-            "balancePaise": 7199978,
+            "label": "Samsung Galaxy S25 Ultra down payment, Samsung Galaxy S25 Ultra processing fee",
+            "amountPaise": -1319978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -133,7 +133,7 @@
             "date": "2026-07-20",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -142,7 +142,7 @@
             "date": "2026-07-21",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -151,7 +151,7 @@
             "date": "2026-07-22",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -160,7 +160,7 @@
             "date": "2026-07-23",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -169,7 +169,7 @@
             "date": "2026-07-24",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -178,7 +178,7 @@
             "date": "2026-07-25",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -187,7 +187,7 @@
             "date": "2026-07-26",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -196,7 +196,7 @@
             "date": "2026-07-27",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -205,7 +205,7 @@
             "date": "2026-07-28",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -214,7 +214,7 @@
             "date": "2026-07-29",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -223,7 +223,7 @@
             "date": "2026-07-30",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -232,7 +232,7 @@
             "date": "2026-07-31",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 7199978,
+            "balancePaise": 5880022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -241,7 +241,7 @@
             "date": "2026-08-01",
             "label": "Monthly Salary, Rent, Monthly Savings",
             "amountPaise": 2600000,
-            "balancePaise": 9799978,
+            "balancePaise": 8480022,
             "isIncome": true,
             "isCommitment": true,
             "breachesFloor": false
@@ -250,7 +250,7 @@
             "date": "2026-08-02",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 9799978,
+            "balancePaise": 8480022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -259,7 +259,7 @@
             "date": "2026-08-03",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 9799978,
+            "balancePaise": 8480022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -268,7 +268,7 @@
             "date": "2026-08-04",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 9799978,
+            "balancePaise": 8480022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -277,7 +277,7 @@
             "date": "2026-08-05",
             "label": "Existing EMI, Family Transfer",
             "amountPaise": -850000,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": true,
             "breachesFloor": false
@@ -286,7 +286,7 @@
             "date": "2026-08-06",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -295,7 +295,7 @@
             "date": "2026-08-07",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -304,7 +304,7 @@
             "date": "2026-08-08",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -313,7 +313,7 @@
             "date": "2026-08-09",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -322,7 +322,7 @@
             "date": "2026-08-10",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -331,7 +331,7 @@
             "date": "2026-08-11",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -340,7 +340,7 @@
             "date": "2026-08-12",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -349,7 +349,7 @@
             "date": "2026-08-13",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -358,7 +358,7 @@
             "date": "2026-08-14",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -367,7 +367,7 @@
             "date": "2026-08-15",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -376,7 +376,7 @@
             "date": "2026-08-16",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -385,7 +385,7 @@
             "date": "2026-08-17",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -394,16 +394,16 @@
             "date": "2026-08-18",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949978,
+            "balancePaise": 7630022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
           },
           {
             "date": "2026-08-19",
-            "label": "Purchase EMI",
-            "amountPaise": -6,
-            "balancePaise": 8949972,
+            "label": "Samsung Galaxy S25 Ultra EMI",
+            "amountPaise": -399993,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -412,7 +412,7 @@
             "date": "2026-08-20",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -421,7 +421,7 @@
             "date": "2026-08-21",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -430,7 +430,7 @@
             "date": "2026-08-22",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -439,7 +439,7 @@
             "date": "2026-08-23",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -448,7 +448,7 @@
             "date": "2026-08-24",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -457,7 +457,7 @@
             "date": "2026-08-25",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -466,7 +466,7 @@
             "date": "2026-08-26",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -475,7 +475,7 @@
             "date": "2026-08-27",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -484,7 +484,7 @@
             "date": "2026-08-28",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -493,7 +493,7 @@
             "date": "2026-08-29",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -502,7 +502,7 @@
             "date": "2026-08-30",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -511,7 +511,7 @@
             "date": "2026-08-31",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 8949972,
+            "balancePaise": 7230029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -520,7 +520,7 @@
             "date": "2026-09-01",
             "label": "Monthly Salary, Rent, Monthly Savings",
             "amountPaise": 2600000,
-            "balancePaise": 11549972,
+            "balancePaise": 9830029,
             "isIncome": true,
             "isCommitment": true,
             "breachesFloor": false
@@ -529,7 +529,7 @@
             "date": "2026-09-02",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 11549972,
+            "balancePaise": 9830029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -538,7 +538,7 @@
             "date": "2026-09-03",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 11549972,
+            "balancePaise": 9830029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -547,7 +547,7 @@
             "date": "2026-09-04",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 11549972,
+            "balancePaise": 9830029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -556,7 +556,7 @@
             "date": "2026-09-05",
             "label": "Existing EMI, Family Transfer",
             "amountPaise": -850000,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": true,
             "breachesFloor": false
@@ -565,7 +565,7 @@
             "date": "2026-09-06",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -574,7 +574,7 @@
             "date": "2026-09-07",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -583,7 +583,7 @@
             "date": "2026-09-08",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -592,7 +592,7 @@
             "date": "2026-09-09",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -601,7 +601,7 @@
             "date": "2026-09-10",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -610,7 +610,7 @@
             "date": "2026-09-11",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -619,7 +619,7 @@
             "date": "2026-09-12",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -628,7 +628,7 @@
             "date": "2026-09-13",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -637,7 +637,7 @@
             "date": "2026-09-14",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -646,7 +646,7 @@
             "date": "2026-09-15",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -655,7 +655,7 @@
             "date": "2026-09-16",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -664,7 +664,7 @@
             "date": "2026-09-17",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -673,16 +673,16 @@
             "date": "2026-09-18",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699972,
+            "balancePaise": 8980029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
           },
           {
             "date": "2026-09-19",
-            "label": "Purchase EMI",
-            "amountPaise": -6,
-            "balancePaise": 10699966,
+            "label": "Samsung Galaxy S25 Ultra EMI",
+            "amountPaise": -399993,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -691,7 +691,7 @@
             "date": "2026-09-20",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -700,7 +700,7 @@
             "date": "2026-09-21",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -709,7 +709,7 @@
             "date": "2026-09-22",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -718,7 +718,7 @@
             "date": "2026-09-23",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -727,7 +727,7 @@
             "date": "2026-09-24",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -736,7 +736,7 @@
             "date": "2026-09-25",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -745,7 +745,7 @@
             "date": "2026-09-26",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -754,7 +754,7 @@
             "date": "2026-09-27",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -763,7 +763,7 @@
             "date": "2026-09-28",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -772,7 +772,7 @@
             "date": "2026-09-29",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -781,7 +781,7 @@
             "date": "2026-09-30",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699966,
+            "balancePaise": 8580036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -790,7 +790,7 @@
             "date": "2026-10-01",
             "label": "Monthly Salary, Rent, Monthly Savings",
             "amountPaise": 2600000,
-            "balancePaise": 13299966,
+            "balancePaise": 11180036,
             "isIncome": true,
             "isCommitment": true,
             "breachesFloor": false
@@ -799,7 +799,7 @@
             "date": "2026-10-02",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 13299966,
+            "balancePaise": 11180036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -808,7 +808,7 @@
             "date": "2026-10-03",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 13299966,
+            "balancePaise": 11180036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -817,7 +817,7 @@
             "date": "2026-10-04",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 13299966,
+            "balancePaise": 11180036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -826,7 +826,7 @@
             "date": "2026-10-05",
             "label": "Existing EMI, Family Transfer",
             "amountPaise": -850000,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": true,
             "breachesFloor": false
@@ -835,7 +835,7 @@
             "date": "2026-10-06",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -844,7 +844,7 @@
             "date": "2026-10-07",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -853,7 +853,7 @@
             "date": "2026-10-08",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -862,7 +862,7 @@
             "date": "2026-10-09",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -871,7 +871,7 @@
             "date": "2026-10-10",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -880,7 +880,7 @@
             "date": "2026-10-11",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -889,7 +889,7 @@
             "date": "2026-10-12",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -898,7 +898,7 @@
             "date": "2026-10-13",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -907,7 +907,7 @@
             "date": "2026-10-14",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -916,7 +916,7 @@
             "date": "2026-10-15",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -925,7 +925,7 @@
             "date": "2026-10-16",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449966,
+            "balancePaise": 10330036,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -934,111 +934,111 @@
         "projectedBalances": [
           {
             "date": "2026-07-19",
-            "balancePaise": 7199978
+            "balancePaise": 5880022
           },
           {
             "date": "2026-07-26",
-            "balancePaise": 7199978
+            "balancePaise": 5880022
           },
           {
             "date": "2026-08-02",
-            "balancePaise": 9799978
+            "balancePaise": 8480022
           },
           {
             "date": "2026-08-09",
-            "balancePaise": 8949978
+            "balancePaise": 7630022
           },
           {
             "date": "2026-08-16",
-            "balancePaise": 8949978
+            "balancePaise": 7630022
           },
           {
             "date": "2026-08-23",
-            "balancePaise": 8949972
+            "balancePaise": 7230029
           },
           {
             "date": "2026-08-30",
-            "balancePaise": 8949972
+            "balancePaise": 7230029
           },
           {
             "date": "2026-09-06",
-            "balancePaise": 10699972
+            "balancePaise": 8980029
           },
           {
             "date": "2026-09-13",
-            "balancePaise": 10699972
+            "balancePaise": 8980029
           },
           {
             "date": "2026-09-20",
-            "balancePaise": 10699966
+            "balancePaise": 8580036
           },
           {
             "date": "2026-09-27",
-            "balancePaise": 10699966
+            "balancePaise": 8580036
           },
           {
             "date": "2026-10-04",
-            "balancePaise": 13299966
+            "balancePaise": 11180036
           },
           {
             "date": "2026-10-11",
-            "balancePaise": 12449966
+            "balancePaise": 10330036
           },
           {
             "date": "2026-10-18",
-            "balancePaise": 12449966
+            "balancePaise": 10330036
           },
           {
             "date": "2026-10-25",
-            "balancePaise": 12449960
+            "balancePaise": 9930043
           },
           {
             "date": "2026-11-01",
-            "balancePaise": 15049960
+            "balancePaise": 12530043
           },
           {
             "date": "2026-11-08",
-            "balancePaise": 14199960
+            "balancePaise": 11680043
           },
           {
             "date": "2026-11-15",
-            "balancePaise": 14199960
+            "balancePaise": 11680043
           },
           {
             "date": "2026-11-22",
-            "balancePaise": 14199954
+            "balancePaise": 11280050
           },
           {
             "date": "2026-11-29",
-            "balancePaise": 14199954
+            "balancePaise": 11280050
           },
           {
             "date": "2026-12-06",
-            "balancePaise": 15949954
+            "balancePaise": 13030050
           },
           {
             "date": "2026-12-13",
-            "balancePaise": 15949954
+            "balancePaise": 13030050
           },
           {
             "date": "2026-12-20",
-            "balancePaise": 15949948
+            "balancePaise": 12630057
           },
           {
             "date": "2026-12-27",
-            "balancePaise": 15949948
+            "balancePaise": 12630057
           },
           {
             "date": "2027-01-03",
-            "balancePaise": 18549948
+            "balancePaise": 15230057
           },
           {
             "date": "2027-01-10",
-            "balancePaise": 17699948
+            "balancePaise": 14380057
           },
           {
             "date": "2027-01-14",
-            "balancePaise": 17699948
+            "balancePaise": 14380057
           }
         ]
       },
@@ -1052,9 +1052,9 @@
         "lowestBalanceDate": "2026-07-19",
         "lowBalanceDays": 0,
         "negativeBalanceDays": 0,
-        "goalDelayDays": 0,
-        "totalCommittedPaise": 94,
-        "emiToIncomeRatio": 7.29,
+        "goalDelayDays": 61,
+        "totalCommittedPaise": 6119894,
+        "emiToIncomeRatio": 15.62,
         "constitutionConflicts": [],
         "recommendation": "This purchase is safe. Your finances can handle it.",
         "dailyLedger": [
@@ -1465,9 +1465,9 @@
           },
           {
             "date": "2026-09-02",
-            "label": "Purchase down payment, Purchase processing fee",
-            "amountPaise": -22,
-            "balancePaise": 11549978,
+            "label": "Samsung Galaxy S25 Ultra down payment, Samsung Galaxy S25 Ultra processing fee",
+            "amountPaise": -1319978,
+            "balancePaise": 10230022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1476,7 +1476,7 @@
             "date": "2026-09-03",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 11549978,
+            "balancePaise": 10230022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1485,7 +1485,7 @@
             "date": "2026-09-04",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 11549978,
+            "balancePaise": 10230022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1494,7 +1494,7 @@
             "date": "2026-09-05",
             "label": "Existing EMI, Family Transfer",
             "amountPaise": -850000,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": true,
             "breachesFloor": false
@@ -1503,7 +1503,7 @@
             "date": "2026-09-06",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1512,7 +1512,7 @@
             "date": "2026-09-07",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1521,7 +1521,7 @@
             "date": "2026-09-08",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1530,7 +1530,7 @@
             "date": "2026-09-09",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1539,7 +1539,7 @@
             "date": "2026-09-10",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1548,7 +1548,7 @@
             "date": "2026-09-11",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1557,7 +1557,7 @@
             "date": "2026-09-12",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1566,7 +1566,7 @@
             "date": "2026-09-13",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1575,7 +1575,7 @@
             "date": "2026-09-14",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1584,7 +1584,7 @@
             "date": "2026-09-15",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1593,7 +1593,7 @@
             "date": "2026-09-16",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1602,7 +1602,7 @@
             "date": "2026-09-17",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1611,7 +1611,7 @@
             "date": "2026-09-18",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1620,7 +1620,7 @@
             "date": "2026-09-19",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1629,7 +1629,7 @@
             "date": "2026-09-20",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1638,7 +1638,7 @@
             "date": "2026-09-21",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1647,7 +1647,7 @@
             "date": "2026-09-22",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1656,7 +1656,7 @@
             "date": "2026-09-23",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1665,7 +1665,7 @@
             "date": "2026-09-24",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1674,7 +1674,7 @@
             "date": "2026-09-25",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1683,7 +1683,7 @@
             "date": "2026-09-26",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1692,7 +1692,7 @@
             "date": "2026-09-27",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1701,7 +1701,7 @@
             "date": "2026-09-28",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1710,7 +1710,7 @@
             "date": "2026-09-29",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1719,7 +1719,7 @@
             "date": "2026-09-30",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 10699978,
+            "balancePaise": 9380022,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1728,16 +1728,16 @@
             "date": "2026-10-01",
             "label": "Monthly Salary, Rent, Monthly Savings",
             "amountPaise": 2600000,
-            "balancePaise": 13299978,
+            "balancePaise": 11980022,
             "isIncome": true,
             "isCommitment": true,
             "breachesFloor": false
           },
           {
             "date": "2026-10-02",
-            "label": "Purchase EMI",
-            "amountPaise": -6,
-            "balancePaise": 13299972,
+            "label": "Samsung Galaxy S25 Ultra EMI",
+            "amountPaise": -399993,
+            "balancePaise": 11580029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1746,7 +1746,7 @@
             "date": "2026-10-03",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 13299972,
+            "balancePaise": 11580029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1755,7 +1755,7 @@
             "date": "2026-10-04",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 13299972,
+            "balancePaise": 11580029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1764,7 +1764,7 @@
             "date": "2026-10-05",
             "label": "Existing EMI, Family Transfer",
             "amountPaise": -850000,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": true,
             "breachesFloor": false
@@ -1773,7 +1773,7 @@
             "date": "2026-10-06",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1782,7 +1782,7 @@
             "date": "2026-10-07",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1791,7 +1791,7 @@
             "date": "2026-10-08",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1800,7 +1800,7 @@
             "date": "2026-10-09",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1809,7 +1809,7 @@
             "date": "2026-10-10",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1818,7 +1818,7 @@
             "date": "2026-10-11",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1827,7 +1827,7 @@
             "date": "2026-10-12",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1836,7 +1836,7 @@
             "date": "2026-10-13",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1845,7 +1845,7 @@
             "date": "2026-10-14",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1854,7 +1854,7 @@
             "date": "2026-10-15",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1863,7 +1863,7 @@
             "date": "2026-10-16",
             "label": "—",
             "amountPaise": 0,
-            "balancePaise": 12449972,
+            "balancePaise": 10730029,
             "isIncome": false,
             "isCommitment": false,
             "breachesFloor": false
@@ -1900,83 +1900,83 @@
           },
           {
             "date": "2026-09-06",
-            "balancePaise": 10699978
+            "balancePaise": 9380022
           },
           {
             "date": "2026-09-13",
-            "balancePaise": 10699978
+            "balancePaise": 9380022
           },
           {
             "date": "2026-09-20",
-            "balancePaise": 10699978
+            "balancePaise": 9380022
           },
           {
             "date": "2026-09-27",
-            "balancePaise": 10699978
+            "balancePaise": 9380022
           },
           {
             "date": "2026-10-04",
-            "balancePaise": 13299972
+            "balancePaise": 11580029
           },
           {
             "date": "2026-10-11",
-            "balancePaise": 12449972
+            "balancePaise": 10730029
           },
           {
             "date": "2026-10-18",
-            "balancePaise": 12449972
+            "balancePaise": 10730029
           },
           {
             "date": "2026-10-25",
-            "balancePaise": 12449972
+            "balancePaise": 10730029
           },
           {
             "date": "2026-11-01",
-            "balancePaise": 15049972
+            "balancePaise": 13330029
           },
           {
             "date": "2026-11-08",
-            "balancePaise": 14199966
+            "balancePaise": 12080036
           },
           {
             "date": "2026-11-15",
-            "balancePaise": 14199966
+            "balancePaise": 12080036
           },
           {
             "date": "2026-11-22",
-            "balancePaise": 14199966
+            "balancePaise": 12080036
           },
           {
             "date": "2026-11-29",
-            "balancePaise": 14199966
+            "balancePaise": 12080036
           },
           {
             "date": "2026-12-06",
-            "balancePaise": 15949960
+            "balancePaise": 13430043
           },
           {
             "date": "2026-12-13",
-            "balancePaise": 15949960
+            "balancePaise": 13430043
           },
           {
             "date": "2026-12-20",
-            "balancePaise": 15949960
+            "balancePaise": 13430043
           },
           {
             "date": "2026-12-27",
-            "balancePaise": 15949960
+            "balancePaise": 13430043
           },
           {
             "date": "2027-01-03",
-            "balancePaise": 18549954
+            "balancePaise": 15630050
           },
           {
             "date": "2027-01-10",
-            "balancePaise": 17699954
+            "balancePaise": 14780050
           },
           {
             "date": "2027-01-14",
-            "balancePaise": 17699954
+            "balancePaise": 14780050
           }
         ]
       },
@@ -1990,7 +1990,7 @@
         "lowestBalanceDate": "2026-07-19",
         "lowBalanceDays": 0,
         "negativeBalanceDays": 0,
-        "goalDelayDays": 0,
+        "goalDelayDays": 61,
         "totalCommittedPaise": 4499900,
         "emiToIncomeRatio": 13.54,
         "constitutionConflicts": [],
@@ -2923,23 +2923,23 @@
     "comparisonSummary": "Compared 3 scenarios. \"Buy Now\" has the fewest conflicts."
   },
   "lastReceipt": {
-    "id": "receipt-1784445485502",
+    "id": "receipt-1784464469802",
     "scenarioResultId": "scenario-buy-now",
     "status": "SAFE",
-    "productName": "Purchase",
-    "listedPricePaise": 100,
-    "upfrontPaymentPaise": 22,
-    "emiAmountPaise": 6,
+    "productName": "Samsung Galaxy S25 Ultra",
+    "listedPricePaise": 5999900,
+    "upfrontPaymentPaise": 1319978,
+    "emiAmountPaise": 399993,
     "tenureMonths": 12,
-    "processingFeePaise": 2,
-    "totalCommittedPaise": 94,
+    "processingFeePaise": 119998,
+    "totalCommittedPaise": 6119894,
     "commitmentEndDate": "2027-07-19",
-    "lowestProjectedBalancePaise": 7199978,
+    "lowestProjectedBalancePaise": 5880022,
     "lowestBalanceDate": "2026-07-19",
     "lowBalanceDays": 0,
     "negativeBalanceDays": 0,
-    "goalDelayDays": 0,
-    "emiBurdenPercent": 7.29,
+    "goalDelayDays": 61,
+    "emiBurdenPercent": 15.62,
     "constitutionConflicts": [],
     "assumptions": [
       "Salary credited on day 1 each month",
@@ -2947,14 +2947,14 @@
       "Existing EMI continues unchanged",
       "Savings contribution maintained"
     ],
-    "confidence": 0.92,
+    "confidence": 1,
     "recommendation": "This purchase is safe. Your finances can handle it.",
     "dailyLedger": [
       {
         "date": "2026-07-19",
-        "label": "Purchase down payment, Purchase processing fee",
-        "amountPaise": -22,
-        "balancePaise": 7199978,
+        "label": "Samsung Galaxy S25 Ultra down payment, Samsung Galaxy S25 Ultra processing fee",
+        "amountPaise": -1319978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -2963,7 +2963,7 @@
         "date": "2026-07-20",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -2972,7 +2972,7 @@
         "date": "2026-07-21",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -2981,7 +2981,7 @@
         "date": "2026-07-22",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -2990,7 +2990,7 @@
         "date": "2026-07-23",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -2999,7 +2999,7 @@
         "date": "2026-07-24",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3008,7 +3008,7 @@
         "date": "2026-07-25",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3017,7 +3017,7 @@
         "date": "2026-07-26",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3026,7 +3026,7 @@
         "date": "2026-07-27",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3035,7 +3035,7 @@
         "date": "2026-07-28",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3044,7 +3044,7 @@
         "date": "2026-07-29",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3053,7 +3053,7 @@
         "date": "2026-07-30",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3062,7 +3062,7 @@
         "date": "2026-07-31",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 7199978,
+        "balancePaise": 5880022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3071,7 +3071,7 @@
         "date": "2026-08-01",
         "label": "Monthly Salary, Rent, Monthly Savings",
         "amountPaise": 2600000,
-        "balancePaise": 9799978,
+        "balancePaise": 8480022,
         "isIncome": true,
         "isCommitment": true,
         "breachesFloor": false
@@ -3080,7 +3080,7 @@
         "date": "2026-08-02",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 9799978,
+        "balancePaise": 8480022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3089,7 +3089,7 @@
         "date": "2026-08-03",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 9799978,
+        "balancePaise": 8480022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3098,7 +3098,7 @@
         "date": "2026-08-04",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 9799978,
+        "balancePaise": 8480022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3107,7 +3107,7 @@
         "date": "2026-08-05",
         "label": "Existing EMI, Family Transfer",
         "amountPaise": -850000,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": true,
         "breachesFloor": false
@@ -3116,7 +3116,7 @@
         "date": "2026-08-06",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3125,7 +3125,7 @@
         "date": "2026-08-07",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3134,7 +3134,7 @@
         "date": "2026-08-08",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3143,7 +3143,7 @@
         "date": "2026-08-09",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3152,7 +3152,7 @@
         "date": "2026-08-10",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3161,7 +3161,7 @@
         "date": "2026-08-11",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3170,7 +3170,7 @@
         "date": "2026-08-12",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3179,7 +3179,7 @@
         "date": "2026-08-13",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3188,7 +3188,7 @@
         "date": "2026-08-14",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3197,7 +3197,7 @@
         "date": "2026-08-15",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3206,7 +3206,7 @@
         "date": "2026-08-16",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3215,7 +3215,7 @@
         "date": "2026-08-17",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3224,16 +3224,16 @@
         "date": "2026-08-18",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949978,
+        "balancePaise": 7630022,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
       },
       {
         "date": "2026-08-19",
-        "label": "Purchase EMI",
-        "amountPaise": -6,
-        "balancePaise": 8949972,
+        "label": "Samsung Galaxy S25 Ultra EMI",
+        "amountPaise": -399993,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3242,7 +3242,7 @@
         "date": "2026-08-20",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3251,7 +3251,7 @@
         "date": "2026-08-21",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3260,7 +3260,7 @@
         "date": "2026-08-22",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3269,7 +3269,7 @@
         "date": "2026-08-23",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3278,7 +3278,7 @@
         "date": "2026-08-24",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3287,7 +3287,7 @@
         "date": "2026-08-25",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3296,7 +3296,7 @@
         "date": "2026-08-26",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3305,7 +3305,7 @@
         "date": "2026-08-27",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3314,7 +3314,7 @@
         "date": "2026-08-28",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3323,7 +3323,7 @@
         "date": "2026-08-29",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3332,7 +3332,7 @@
         "date": "2026-08-30",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3341,7 +3341,7 @@
         "date": "2026-08-31",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 8949972,
+        "balancePaise": 7230029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3350,7 +3350,7 @@
         "date": "2026-09-01",
         "label": "Monthly Salary, Rent, Monthly Savings",
         "amountPaise": 2600000,
-        "balancePaise": 11549972,
+        "balancePaise": 9830029,
         "isIncome": true,
         "isCommitment": true,
         "breachesFloor": false
@@ -3359,7 +3359,7 @@
         "date": "2026-09-02",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 11549972,
+        "balancePaise": 9830029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3368,7 +3368,7 @@
         "date": "2026-09-03",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 11549972,
+        "balancePaise": 9830029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3377,7 +3377,7 @@
         "date": "2026-09-04",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 11549972,
+        "balancePaise": 9830029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3386,7 +3386,7 @@
         "date": "2026-09-05",
         "label": "Existing EMI, Family Transfer",
         "amountPaise": -850000,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": true,
         "breachesFloor": false
@@ -3395,7 +3395,7 @@
         "date": "2026-09-06",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3404,7 +3404,7 @@
         "date": "2026-09-07",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3413,7 +3413,7 @@
         "date": "2026-09-08",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3422,7 +3422,7 @@
         "date": "2026-09-09",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3431,7 +3431,7 @@
         "date": "2026-09-10",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3440,7 +3440,7 @@
         "date": "2026-09-11",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3449,7 +3449,7 @@
         "date": "2026-09-12",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3458,7 +3458,7 @@
         "date": "2026-09-13",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3467,7 +3467,7 @@
         "date": "2026-09-14",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3476,7 +3476,7 @@
         "date": "2026-09-15",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3485,7 +3485,7 @@
         "date": "2026-09-16",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3494,7 +3494,7 @@
         "date": "2026-09-17",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3503,16 +3503,16 @@
         "date": "2026-09-18",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699972,
+        "balancePaise": 8980029,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
       },
       {
         "date": "2026-09-19",
-        "label": "Purchase EMI",
-        "amountPaise": -6,
-        "balancePaise": 10699966,
+        "label": "Samsung Galaxy S25 Ultra EMI",
+        "amountPaise": -399993,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3521,7 +3521,7 @@
         "date": "2026-09-20",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3530,7 +3530,7 @@
         "date": "2026-09-21",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3539,7 +3539,7 @@
         "date": "2026-09-22",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3548,7 +3548,7 @@
         "date": "2026-09-23",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3557,7 +3557,7 @@
         "date": "2026-09-24",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3566,7 +3566,7 @@
         "date": "2026-09-25",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3575,7 +3575,7 @@
         "date": "2026-09-26",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3584,7 +3584,7 @@
         "date": "2026-09-27",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3593,7 +3593,7 @@
         "date": "2026-09-28",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3602,7 +3602,7 @@
         "date": "2026-09-29",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3611,7 +3611,7 @@
         "date": "2026-09-30",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 10699966,
+        "balancePaise": 8580036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3620,7 +3620,7 @@
         "date": "2026-10-01",
         "label": "Monthly Salary, Rent, Monthly Savings",
         "amountPaise": 2600000,
-        "balancePaise": 13299966,
+        "balancePaise": 11180036,
         "isIncome": true,
         "isCommitment": true,
         "breachesFloor": false
@@ -3629,7 +3629,7 @@
         "date": "2026-10-02",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 13299966,
+        "balancePaise": 11180036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3638,7 +3638,7 @@
         "date": "2026-10-03",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 13299966,
+        "balancePaise": 11180036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3647,7 +3647,7 @@
         "date": "2026-10-04",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 13299966,
+        "balancePaise": 11180036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3656,7 +3656,7 @@
         "date": "2026-10-05",
         "label": "Existing EMI, Family Transfer",
         "amountPaise": -850000,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": true,
         "breachesFloor": false
@@ -3665,7 +3665,7 @@
         "date": "2026-10-06",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3674,7 +3674,7 @@
         "date": "2026-10-07",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3683,7 +3683,7 @@
         "date": "2026-10-08",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3692,7 +3692,7 @@
         "date": "2026-10-09",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3701,7 +3701,7 @@
         "date": "2026-10-10",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3710,7 +3710,7 @@
         "date": "2026-10-11",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3719,7 +3719,7 @@
         "date": "2026-10-12",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3728,7 +3728,7 @@
         "date": "2026-10-13",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3737,7 +3737,7 @@
         "date": "2026-10-14",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3746,7 +3746,7 @@
         "date": "2026-10-15",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3755,7 +3755,7 @@
         "date": "2026-10-16",
         "label": "—",
         "amountPaise": 0,
-        "balancePaise": 12449966,
+        "balancePaise": 10330036,
         "isIncome": false,
         "isCommitment": false,
         "breachesFloor": false
@@ -3764,131 +3764,131 @@
     "projectedBalances": [
       {
         "date": "2026-07-19",
-        "balancePaise": 7199978
+        "balancePaise": 5880022
       },
       {
         "date": "2026-07-26",
-        "balancePaise": 7199978
+        "balancePaise": 5880022
       },
       {
         "date": "2026-08-02",
-        "balancePaise": 9799978
+        "balancePaise": 8480022
       },
       {
         "date": "2026-08-09",
-        "balancePaise": 8949978
+        "balancePaise": 7630022
       },
       {
         "date": "2026-08-16",
-        "balancePaise": 8949978
+        "balancePaise": 7630022
       },
       {
         "date": "2026-08-23",
-        "balancePaise": 8949972
+        "balancePaise": 7230029
       },
       {
         "date": "2026-08-30",
-        "balancePaise": 8949972
+        "balancePaise": 7230029
       },
       {
         "date": "2026-09-06",
-        "balancePaise": 10699972
+        "balancePaise": 8980029
       },
       {
         "date": "2026-09-13",
-        "balancePaise": 10699972
+        "balancePaise": 8980029
       },
       {
         "date": "2026-09-20",
-        "balancePaise": 10699966
+        "balancePaise": 8580036
       },
       {
         "date": "2026-09-27",
-        "balancePaise": 10699966
+        "balancePaise": 8580036
       },
       {
         "date": "2026-10-04",
-        "balancePaise": 13299966
+        "balancePaise": 11180036
       },
       {
         "date": "2026-10-11",
-        "balancePaise": 12449966
+        "balancePaise": 10330036
       },
       {
         "date": "2026-10-18",
-        "balancePaise": 12449966
+        "balancePaise": 10330036
       },
       {
         "date": "2026-10-25",
-        "balancePaise": 12449960
+        "balancePaise": 9930043
       },
       {
         "date": "2026-11-01",
-        "balancePaise": 15049960
+        "balancePaise": 12530043
       },
       {
         "date": "2026-11-08",
-        "balancePaise": 14199960
+        "balancePaise": 11680043
       },
       {
         "date": "2026-11-15",
-        "balancePaise": 14199960
+        "balancePaise": 11680043
       },
       {
         "date": "2026-11-22",
-        "balancePaise": 14199954
+        "balancePaise": 11280050
       },
       {
         "date": "2026-11-29",
-        "balancePaise": 14199954
+        "balancePaise": 11280050
       },
       {
         "date": "2026-12-06",
-        "balancePaise": 15949954
+        "balancePaise": 13030050
       },
       {
         "date": "2026-12-13",
-        "balancePaise": 15949954
+        "balancePaise": 13030050
       },
       {
         "date": "2026-12-20",
-        "balancePaise": 15949948
+        "balancePaise": 12630057
       },
       {
         "date": "2026-12-27",
-        "balancePaise": 15949948
+        "balancePaise": 12630057
       },
       {
         "date": "2027-01-03",
-        "balancePaise": 18549948
+        "balancePaise": 15230057
       },
       {
         "date": "2027-01-10",
-        "balancePaise": 17699948
+        "balancePaise": 14380057
       },
       {
         "date": "2027-01-14",
-        "balancePaise": 17699948
+        "balancePaise": 14380057
       }
     ],
-    "createdAt": "2026-07-19T07:18:05.502Z"
+    "createdAt": "2026-07-19T12:34:29.802Z"
   },
   "lastPlan": {
-    "id": "plan-1784445485502",
-    "receiptId": "receipt-1784445485502",
+    "id": "plan-1784464469802",
+    "receiptId": "receipt-1784464469802",
     "recommendedDate": "2026-07-19",
-    "maxPricePaise": 100,
-    "requiredDownPaymentPaise": 20,
-    "maxEmiPaise": 6,
+    "maxPricePaise": 5999900,
+    "requiredDownPaymentPaise": 1199980,
+    "maxEmiPaise": 399993,
     "maxTenureMonths": 12,
-    "requiredBalanceBeforePurchasePaise": 1000022,
+    "requiredBalanceBeforePurchasePaise": 2319978,
     "invalidationConditions": [
       "Salary is delayed by more than 7 days",
       "An unplanned expense exceeds ₹5,000",
       "Balance drops below ₹10,000 before purchase"
     ],
     "status": "draft",
-    "createdAt": "2026-07-19T07:18:05.502Z"
+    "createdAt": "2026-07-19T12:34:29.802Z"
   },
   "safeToSpend": {
     "safeAmountPaise": 6200000,
@@ -3896,9 +3896,33 @@
     "upcomingCommitmentPaise": 0,
     "bufferQuality": "excellent",
     "confidence": 0.95,
-    "lastCalculatedAt": "2026-07-19T07:18:05.503Z"
+    "lastCalculatedAt": "2026-07-19T12:34:29.803Z"
   },
   "history": [
+    {
+      "id": "hist-1784463142828",
+      "type": "plan_approved",
+      "title": "10 Lakh Laptop — Safe Plan Approved",
+      "status": "SAFE",
+      "plan": {
+        "id": "plan-1784462993288",
+        "receiptId": "receipt-1784462993288",
+        "recommendedDate": "2026-07-19",
+        "maxPricePaise": 100000000,
+        "requiredDownPaymentPaise": 20000000,
+        "maxEmiPaise": 6666666,
+        "maxTenureMonths": 12,
+        "requiredBalanceBeforePurchasePaise": 24000000,
+        "invalidationConditions": [
+          "Salary is delayed by more than 7 days",
+          "An unplanned expense exceeds ₹5,000",
+          "Balance drops below ₹10,000 before purchase"
+        ],
+        "status": "approved",
+        "createdAt": "2026-07-19T12:09:53.288Z"
+      },
+      "createdAt": "2026-07-19T12:12:22.828Z"
+    },
     {
       "id": "hist-002",
       "type": "goal_delay_avoided",

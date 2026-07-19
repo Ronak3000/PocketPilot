@@ -1,0 +1,251 @@
+{
+  "version": 1,
+  "currency": "INR",
+  "moneyUnit": "paise",
+  "assumptions": {
+    "startDate": "2026-08-15",
+    "purchaseDate": "2026-08-15",
+    "horizonDays": 730,
+    "sameDayOrder": "inflows-before-outflows",
+    "salaryDayOfMonth": 1,
+    "rentDayOfMonth": 3,
+    "familyTransferDayOfMonth": 5,
+    "savingsDayOfMonth": 5,
+    "existingEmiDayOfMonth": 10,
+    "newEmiFirstDue": "one-month-after-purchase",
+    "alternativeTerms": "cash-purchase-with-no-fee",
+    "waitGoalImpact": "one-monthly-contribution-less-than-buy-now"
+  },
+  "profile": {
+    "startingBalancePaise": 7200000,
+    "monthlyIncomePaise": 4800000,
+    "existingMonthlyEmiPaise": 350000,
+    "protectedBalanceFloorPaise": 1000000,
+    "monthlySavingsContributionPaise": 800000,
+    "incomeConfidence": 1
+  },
+  "events": [
+    {
+      "id": "salary",
+      "title": "Monthly salary",
+      "amountPaise": 4800000,
+      "direction": "inflow",
+      "kind": "salary",
+      "schedule": "recurring",
+      "startDate": "2026-09-01",
+      "frequency": "monthly",
+      "dayOfMonth": 1
+    },
+    {
+      "id": "rent",
+      "title": "Rent",
+      "amountPaise": 1400000,
+      "direction": "outflow",
+      "kind": "rent",
+      "protected": true,
+      "schedule": "recurring",
+      "startDate": "2026-09-03",
+      "frequency": "monthly",
+      "dayOfMonth": 3
+    },
+    {
+      "id": "family-transfer",
+      "title": "Family transfer",
+      "amountPaise": 500000,
+      "direction": "outflow",
+      "kind": "family_transfer",
+      "protected": true,
+      "schedule": "recurring",
+      "startDate": "2026-09-05",
+      "frequency": "monthly",
+      "dayOfMonth": 5
+    },
+    {
+      "id": "existing-emi",
+      "title": "Existing EMI",
+      "amountPaise": 350000,
+      "direction": "outflow",
+      "kind": "existing_emi",
+      "protected": true,
+      "schedule": "recurring",
+      "startDate": "2026-09-10",
+      "frequency": "monthly",
+      "dayOfMonth": 10
+    },
+    {
+      "id": "savings",
+      "title": "Emergency-fund contribution",
+      "amountPaise": 800000,
+      "direction": "outflow",
+      "kind": "goal_contribution",
+      "protected": true,
+      "schedule": "recurring",
+      "startDate": "2026-09-05",
+      "frequency": "monthly",
+      "dayOfMonth": 5
+    }
+  ],
+  "goal": {
+    "id": "emergency-fund",
+    "targetAmountPaise": 15000000,
+    "currentAmountPaise": 7200000,
+    "monthlyContributionPaise": 800000,
+    "contributionDayOfMonth": 5,
+    "startDate": "2026-08-15"
+  },
+  "constitution": {
+    "id": "aarav-constitution",
+    "rules": [
+      {
+        "id": "minimum-floor",
+        "type": "minimum_balance",
+        "enabled": true,
+        "severity": "breach",
+        "thresholdPaise": 1000000
+      },
+      {
+        "id": "emi-ratio",
+        "type": "maximum_emi_ratio",
+        "enabled": true,
+        "severity": "warning",
+        "maximumBasisPoints": 2000
+      },
+      {
+        "id": "emi-tenure",
+        "type": "maximum_emi_tenure",
+        "enabled": true,
+        "severity": "warning",
+        "maximumMonths": 12
+      },
+      {
+        "id": "savings-target",
+        "type": "savings_target",
+        "enabled": true,
+        "severity": "caution",
+        "targetPaise": 800000
+      },
+      {
+        "id": "protected-expenses",
+        "type": "protected_expense",
+        "enabled": true,
+        "severity": "breach"
+      },
+      {
+        "id": "goal-protection",
+        "type": "goal_protection",
+        "enabled": true,
+        "severity": "warning",
+        "maximumDelayDays": 60
+      },
+      {
+        "id": "guilt-free",
+        "type": "guilt_free_allowance",
+        "enabled": true,
+        "severity": "caution",
+        "maximumPurchasePaise": 4000000
+      },
+      {
+        "id": "income-confidence",
+        "type": "income_confidence",
+        "enabled": true,
+        "severity": "warning",
+        "minimumConfidence": 0.8
+      }
+    ]
+  },
+  "proposal": {
+    "id": "phone-59999",
+    "title": "₹59,999 phone",
+    "listedPricePaise": 5999900,
+    "purchaseDate": "2026-08-15",
+    "downPaymentPaise": 1200000,
+    "processingFeePaise": 149900,
+    "monthlyEmiPaise": 450000,
+    "tenureMonths": 12
+  },
+  "scenarios": [
+    {
+      "id": "buy-now",
+      "label": "Buy now",
+      "scenarioType": "buy_now",
+      "goalImpactPaise": 6749900,
+      "expected": {
+        "minimumBalancePaise": 5850100,
+        "negativeBalanceDays": 0,
+        "lowBalanceDays": 0,
+        "goalDelayDays": 274,
+        "totalCommitmentPaise": 6749900,
+        "emiRatioBasisPoints": 1667,
+        "constitutionWarnings": [
+          "GOAL_DELAYED",
+          "GUILT_FREE_ALLOWANCE_EXCEEDED"
+        ],
+        "downPaymentPaise": 1200000,
+        "processingFeePaise": 149900,
+        "monthlyEmiPaise": 450000,
+        "installmentCount": 12,
+        "totalInstallmentCommitmentPaise": 5400000,
+        "firstEmiDate": "2026-09-15",
+        "commitmentEndingDate": "2027-08-15"
+      }
+    },
+    {
+      "id": "wait-45-days",
+      "label": "Wait 45 days",
+      "scenarioType": "delay",
+      "delayDays": 45,
+      "goalImpactPaise": 5949900,
+      "expected": {
+        "minimumBalancePaise": 7200000,
+        "negativeBalanceDays": 0,
+        "lowBalanceDays": 0,
+        "goalDelayDays": 245,
+        "totalCommitmentPaise": 6749900,
+        "emiRatioBasisPoints": 1667,
+        "constitutionWarnings": [
+          "GOAL_DELAYED",
+          "GUILT_FREE_ALLOWANCE_EXCEEDED"
+        ],
+        "downPaymentPaise": 1200000,
+        "processingFeePaise": 149900,
+        "monthlyEmiPaise": 450000,
+        "installmentCount": 12,
+        "totalInstallmentCommitmentPaise": 5400000,
+        "firstEmiDate": "2026-10-29",
+        "commitmentEndingDate": "2027-09-29"
+      }
+    },
+    {
+      "id": "cheaper-alternative",
+      "label": "Buy ₹39,999 alternative",
+      "scenarioType": "alternative",
+      "goalImpactPaise": 3999900,
+      "alternativeProposal": {
+        "id": "phone-39999",
+        "title": "₹39,999 phone",
+        "listedPricePaise": 3999900,
+        "purchaseDate": "2026-08-15",
+        "downPaymentPaise": 3999900,
+        "processingFeePaise": 0
+      },
+      "expected": {
+        "minimumBalancePaise": 3200100,
+        "negativeBalanceDays": 0,
+        "lowBalanceDays": 0,
+        "goalDelayDays": 153,
+        "totalCommitmentPaise": 3999900,
+        "emiRatioBasisPoints": 729,
+        "constitutionWarnings": [
+          "GOAL_DELAYED"
+        ],
+        "downPaymentPaise": 3999900,
+        "processingFeePaise": 0,
+        "monthlyEmiPaise": 0,
+        "installmentCount": 0,
+        "totalInstallmentCommitmentPaise": 0,
+        "firstEmiDate": null,
+        "commitmentEndingDate": null
+      }
+    }
+  ]
+}

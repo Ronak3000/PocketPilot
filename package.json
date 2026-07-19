@@ -16,6 +16,9 @@
     "smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.18",
+    "@ai-sdk/react": "^4.0.34",
+    "ai": "^7.0.31",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4"

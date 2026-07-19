@@ -12,19 +12,14 @@ import type {
   HistoryEntry,
 } from "@/features/types";
 
-/**
- * API client stub — calls Next.js API routes.
- * Will be implemented when Task 3 creates the backend.
- * For now, all methods throw to surface accidental usage.
- */
-
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(path, {
     headers: { "Content-Type": "application/json" },
     ...options,
   });
   if (!res.ok) {
-    throw new Error(`API error: ${res.status} ${res.statusText}`);
+    const text = await res.text().catch(() => "");
+    throw new Error(`API error: ${res.status} ${res.statusText} — ${text}`);
   }
   return res.json() as Promise<T>;
 }
@@ -59,16 +54,16 @@ export const apiPocketPilotClient: PocketPilotClient = {
     });
   },
 
-  async getScenarios(decisionId: string): Promise<ScenarioComparison> {
-    return apiFetch(`/api/scenarios?decisionId=${decisionId}`);
+  async getScenarios(): Promise<ScenarioComparison> {
+    return apiFetch("/api/scenarios");
   },
 
-  async getReceipt(scenarioId: string): Promise<FutureReceipt> {
-    return apiFetch(`/api/receipt?scenarioId=${scenarioId}`);
+  async getReceipt(): Promise<FutureReceipt> {
+    return apiFetch("/api/receipt");
   },
 
-  async getSafePlan(receiptId: string): Promise<ActionPlan> {
-    return apiFetch(`/api/plan?receiptId=${receiptId}`);
+  async getSafePlan(): Promise<ActionPlan> {
+    return apiFetch("/api/plan");
   },
 
   async getSafeToSpend(): Promise<SafeToSpend> {

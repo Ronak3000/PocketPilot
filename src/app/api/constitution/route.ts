@@ -1,25 +1,29 @@
-import { NextResponse } from 'next/server';
-import { db } from '../../../server/db';
-import { MoneyConstitutionSchema } from '../../../contracts';
+import { NextResponse } from "next/server";
+import { db } from "@/server/db";
 
 export async function GET() {
   const constitution = db.getConstitution();
   if (!constitution) {
-    return NextResponse.json({ error: 'Constitution not found' }, { status: 404 });
+    return NextResponse.json({ error: "Constitution not found" }, { status: 404 });
   }
   return NextResponse.json(constitution);
 }
 
-export async function PUT(request: Request) {
+export async function PATCH(request: Request) {
   try {
-    const body = await request.json();
-    const result = MoneyConstitutionSchema.safeParse(body);
-    if (!result.success) {
-      return NextResponse.json({ error: 'Invalid constitution data', details: result.error }, { status: 400 });
+    const updates = await request.json();
+    const existing = db.getConstitution();
+    if (!existing) {
+      return NextResponse.json({ error: "Constitution not found" }, { status: 404 });
     }
-    db.setConstitution(result.data);
-    return NextResponse.json(result.data);
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to update constitution' }, { status: 500 });
+    const updated = {
+      ...existing,
+      rules: updates.rules ?? existing.rules,
+      updatedAt: new Date().toISOString(),
+    };
+    db.setConstitution(updated);
+    return NextResponse.json(updated);
+  } catch {
+    return NextResponse.json({ error: "Failed to update constitution" }, { status: 500 });
   }
 }

@@ -301,8 +301,8 @@ function AccountStatusCard({ status }: { status: PostPurchaseStatus }) {
   return (
     <div
       style={{
-        background: "var(--color-surface, #1e1e2e)",
-        border: "1px solid var(--color-border-subtle, rgba(255,255,255,0.08))",
+        background: "var(--color-bg-surface)",
+        border: "1px solid var(--color-border-subtle)",
         borderRadius: "16px",
         padding: "20px",
         display: "flex",
@@ -314,10 +314,10 @@ function AccountStatusCard({ status }: { status: PostPurchaseStatus }) {
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <span style={{ fontSize: "22px" }}>🧾</span>
         <div>
-          <p style={{ fontSize: "12px", color: "var(--color-text-muted, #888)", margin: 0 }}>
+          <p style={{ fontSize: "12px", color: "var(--color-text-muted)", margin: 0 }}>
             Purchase recorded
           </p>
-          <p style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-text, #fff)", margin: 0 }}>
+          <p style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-text-primary)", margin: 0 }}>
             {productName} · {fmt(amountPaise)}
           </p>
         </div>
@@ -326,15 +326,15 @@ function AccountStatusCard({ status }: { status: PostPurchaseStatus }) {
       {/* New Balance */}
       <div
         style={{
-          background: "var(--color-surface-alt, rgba(255,255,255,0.04))",
+          background: "var(--color-bg-secondary)",
           borderRadius: "12px",
           padding: "14px",
         }}
       >
-        <p style={{ fontSize: "11px", color: "var(--color-text-muted, #888)", margin: "0 0 4px" }}>
+        <p style={{ fontSize: "11px", color: "var(--color-text-muted)", margin: "0 0 4px" }}>
           New Balance
         </p>
-        <p style={{ fontSize: "20px", fontWeight: 800, color: "var(--color-text, #fff)", margin: 0 }}>
+        <p style={{ fontSize: "20px", fontWeight: 800, color: "var(--color-text-primary)", margin: 0 }}>
           {fmt(newBalancePaise)}
         </p>
       </div>
@@ -346,31 +346,34 @@ function AccountStatusCard({ status }: { status: PostPurchaseStatus }) {
             style={{
               fontSize: "11px",
               fontWeight: 600,
-              color: "var(--color-text-muted, #888)",
+              color: "var(--color-text-muted)",
               margin: "0 0 8px",
               textTransform: "uppercase",
-              letterSpacing: "0.06em",
+              letterSpacing: "0.5px",
             }}
           >
-            Recommendations
+            RECOMMENDATIONS
           </p>
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             {recommendations.map((rec, i) => (
-              <li
+              <div
                 key={i}
                 style={{
-                  fontSize: "13px",
-                  color: "var(--color-text, #fff)",
-                  background: "var(--color-surface-alt, rgba(255,255,255,0.04))",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "8px",
+                  background: "var(--color-bg-secondary)",
+                  padding: "10px",
                   borderRadius: "8px",
-                  padding: "8px 12px",
-                  lineHeight: 1.5,
                 }}
               >
-                {rec}
-              </li>
+                <span style={{ fontSize: "14px" }}>💡</span>
+                <p style={{ fontSize: "13px", margin: 0, color: "var(--color-text-secondary)", lineHeight: 1.4 }}>
+                  {rec}
+                </p>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
     </div>

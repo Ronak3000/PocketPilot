@@ -7,7 +7,7 @@ import type {
   MoneyConstitution,
   SafeToSpend,
 } from "@/features/types";
-import { runFullAnalysis } from "@/server/bridge";
+import { runFullAnalysis, profileToEvents } from "@/server/bridge";
 import { db } from "@/server/db";
 
 interface ChatToolsInput {
@@ -125,10 +125,30 @@ export function createChatTools(input: ChatToolsInput) {
         );
         db.patchProfile({ currentBalancePaise: newBalancePaise });
 
-        const safeToSpend = recalculateSafeToSpend(
-          freshProfile,
-          newBalancePaise,
-        );
+        const today = new Date().toISOString().split("T")[0];
+        const events = profileToEvents(freshProfile);
+        const stsResult = calculateSafeToSpend({
+          startDate: today,
+          currentBalancePaise: newBalancePaise,
+          protectedBalanceFloorPaise: freshProfile.protectedBalanceFloorPaise,
+          events,
+          protectedEventIds: events.filter((e) => e.protected).map((e) => e.id),
+        });
+
+        const bufferRatio = stsResult.safeToSpendPaise / freshProfile.monthlySalaryPaise;
+        let bufferQuality: SafeToSpend["bufferQuality"] = "excellent";
+        if (bufferRatio < 0.1) bufferQuality = "critical";
+        else if (bufferRatio < 0.2) bufferQuality = "tight";
+        else if (bufferRatio < 0.4) bufferQuality = "good";
+
+        const safeToSpend: SafeToSpend = {
+          safeAmountPaise: stsResult.safeToSpendPaise,
+          protectedAmountPaise: stsResult.protectedCommitmentsPaise,
+          upcomingCommitmentPaise: stsResult.protectedCommitmentsPaise,
+          bufferQuality,
+          confidence: 0.95,
+          lastCalculatedAt: new Date().toISOString(),
+        };
         db.setSafeToSpend(safeToSpend);
 
         // ── Record purchase in history ──

@@ -20,7 +20,7 @@ import {
 import { createChatTools } from "@/server/chat-tools";
 import { db } from "@/server/db";
 
-export const maxDuration = 30;
+export const maxDuration = 120;
 
 export async function POST(req: Request) {
   try {
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       return Response.json(
         {
           error:
-            "Google Generative AI is not configured. Add GOOGLE_GENERATIVE_AI_API_KEY to .env.local.",
+            "Google Generative AI API key is not configured. Add GOOGLE_GENERATIVE_AI_API_KEY to .env.local.",
         },
         { status: 503 },
       );
@@ -112,6 +112,7 @@ export async function POST(req: Request) {
     });
 
     const google = createGoogleGenerativeAI({ apiKey });
+
     const result = streamText({
       model: google("gemini-3.5-flash"),
       messages: await convertToModelMessages(messages),

@@ -147,5 +147,7 @@ TOOLS:
 - calculatePurchase: use only for a purchase the user is considering. Ask for product and price if missing.
 - recordPurchase: use only after the user says the payment or purchase already happened.
 - Call the correct tool as soon as its required values are known.
+- If the user provides a price in INR (e.g. lakhs, thousands), calculate the paise yourself (multiply INR by 100). DO NOT ask the user to do the math.
+- Understand modern internet/Gen Z slang (e.g. W = Win/Good idea, L = Loss/Bad idea).
 - After a tool result, explain it using the current response mode.`;
 }

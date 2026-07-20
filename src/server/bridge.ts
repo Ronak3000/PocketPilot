@@ -39,7 +39,7 @@ import type {
 
 // ───── Profile → Engine Events ─────
 
-function profileToEvents(profile: FinancialProfile): FinancialEvent[] {
+export function profileToEvents(profile: FinancialProfile): FinancialEvent[] {
   const events: FinancialEvent[] = [];
   const today = new Date().toISOString().split("T")[0];
 
@@ -315,11 +315,13 @@ export function runFullAnalysis(
 
   // Derive a meaningful cheaper alternative: 70% of the actual product price
   const altPricePaise = Math.round(decision.pricePaise * 0.7);
-  const altDownPaise = Math.round(altPricePaise * 0.2);
-  const altTenureMonths = decision.tenureMonths ?? 12;
+  const isAltEmi = (decision.tenureMonths ?? 0) > 0;
+  
+  const altDownPaise = isAltEmi ? Math.round(altPricePaise * 0.2) : altPricePaise;
+  const altTenureMonths = isAltEmi ? decision.tenureMonths! : 0;
   const altPrincipal = altPricePaise - altDownPaise;
-  const altEmiPaise = altTenureMonths > 0 ? Math.floor(altPrincipal / altTenureMonths) : 0;
-  const altProcessingPaise = Math.round(altPricePaise * 0.02);
+  const altEmiPaise = isAltEmi && altTenureMonths > 0 ? Math.floor(altPrincipal / altTenureMonths) : 0;
+  const altProcessingPaise = isAltEmi ? Math.round(altPricePaise * 0.02) : 0;
   const altLabel = `₹${Math.floor(altPricePaise / 100).toLocaleString("en-IN")} Alternative (30% less)`;
 
   const cheaperAlternative: PurchaseProposal = {

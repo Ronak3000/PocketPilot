@@ -9,7 +9,8 @@
 - Users can enable or disable memory, humor and light roasting.
 - Preferences, goals and trusted purchase behavior persist in `db.json`.
 - Memories are treated as untrusted data in the system prompt.
-- `/api/memory` exposes the backend required for a future Memory Center.
+- `/api/memory` exposes backend inspection and control without a dedicated
+  frontend.
 
 ## Files to read first
 
@@ -18,6 +19,8 @@
 - `src/app/api/chat/route.ts`
 - `src/app/api/memory/route.ts`
 - `src/server/db.ts`
+- `supabase/migrations/20260720044831_user_memory.sql`
+- `docs/workstreams/task-3/MEMORY_ARCHITECTURE.md`
 - `tests/ai/personalization.test.ts`
 
 ## Important behavior
@@ -48,9 +51,9 @@ pnpm build
 
 ## Exact next task
 
-Add a Task 1 Memory Center that calls `/api/memory`, then replace the JSON
-adapter with authenticated Supabase/Postgres storage before supporting real
-users.
+Keep the hackathon experience in the existing chat. Before supporting real
+users, add authentication and replace JSON persistence with Supabase queries
+using the included migration.
 
 ## Do not change
 

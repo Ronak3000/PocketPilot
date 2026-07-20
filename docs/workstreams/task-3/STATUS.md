@@ -19,7 +19,7 @@ User memory and safe personality foundation implemented on
 
 ## In progress
 
-- Task 1 Memory Center UI integration.
+- Authenticated Supabase runtime integration after the hackathon demo.
 
 ## Blocked
 
@@ -47,6 +47,10 @@ User memory and safe personality foundation implemented on
 - The current JSON store is appropriate only for the single-user hackathon demo.
 - Memory extraction intentionally supports a small set of explicit phrases.
 - No vector search or knowledge-graph service is used.
+- No dedicated memory frontend is required; behavior is demonstrated through
+  the existing chat.
+- The Supabase migration is reviewed but not applied because this checkout has
+  no running or linked Supabase database.
 
 ## Last verified base commit
 

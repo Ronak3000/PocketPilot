@@ -14,6 +14,9 @@ import type {
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
 
+import DashboardHeader from "../dashboard/DashboardHeader";
+import DashboardWidgets from "../dashboard/DashboardWidgets";
+
 interface PurchaseAnalysisOutput {
   receipt: FutureReceipt;
   comparison: ScenarioComparison;
@@ -99,7 +102,7 @@ export default function ChatWorkspace() {
 
   function handleDemoPurchase() {
     sendMessage({
-      text: "Can I afford a Samsung Galaxy S25 Ultra for ₹59,999 on 12-month EMI?",
+      text: "Can I afford an iPhone 15 for ₹79,900?",
     });
   }
 
@@ -113,13 +116,19 @@ export default function ChatWorkspace() {
   };
 
   return (
-    <div className="flex flex-col h-screen lg:h-screen">
-      {/* Messages */}
+    <div className="flex flex-col h-screen lg:h-[100dvh]">
+      {/* Scrollable Main Area */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 py-6 lg:px-8 space-y-4"
+        className="flex-1 overflow-y-auto px-6 py-10 lg:px-12"
       >
-        <div className="max-w-2xl mx-auto space-y-4">
+        <div className="max-w-[1200px] mx-auto">
+          {/* Static Dashboard Elements */}
+          <DashboardHeader />
+          {messages.length <= 1 && <DashboardWidgets />}
+          
+          {/* Chat Messages */}
+          <div className="mt-8 space-y-6">
           {messages.map((m) => {
               // Split parts: text first, then tool results — so the vibe-check text
               // always renders ABOVE the receipt/comparison/plan cards.
@@ -144,7 +153,6 @@ export default function ChatWorkspace() {
                       receipt={null}
                       comparison={null}
                       plan={null}
-                      safeToSpend={null}
                       onQuickFill={handleQuickFill}
                     />
                   ))}
@@ -153,8 +161,12 @@ export default function ChatWorkspace() {
                   {toolParts.map((part) => {
                     // ── calculatePurchase ──────────────────────────────────
                     if (part.type === "tool-calculatePurchase") {
-                      if (part.state === "output-available") {
-                        const { receipt, comparison, plan, safeToSpend } = part.output;
+                      if (part.state === "output-available" || (part as any).state === "result") {
+                        const output = part.output || (part as any).result;
+                        if (!output) {
+                           return <div key={part.toolCallId} className="text-red-500 px-4 py-2">Error: Tool completed but no output received.</div>;
+                        }
+                        const { receipt, comparison, plan } = output;
                         return (
                           <div key={part.toolCallId} className="space-y-4">
                             <MessageBubble
@@ -162,7 +174,6 @@ export default function ChatWorkspace() {
                               receipt={receipt}
                               comparison={null}
                               plan={null}
-                              safeToSpend={safeToSpend}
                               onQuickFill={handleQuickFill}
                             />
                             {comparison && comparison.scenarios.length > 0 && (
@@ -171,7 +182,6 @@ export default function ChatWorkspace() {
                                 receipt={null}
                                 comparison={comparison}
                                 plan={null}
-                                safeToSpend={null}
                                 onQuickFill={handleQuickFill}
                               />
                             )}
@@ -181,13 +191,21 @@ export default function ChatWorkspace() {
                                 receipt={null}
                                 comparison={null}
                                 plan={plan}
-                                safeToSpend={null}
                                 onQuickFill={handleQuickFill}
                               />
                             )}
                           </div>
                         );
                       }
+                      
+                      if ((part as any).errorText || (part as any).error) {
+                        return (
+                          <div key={part.toolCallId} className="text-red-500 px-4 py-2">
+                            Engine Error: {(part as any).errorText || (part as any).error}
+                          </div>
+                        );
+                      }
+
                       // Still running
                       return (
                         <div key={part.toolCallId} className="flex items-center gap-1.5 px-4 py-3 animate-fade-in">
@@ -203,11 +221,24 @@ export default function ChatWorkspace() {
 
                     // ── recordPurchase ─────────────────────────────────────
                     if (part.type === "tool-recordPurchase") {
-                      if (part.state === "output-available") {
+                      if (part.state === "output-available" || (part as any).state === "result") {
+                        const output = part.output || (part as any).result;
+                        if (!output) {
+                           return <div key={part.toolCallId} className="text-red-500 px-4 py-2">Error: Tool completed but no output received.</div>;
+                        }
                         return (
-                          <AccountStatusCard key={part.toolCallId} status={part.output} />
+                          <AccountStatusCard key={part.toolCallId} status={output} />
                         );
                       }
+                      
+                      if ((part as any).errorText || (part as any).error) {
+                        return (
+                          <div key={part.toolCallId} className="text-red-500 px-4 py-2">
+                            Engine Error: {(part as any).errorText || (part as any).error}
+                          </div>
+                        );
+                      }
+
                       return (
                         <div key={part.toolCallId} className="flex items-center gap-1.5 px-4 py-3 animate-fade-in">
                           <div className="flex gap-1">
@@ -232,9 +263,10 @@ export default function ChatWorkspace() {
             </p>
           )}
 
+          </div>
           {/* Fallback general loading state if waiting for response but not in tool invocation */}
           {(status === "submitted" || status === "streaming") && messages.length > 0 && messages[messages.length - 1].role === 'user' && (
-            <div className="flex items-center gap-1.5 px-4 py-3 animate-fade-in">
+            <div className="flex items-center gap-1.5 px-4 py-3 animate-fade-in mt-4">
               <div className="flex gap-1">
                 <span className="w-2 h-2 rounded-full bg-[var(--color-text-muted)]" style={{ animation: "pp-dot-bounce 1.4s ease-in-out 0s infinite" }} />
                 <span className="w-2 h-2 rounded-full bg-[var(--color-text-muted)]" style={{ animation: "pp-dot-bounce 1.4s ease-in-out 0.2s infinite" }} />
@@ -259,29 +291,18 @@ export default function ChatWorkspace() {
 // ─── Account Status Card ──────────────────────────────────────────────────────
 // Rendered when the user reports a completed purchase (recordPurchase tool).
 
-const BUFFER_META: Record<
-  string,
-  { label: string; color: string; bg: string; icon: string }
-> = {
-  excellent: { label: "Excellent", color: "#22c55e", bg: "rgba(34,197,94,0.1)",  icon: "🟢" },
-  good:      { label: "Good",      color: "#84cc16", bg: "rgba(132,204,22,0.1)", icon: "🟡" },
-  tight:     { label: "Tight",     color: "#f59e0b", bg: "rgba(245,158,11,0.1)", icon: "🟠" },
-  critical:  { label: "Critical",  color: "#ef4444", bg: "rgba(239,68,68,0.1)",  icon: "🔴" },
-};
-
 function fmt(paise: number): string {
   return "₹" + Math.floor(paise / 100).toLocaleString("en-IN");
 }
 
 function AccountStatusCard({ status }: { status: PostPurchaseStatus }) {
-  const { productName, amountPaise, newBalancePaise, safeToSpend, recommendations } = status;
-  const meta = BUFFER_META[safeToSpend.bufferQuality] ?? BUFFER_META.good;
+  const { productName, amountPaise, newBalancePaise, recommendations } = status;
 
   return (
     <div
       style={{
         background: "var(--color-surface, #1e1e2e)",
-        border: `1px solid ${meta.color}44`,
+        border: "1px solid var(--color-border-subtle, rgba(255,255,255,0.08))",
         borderRadius: "16px",
         padding: "20px",
         display: "flex",
@@ -302,41 +323,20 @@ function AccountStatusCard({ status }: { status: PostPurchaseStatus }) {
         </div>
       </div>
 
-      {/* Balance row */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-        <div
-          style={{
-            background: "var(--color-surface-alt, rgba(255,255,255,0.04))",
-            borderRadius: "12px",
-            padding: "14px",
-          }}
-        >
-          <p style={{ fontSize: "11px", color: "var(--color-text-muted, #888)", margin: "0 0 4px" }}>
-            New Balance
-          </p>
-          <p style={{ fontSize: "20px", fontWeight: 800, color: "var(--color-text, #fff)", margin: 0 }}>
-            {fmt(newBalancePaise)}
-          </p>
-        </div>
-
-        <div
-          style={{
-            background: meta.bg,
-            borderRadius: "12px",
-            padding: "14px",
-            border: `1px solid ${meta.color}33`,
-          }}
-        >
-          <p style={{ fontSize: "11px", color: "var(--color-text-muted, #888)", margin: "0 0 4px" }}>
-            Safe to Spend
-          </p>
-          <p style={{ fontSize: "20px", fontWeight: 800, color: meta.color, margin: 0 }}>
-            {fmt(safeToSpend.safeAmountPaise)}
-          </p>
-          <p style={{ fontSize: "11px", color: meta.color, margin: "4px 0 0", opacity: 0.85 }}>
-            {meta.icon} Buffer: {meta.label}
-          </p>
-        </div>
+      {/* New Balance */}
+      <div
+        style={{
+          background: "var(--color-surface-alt, rgba(255,255,255,0.04))",
+          borderRadius: "12px",
+          padding: "14px",
+        }}
+      >
+        <p style={{ fontSize: "11px", color: "var(--color-text-muted, #888)", margin: "0 0 4px" }}>
+          New Balance
+        </p>
+        <p style={{ fontSize: "20px", fontWeight: 800, color: "var(--color-text, #fff)", margin: 0 }}>
+          {fmt(newBalancePaise)}
+        </p>
       </div>
 
       {/* Recommendations */}

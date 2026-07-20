@@ -74,84 +74,52 @@
   --chat-input-height: 72px;
 }
 
-/* ── Dark mode palette (default) ── */
+/* ── Main Color Palette (Light Mode) ── */
 :root {
-  --color-bg-primary: #09090b;
-  --color-bg-secondary: #131316;
-  --color-bg-surface: #18181b;
-  --color-bg-elevated: #1f1f23;
-  --color-bg-hover: #27272a;
-  --color-bg-active: #2d2d31;
+  /* Backgrounds */
+  --color-bg-primary: #fafafb; /* Very slight off-white for the main app background */
+  --color-bg-secondary: #f4f5f7;
+  --color-bg-surface: #ffffff; /* Crisp white for cards/bubbles */
+  --color-bg-elevated: #ffffff;
+  --color-bg-hover: #f1f5f9;
+  --color-bg-active: #e2e8f0;
 
-  --color-border-subtle: #27272a;
-  --color-border-default: #3f3f46;
-  --color-border-strong: #52525b;
+  /* Borders */
+  --color-border-subtle: #f1f5f9;
+  --color-border-default: #e2e8f0;
+  --color-border-strong: #cbd5e1;
 
-  --color-text-primary: #fafafa;
-  --color-text-secondary: #a1a1aa;
-  --color-text-muted: #71717a;
-  --color-text-disabled: #52525b;
+  /* Text */
+  --color-text-primary: #0f172a; /* Slate 900 for high contrast */
+  --color-text-secondary: #64748b; /* Slate 500 for subtext */
+  --color-text-muted: #94a3b8;
+  --color-text-disabled: #cbd5e1;
 
-  --color-accent: #14b8a6;
-  --color-accent-hover: #0d9488;
-  --color-accent-subtle: rgba(20, 184, 166, 0.12);
-  --color-accent-text: #2dd4bf;
+  /* Accents (The vibrant blue from the mockup) */
+  --color-accent: #2563eb; /* Blue 600 */
+  --color-accent-hover: #1d4ed8;
+  --color-accent-subtle: #eff6ff; /* Blue 50 */
+  --color-accent-text: #2563eb;
 
-  --color-safe: #22c55e;
-  --color-safe-subtle: rgba(34, 197, 94, 0.12);
+  /* Semantic colors */
+  --color-safe: #10b981; /* Emerald 500 */
+  --color-safe-subtle: #ecfdf5; /* Emerald 50 */
   --color-caution: #f59e0b;
-  --color-caution-subtle: rgba(245, 158, 11, 0.12);
-  --color-warning: #f97316;
-  --color-warning-subtle: rgba(249, 115, 22, 0.12);
+  --color-caution-subtle: #fffbeb;
+  --color-warning: #ea580c;
+  --color-warning-subtle: #fff7ed;
   --color-breach: #ef4444;
-  --color-breach-subtle: rgba(239, 68, 68, 0.12);
+  --color-breach-subtle: #fef2f2;
 
-  --color-input-bg: #1a1a1e;
-  --color-input-border: #3f3f46;
-  --color-input-focus: #14b8a6;
-}
+  /* Inputs */
+  --color-input-bg: #ffffff;
+  --color-input-border: #e2e8f0;
+  --color-input-focus: #2563eb;
 
-/* ── Light mode overrides ── */
-@media (prefers-color-scheme: light) {
-  :root:not(.dark) {
-    --color-bg-primary: #fafafa;
-    --color-bg-secondary: #f5f5f5;
-    --color-bg-surface: #ffffff;
-    --color-bg-elevated: #ffffff;
-    --color-bg-hover: #f0f0f0;
-    --color-bg-active: #e5e5e5;
-
-    --color-border-subtle: #e5e5e5;
-    --color-border-default: #d4d4d8;
-    --color-border-strong: #a1a1aa;
-
-    --color-text-primary: #09090b;
-    --color-text-secondary: #52525b;
-    --color-text-muted: #71717a;
-    --color-text-disabled: #a1a1aa;
-
-    --color-accent: #0d9488;
-    --color-accent-hover: #0f766e;
-    --color-accent-subtle: rgba(13, 148, 136, 0.08);
-    --color-accent-text: #0d9488;
-
-    --color-safe: #16a34a;
-    --color-safe-subtle: rgba(22, 163, 74, 0.08);
-    --color-caution: #d97706;
-    --color-caution-subtle: rgba(217, 119, 6, 0.08);
-    --color-warning: #ea580c;
-    --color-warning-subtle: rgba(234, 88, 12, 0.08);
-    --color-breach: #dc2626;
-    --color-breach-subtle: rgba(220, 38, 38, 0.08);
-
-    --color-input-bg: #ffffff;
-    --color-input-border: #d4d4d8;
-    --color-input-focus: #0d9488;
-
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.12);
-    --shadow-glow-teal: 0 0 20px rgba(13, 148, 136, 0.1);
-  }
+  /* Premium soft shadows matching the mockup */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.06);
+  --shadow-xl: 0 20px 40px rgba(15, 23, 42, 0.08);
+  --shadow-glow-teal: 0 0 20px rgba(37, 99, 235, 0.15); /* Re-purposed to blue glow */
 }

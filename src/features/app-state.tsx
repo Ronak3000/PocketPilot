@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useReducer, type Dispatch } from "react";
+import React, { createContext, useContext, useReducer, useEffect, type Dispatch } from "react";
 import type {
   AppState,
   AppView,
@@ -29,7 +29,8 @@ type AppAction =
   | { type: "SET_HISTORY"; history: HistoryEntry[] }
   | { type: "COMPLETE_ONBOARDING" }
   | { type: "TOGGLE_SIDEBAR" }
-  | { type: "RESET_DEMO" };
+  | { type: "RESET_DEMO" }
+  | { type: "HYDRATE_STATE"; state: Partial<AppState> };
 
 // ── Initial State ──
 
@@ -52,6 +53,9 @@ const initialState: AppState = {
 
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
+    case "HYDRATE_STATE":
+      return { ...state, ...action.state };
+
     case "SET_VIEW":
       return { ...state, view: action.view };
 
@@ -106,6 +110,32 @@ const AppDispatchContext = createContext<Dispatch<AppAction>>(() => {});
 
 export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
+
+  // Hydrate from localStorage on mount (SSR-safe)
+  useEffect(() => {
+    const saved = localStorage.getItem("pocket-pilot-state");
+    if (saved) {
+      try {
+        dispatch({ type: "HYDRATE_STATE", state: JSON.parse(saved) });
+      } catch (e) {
+        console.error("[PocketPilot] Failed to restore state:", e);
+      }
+    }
+  }, []);
+
+  // Persist key slices whenever they change
+  useEffect(() => {
+    const { view, profile, constitution, isOnboarded } = state;
+    if (!isOnboarded) {
+      // After a reset, clear persisted state
+      localStorage.removeItem("pocket-pilot-state");
+      return;
+    }
+    localStorage.setItem(
+      "pocket-pilot-state",
+      JSON.stringify({ view, profile, constitution, isOnboarded }),
+    );
+  }, [state.view, state.profile, state.constitution, state.isOnboarded]);
 
   return (
     <AppStateContext.Provider value={state}>

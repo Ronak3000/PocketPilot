@@ -32,18 +32,30 @@ export function createChatTools(input: ChatToolsInput) {
         emiMonths: z.number().int().positive().optional(),
       }),
       execute: async ({ productName, pricePaise, emiMonths }) => {
-        const tenureMonths = emiMonths || 12;
-        const downPaymentPaise = Math.floor(pricePaise * 0.2);
+        const isEmiPlan = typeof emiMonths === "number" && emiMonths > 0;
+        const tenureMonths = isEmiPlan ? emiMonths : 0;
+        // For EMI: 20% down, rest financed over tenure at 0% (no-cost EMI)
+        // For full upfront: entire amount paid on day 1, no EMI, no processing fee
+        const downPaymentPaise = isEmiPlan
+          ? Math.floor(pricePaise * 0.2)
+          : pricePaise; // full upfront
         const principalPaise = pricePaise - downPaymentPaise;
+        const emiAmountPaise = isEmiPlan && tenureMonths > 0
+          ? Math.floor(principalPaise / tenureMonths)
+          : 0;
+        // Processing fee (typically 1–2%) only applies to financed EMI plans
+        const processingFeePaise = isEmiPlan
+          ? Math.floor(pricePaise * 0.02)
+          : 0;
         const decision: ExtractedDecision = {
           id: `decision-${Date.now()}`,
           decisionInputId: `input-${Date.now()}`,
           productName,
           pricePaise,
           downPaymentPaise,
-          emiAmountPaise: Math.floor(principalPaise / tenureMonths),
+          emiAmountPaise,
           tenureMonths,
-          processingFeePaise: Math.floor(pricePaise * 0.02),
+          processingFeePaise,
           confidence: 1,
           missingFields: [],
           createdAt: new Date().toISOString(),
@@ -60,6 +72,17 @@ export function createChatTools(input: ChatToolsInput) {
         db.setLastReceipt(analysis.receipt);
         db.setLastPlan(analysis.plan);
         db.setSafeToSpend(analysis.safeToSpend);
+
+        // ── Add to history so the History panel tracks every analysis ──
+        db.addHistoryEntry({
+          id: `hist-${Date.now()}`,
+          type: "receipt",
+          title: `${productName} — ₹${Math.floor(pricePaise / 100).toLocaleString("en-IN")}`,
+          status: analysis.receipt.status,
+          receipt: analysis.receipt,
+          plan: analysis.plan,
+          createdAt: new Date().toISOString(),
+        });
         if (input.rememberBehavior) {
           db.remember(
             input.profile.id,
@@ -107,6 +130,19 @@ export function createChatTools(input: ChatToolsInput) {
           newBalancePaise,
         );
         db.setSafeToSpend(safeToSpend);
+
+        // ── Record purchase in history ──
+        db.addHistoryEntry({
+          id: `hist-purchase-${Date.now()}`,
+          type: "plan_approved",
+          title: `Purchased ${productName} — ₹${Math.floor(amountPaise / 100).toLocaleString("en-IN")}`,
+          status: safeToSpend.bufferQuality === "critical"
+            ? "BREACH"
+            : safeToSpend.bufferQuality === "tight"
+            ? "CAUTION"
+            : "SAFE",
+          createdAt: new Date().toISOString(),
+        });
         if (input.rememberBehavior) {
           db.remember(
             input.profile.id,

@@ -20,7 +20,6 @@ import type {
 
 import {
   simulateScenario,
-  compareScenarios,
   evaluateConstitution,
   calculateSafeToSpend,
 } from "@/core/finance";
@@ -31,15 +30,13 @@ import type {
   PurchaseProposal,
   MoneyConstitution as EngineConstitution,
   ScenarioResult as EngineScenarioResult,
-  SafeToSpendInput,
   ConstitutionEvaluation as EngineConstitutionEvaluation,
   DailyLedgerEntry as EngineLedgerEntry,
-  IsoDate,
 } from "@/core/finance";
 
 // ───── Profile → Engine Events ─────
 
-function profileToEvents(profile: FinancialProfile): FinancialEvent[] {
+export function profileToEvents(profile: FinancialProfile): FinancialEvent[] {
   const events: FinancialEvent[] = [];
   const today = new Date().toISOString().split("T")[0];
 
@@ -313,23 +310,34 @@ export function runFullAnalysis(
     delayDays: 45,
   };
 
-  const cheaperPhone: PurchaseProposal = {
+  // Derive a meaningful cheaper alternative: 70% of the actual product price
+  const altPricePaise = Math.round(decision.pricePaise * 0.7);
+  const isAltEmi = (decision.tenureMonths ?? 0) > 0;
+
+  const altDownPaise = isAltEmi ? Math.round(altPricePaise * 0.2) : altPricePaise;
+  const altTenureMonths = isAltEmi ? decision.tenureMonths! : 0;
+  const altPrincipal = altPricePaise - altDownPaise;
+  const altEmiPaise = isAltEmi && altTenureMonths > 0 ? Math.floor(altPrincipal / altTenureMonths) : 0;
+  const altProcessingPaise = isAltEmi ? Math.round(altPricePaise * 0.02) : 0;
+  const altLabel = `₹${Math.floor(altPricePaise / 100).toLocaleString("en-IN")} Alternative (30% less)`;
+
+  const cheaperAlternative: PurchaseProposal = {
     id: "proposal-cheaper",
-    title: "Budget Alternative Phone",
-    listedPricePaise: 3_999_900,
+    title: `${decision.productName} (Budget Alternative)`,
+    listedPricePaise: altPricePaise,
     purchaseDate: today,
-    downPaymentPaise: 800_000,
-    processingFeePaise: 99_900,
-    monthlyEmiPaise: 300_000,
-    tenureMonths: 12,
+    downPaymentPaise: altDownPaise,
+    processingFeePaise: altProcessingPaise,
+    monthlyEmiPaise: altEmiPaise,
+    tenureMonths: altTenureMonths,
   };
 
   const alternative: ScenarioInput = {
     ...baseBuyNow,
     id: "scenario-cheaper",
-    label: "₹39,999 Alternative",
+    label: altLabel,
     scenarioType: "alternative",
-    alternativeProposal: cheaperPhone,
+    alternativeProposal: cheaperAlternative,
   };
 
   // ── Run simulations ──
@@ -365,7 +373,10 @@ export function runFullAnalysis(
     id: `comparison-${Date.now()}`,
     scenarios,
     recommendedScenarioId: recommendedId,
-    comparisonSummary: `Compared ${scenarios.length} scenarios. "${sorted[0].label}" has the fewest conflicts.`,
+    comparisonSummary: `"${sorted[0].label}" is the best option (${sorted[0].status}). ` +
+      (sorted[0].constitutionConflicts.length === 0
+        ? "No constitution rules are breached."
+        : `${sorted[0].constitutionConflicts.length} rule conflict(s) — review below.`),
   };
 
   // ── Build Future Receipt for buy-now ──
@@ -390,10 +401,13 @@ export function runFullAnalysis(
     emiBurdenPercent: frontendBuyNow.emiToIncomeRatio,
     constitutionConflicts: frontendBuyNow.constitutionConflicts,
     assumptions: [
-      "Salary credited on day 1 each month",
-      "No unplanned expenses during projection",
-      "Existing EMI continues unchanged",
-      "Savings contribution maintained",
+      `Salary of ₹${Math.floor(profile.monthlySalaryPaise / 100).toLocaleString("en-IN")} credited on day ${profile.salaryDay} each month`,
+      `Rent of ₹${Math.floor(profile.rentPaise / 100).toLocaleString("en-IN")} paid on day 1 each month`,
+      profile.existingEmiPaise > 0
+        ? `Existing EMI of ₹${Math.floor(profile.existingEmiPaise / 100).toLocaleString("en-IN")} continues unchanged`
+        : "No existing EMI commitments",
+      `Monthly savings target of ₹${Math.floor(profile.monthlySavingsTargetPaise / 100).toLocaleString("en-IN")} maintained`,
+      "No unplanned expenses during 6-month projection",
     ],
     confidence: decision.confidence,
     recommendation: frontendBuyNow.recommendation,
@@ -416,10 +430,11 @@ export function runFullAnalysis(
     maxTenureMonths: decision.tenureMonths ?? 0,
     requiredBalanceBeforePurchasePaise: profile.protectedBalanceFloorPaise + (decision.downPaymentPaise ?? 0) + (decision.processingFeePaise ?? 0),
     invalidationConditions: [
-      "Salary is delayed by more than 7 days",
-      "An unplanned expense exceeds ₹5,000",
-      "Balance drops below ₹10,000 before purchase",
-    ],
+      `Salary is delayed by more than 7 days`,
+      `An unplanned expense exceeds ₹${Math.floor(profile.protectedBalanceFloorPaise / 100 * 0.5).toLocaleString("en-IN")}`,
+      `Balance drops below ₹${Math.floor(profile.protectedBalanceFloorPaise / 100).toLocaleString("en-IN")} before purchase`,
+      profile.existingEmiPaise > 0 ? "An existing EMI is increased or a new subscription is added" : "",
+    ].filter(Boolean),
     status: "draft",
     createdAt: new Date().toISOString(),
   };

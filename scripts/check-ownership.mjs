@@ -31,6 +31,31 @@ const ALLOWED_PATHS = {
     'docs/workstreams/task-3/',
     'docs/integration-requests/task-3-requests.md',
     'docs/CONTRACT_CHANGELOG.md'
+  ],
+  'feature/emergency-funding-assist': [
+    '.env.example',
+    '.gitignore',
+    'README.md',
+    'package.json',
+    'pnpm-lock.yaml',
+    'pnpm-workspace.yaml',
+    'playwright.config.ts',
+    'vitest.config.ts',
+    'scripts/check-ownership.mjs',
+    'src/app/',
+    'src/components/',
+    'src/core/ai/',
+    'src/core/finance/',
+    'src/features/',
+    'src/mocks/',
+    'src/server/',
+    'src/styles/',
+    'tests/ai/',
+    'tests/e2e/',
+    'tests/finance/',
+    'tests/fixtures/',
+    'tests/integration/',
+    'docs/workstreams/emergency/'
   ]
 };
 
@@ -57,8 +82,16 @@ try {
 
   const excludedPaths = EXCLUDED_PATHS[branch] || [];
   
-  // Use main as base, assuming it exists
-  const diffOutput = execSync('git diff --name-only main...HEAD').toString().trim();
+  const preferredBase = branch === 'feature/emergency-funding-assist'
+    ? 'origin/dev-next-phase'
+    : 'main';
+  let base = preferredBase;
+  try {
+    execSync(`git rev-parse --verify ${preferredBase}`, { stdio: 'ignore' });
+  } catch {
+    base = 'main';
+  }
+  const diffOutput = execSync(`git diff --name-only ${base}...HEAD`).toString().trim();
   if (!diffOutput) {
     console.log('No files changed.');
     process.exit(0);

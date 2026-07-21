@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { pocketPilotClient } from "@/mocks/adapter";
+import { useEmergencyAssist } from "@/features/emergency/useEmergencyAssist";
 import type {
   ActionPlan,
   FutureReceipt,
@@ -13,6 +14,10 @@ import type {
 } from "@/features/types";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
+import { AccountStatusCard } from "./AccountStatusCard";
+
+import DashboardHeader from "../dashboard/DashboardHeader";
+import DashboardWidgets from "../dashboard/DashboardWidgets";
 
 interface PurchaseAnalysisOutput {
   receipt: FutureReceipt;
@@ -60,12 +65,11 @@ function getChatErrorMessage(error: Error): string {
 
 export default function ChatWorkspace() {
   const [userName, setUserName] = useState<string>("");
+  const { openForText, emergencyDialog } = useEmergencyAssist();
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Fetch the user's name on mount
   useEffect(() => {
-    pocketPilotClient.getProfile().then((profile) => {
-      setUserName(profile?.name || "there");
+    pocketPilotClient.getProfile().then((loadedProfile) => {
+      setUserName(loadedProfile?.name || "there");
     }).catch(() => {
       setUserName("Aarav");
     });
@@ -76,7 +80,6 @@ export default function ChatWorkspace() {
       transport: new DefaultChatTransport({ api: "/api/chat" }),
     });
 
-  // Inject greeting once we have the username
   useEffect(() => {
     if (userName && messages.length === 0) {
       setMessages([{
@@ -99,7 +102,7 @@ export default function ChatWorkspace() {
 
   function handleDemoPurchase() {
     sendMessage({
-      text: "Can I afford a Samsung Galaxy S25 Ultra for ₹59,999 on 12-month EMI?",
+      text: "Can I afford an iPhone 15 for ₹79,900?",
     });
   }
 
@@ -109,17 +112,31 @@ export default function ChatWorkspace() {
 
   // A custom submit handler that adapts to our ChatInput
   const handleSend = (text: string) => {
+    if (openForText(text)) {
+      setMessages((current) => [
+        ...current,
+        { id: crypto.randomUUID(), role: "user", parts: [{ type: "text", text }] },
+      ]);
+      return;
+    }
     sendMessage({ text });
   };
 
   return (
-    <div className="flex flex-col h-screen lg:h-screen">
-      {/* Messages */}
+    <>
+    <div className="flex flex-col h-screen lg:h-[100dvh]">
+      {/* Scrollable Main Area */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 py-6 lg:px-8 space-y-4"
+        className="flex-1 overflow-y-auto px-6 py-10 lg:px-12"
       >
-        <div className="max-w-2xl mx-auto space-y-4">
+        <div className="max-w-[1200px] mx-auto">
+          {/* Static Dashboard Elements */}
+          <DashboardHeader />
+          {messages.length <= 1 && <DashboardWidgets />}
+
+          {/* Chat Messages */}
+          <div className="mt-8 space-y-6">
           {messages.map((m) => {
               // Split parts: text first, then tool results — so the vibe-check text
               // always renders ABOVE the receipt/comparison/plan cards.
@@ -144,7 +161,6 @@ export default function ChatWorkspace() {
                       receipt={null}
                       comparison={null}
                       plan={null}
-                      safeToSpend={null}
                       onQuickFill={handleQuickFill}
                     />
                   ))}
@@ -154,7 +170,8 @@ export default function ChatWorkspace() {
                     // ── calculatePurchase ──────────────────────────────────
                     if (part.type === "tool-calculatePurchase") {
                       if (part.state === "output-available") {
-                        const { receipt, comparison, plan, safeToSpend } = part.output;
+                        const output = part.output;
+                        const { receipt, comparison, plan } = output;
                         return (
                           <div key={part.toolCallId} className="space-y-4">
                             <MessageBubble
@@ -162,7 +179,6 @@ export default function ChatWorkspace() {
                               receipt={receipt}
                               comparison={null}
                               plan={null}
-                              safeToSpend={safeToSpend}
                               onQuickFill={handleQuickFill}
                             />
                             {comparison && comparison.scenarios.length > 0 && (
@@ -171,7 +187,6 @@ export default function ChatWorkspace() {
                                 receipt={null}
                                 comparison={comparison}
                                 plan={null}
-                                safeToSpend={null}
                                 onQuickFill={handleQuickFill}
                               />
                             )}
@@ -181,13 +196,21 @@ export default function ChatWorkspace() {
                                 receipt={null}
                                 comparison={null}
                                 plan={plan}
-                                safeToSpend={null}
                                 onQuickFill={handleQuickFill}
                               />
                             )}
                           </div>
                         );
                       }
+
+                      if (part.state === "output-error") {
+                        return (
+                          <div key={part.toolCallId} className="text-red-500 px-4 py-2">
+                            Engine Error: {part.errorText}
+                          </div>
+                        );
+                      }
+
                       // Still running
                       return (
                         <div key={part.toolCallId} className="flex items-center gap-1.5 px-4 py-3 animate-fade-in">
@@ -204,10 +227,20 @@ export default function ChatWorkspace() {
                     // ── recordPurchase ─────────────────────────────────────
                     if (part.type === "tool-recordPurchase") {
                       if (part.state === "output-available") {
+                        const output = part.output;
                         return (
-                          <AccountStatusCard key={part.toolCallId} status={part.output} />
+                          <AccountStatusCard key={part.toolCallId} status={output} />
                         );
                       }
+
+                      if (part.state === "output-error") {
+                        return (
+                          <div key={part.toolCallId} className="text-red-500 px-4 py-2">
+                            Engine Error: {part.errorText}
+                          </div>
+                        );
+                      }
+
                       return (
                         <div key={part.toolCallId} className="flex items-center gap-1.5 px-4 py-3 animate-fade-in">
                           <div className="flex gap-1">
@@ -232,9 +265,10 @@ export default function ChatWorkspace() {
             </p>
           )}
 
+          </div>
           {/* Fallback general loading state if waiting for response but not in tool invocation */}
           {(status === "submitted" || status === "streaming") && messages.length > 0 && messages[messages.length - 1].role === 'user' && (
-            <div className="flex items-center gap-1.5 px-4 py-3 animate-fade-in">
+            <div className="flex items-center gap-1.5 px-4 py-3 animate-fade-in mt-4">
               <div className="flex gap-1">
                 <span className="w-2 h-2 rounded-full bg-[var(--color-text-muted)]" style={{ animation: "pp-dot-bounce 1.4s ease-in-out 0s infinite" }} />
                 <span className="w-2 h-2 rounded-full bg-[var(--color-text-muted)]" style={{ animation: "pp-dot-bounce 1.4s ease-in-out 0.2s infinite" }} />
@@ -249,130 +283,10 @@ export default function ChatWorkspace() {
       {/* Input */}
       <ChatInput
         onSend={handleSend}
-        onDemoPurchase={handleDemoPurchase}
         showDemoButton={messages.length <= 1}
       />
     </div>
-  );
-}
-
-// ─── Account Status Card ──────────────────────────────────────────────────────
-// Rendered when the user reports a completed purchase (recordPurchase tool).
-
-const BUFFER_META: Record<
-  string,
-  { label: string; color: string; bg: string; icon: string }
-> = {
-  excellent: { label: "Excellent", color: "#22c55e", bg: "rgba(34,197,94,0.1)",  icon: "🟢" },
-  good:      { label: "Good",      color: "#84cc16", bg: "rgba(132,204,22,0.1)", icon: "🟡" },
-  tight:     { label: "Tight",     color: "#f59e0b", bg: "rgba(245,158,11,0.1)", icon: "🟠" },
-  critical:  { label: "Critical",  color: "#ef4444", bg: "rgba(239,68,68,0.1)",  icon: "🔴" },
-};
-
-function fmt(paise: number): string {
-  return "₹" + Math.floor(paise / 100).toLocaleString("en-IN");
-}
-
-function AccountStatusCard({ status }: { status: PostPurchaseStatus }) {
-  const { productName, amountPaise, newBalancePaise, safeToSpend, recommendations } = status;
-  const meta = BUFFER_META[safeToSpend.bufferQuality] ?? BUFFER_META.good;
-
-  return (
-    <div
-      style={{
-        background: "var(--color-surface, #1e1e2e)",
-        border: `1px solid ${meta.color}44`,
-        borderRadius: "16px",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-      }}
-    >
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <span style={{ fontSize: "22px" }}>🧾</span>
-        <div>
-          <p style={{ fontSize: "12px", color: "var(--color-text-muted, #888)", margin: 0 }}>
-            Purchase recorded
-          </p>
-          <p style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-text, #fff)", margin: 0 }}>
-            {productName} · {fmt(amountPaise)}
-          </p>
-        </div>
-      </div>
-
-      {/* Balance row */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-        <div
-          style={{
-            background: "var(--color-surface-alt, rgba(255,255,255,0.04))",
-            borderRadius: "12px",
-            padding: "14px",
-          }}
-        >
-          <p style={{ fontSize: "11px", color: "var(--color-text-muted, #888)", margin: "0 0 4px" }}>
-            New Balance
-          </p>
-          <p style={{ fontSize: "20px", fontWeight: 800, color: "var(--color-text, #fff)", margin: 0 }}>
-            {fmt(newBalancePaise)}
-          </p>
-        </div>
-
-        <div
-          style={{
-            background: meta.bg,
-            borderRadius: "12px",
-            padding: "14px",
-            border: `1px solid ${meta.color}33`,
-          }}
-        >
-          <p style={{ fontSize: "11px", color: "var(--color-text-muted, #888)", margin: "0 0 4px" }}>
-            Safe to Spend
-          </p>
-          <p style={{ fontSize: "20px", fontWeight: 800, color: meta.color, margin: 0 }}>
-            {fmt(safeToSpend.safeAmountPaise)}
-          </p>
-          <p style={{ fontSize: "11px", color: meta.color, margin: "4px 0 0", opacity: 0.85 }}>
-            {meta.icon} Buffer: {meta.label}
-          </p>
-        </div>
-      </div>
-
-      {/* Recommendations */}
-      {recommendations.length > 0 && (
-        <div>
-          <p
-            style={{
-              fontSize: "11px",
-              fontWeight: 600,
-              color: "var(--color-text-muted, #888)",
-              margin: "0 0 8px",
-              textTransform: "uppercase",
-              letterSpacing: "0.06em",
-            }}
-          >
-            Recommendations
-          </p>
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
-            {recommendations.map((rec, i) => (
-              <li
-                key={i}
-                style={{
-                  fontSize: "13px",
-                  color: "var(--color-text, #fff)",
-                  background: "var(--color-surface-alt, rgba(255,255,255,0.04))",
-                  borderRadius: "8px",
-                  padding: "8px 12px",
-                  lineHeight: 1.5,
-                }}
-              >
-                {rec}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+    {emergencyDialog}
+    </>
   );
 }

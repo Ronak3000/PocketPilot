@@ -7,7 +7,12 @@ import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import Shimmer from "@/components/ui/Shimmer";
 
-export default function HistoryPanel() {
+interface HistoryPanelProps {
+  /** Increment this value each time the panel is shown to force a data refresh */
+  refreshKey?: number;
+}
+
+export default function HistoryPanel({ refreshKey = 0 }: HistoryPanelProps) {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,11 +26,11 @@ export default function HistoryPanel() {
       }
     }
     load();
-  }, []);
+  }, [refreshKey]);
 
   const typeLabels: Record<string, string> = {
     receipt: "Future Receipt",
-    plan_approved: "Plan Approved",
+    plan_approved: "Purchase Recorded",
     abandoned: "Abandoned",
     goal_delay_avoided: "Goal Delay Avoided",
     breach_prevented: "Breach Prevented",

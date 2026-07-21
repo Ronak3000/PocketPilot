@@ -1,0 +1,219 @@
+.emergency-assist {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  overflow-y: auto;
+  padding: clamp(16px, 4vw, 48px);
+  background: rgba(15, 23, 42, 0.62);
+  backdrop-filter: blur(8px);
+}
+
+.emergency-assist__inner {
+  width: min(1080px, 100%);
+  min-height: 420px;
+  margin: 0 auto;
+  padding: clamp(20px, 4vw, 40px);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-surface);
+  box-shadow: var(--shadow-xl);
+}
+
+.emergency-assist h1,
+.emergency-assist h2 {
+  margin: 0 0 12px;
+  color: var(--color-text-primary);
+  font-weight: 800;
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.emergency-assist h1 { font-size: clamp(1.6rem, 4vw, 2.25rem); }
+.emergency-assist h2 { font-size: clamp(1.3rem, 3vw, 1.75rem); }
+.emergency-assist p { color: var(--color-text-secondary); }
+
+.emergency-assist__error,
+.emergency-assist__loading,
+.emergency-acknowledgement__notice,
+.consent-gate__notice,
+.non-credit-alternatives__insurance-notice,
+.loan-offer-comparison__disclaimer-banner,
+.eligibility-explanation__disclaimer,
+.lender-handoff__simulation-banner,
+.lender-handoff__disclaimer-box {
+  margin: 16px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--color-caution);
+  border-radius: var(--radius-md);
+  background: var(--color-caution-subtle);
+  color: #7c4a03;
+  line-height: 1.5;
+}
+
+.emergency-assist__error {
+  border-color: var(--color-breach);
+  background: var(--color-breach-subtle);
+  color: var(--color-breach);
+}
+
+.emergency-acknowledgement__icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 20px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-caution-subtle);
+  color: var(--color-caution);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.emergency-acknowledgement__badge,
+.offer-card__badge {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-subtle);
+  color: var(--color-accent-text);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.form-group { margin-top: 16px; }
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--radius-md);
+  background: var(--color-input-bg);
+  color: var(--color-text-primary);
+}
+
+.form-input:focus { border-color: var(--color-input-focus); }
+.form-input--error { border-color: var(--color-breach); }
+.form-error { display: block; margin-top: 6px; color: var(--color-breach); font-size: 13px; }
+.form-checkbox { display: flex; gap: 10px; margin-top: 18px; color: var(--color-text-secondary); }
+
+.emergency-acknowledgement__actions,
+.emergency-amount-form__actions,
+.funding-gap-result__actions,
+.non-credit-alternatives__actions,
+.loan-offer-comparison__actions,
+.eligibility-explanation__actions,
+.lender-handoff__actions,
+.emergency-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.emergency-assist .btn {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 750;
+  transition: transform var(--duration-fast), background var(--duration-fast);
+}
+.emergency-assist .btn:hover { transform: translateY(-1px); }
+.emergency-assist .btn--primary { background: var(--color-accent); color: white; }
+.emergency-assist .btn--primary:hover { background: var(--color-accent-hover); }
+.emergency-assist .btn--secondary { border-color: var(--color-border-default); background: var(--color-bg-secondary); }
+.emergency-assist .btn--ghost,
+.emergency-assist .btn--text { border-color: var(--color-border-default); background: transparent; color: var(--color-text-secondary); }
+
+.consent-gate__fields,
+.funding-gap-result__breakdown,
+.loan-offer-comparison__assessment-note,
+.lender-handoff__summary,
+.lender-handoff__what-happens-next {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-secondary);
+}
+.consent-gate__field-list,
+.alternatives-list,
+.reason-list { margin: 10px 0 0; padding-left: 20px; }
+.consent-gate__options { display: grid; gap: 10px; margin-top: 20px; }
+.consent-gate__btn { text-align: left; }
+
+.gap-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border-default);
+}
+.gap-row--total { border-bottom: 0; font-size: var(--font-size-lg); font-weight: 800; }
+.gap-row__value--positive { color: var(--color-safe); }
+
+.alternatives-list { display: grid; gap: 12px; padding: 0; list-style: none; }
+.alternatives-list__item,
+.reason-list > li,
+.reason-list > div {
+  padding: 14px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+}
+.alternatives-list__label,
+.reason-item__label { color: var(--color-text-primary); font-weight: 750; }
+.alternatives-list__detail,
+.reason-item__detail { margin-top: 4px; color: var(--color-text-secondary); font-size: var(--font-size-sm); }
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.offer-card {
+  position: relative;
+  padding: 18px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+}
+.offer-card--recommended { border: 2px solid var(--color-accent); }
+.offer-card__tag { margin: -18px -18px 14px; padding: 7px 12px; background: var(--color-accent); color: white; font-size: 12px; font-weight: 800; }
+.offer-card__provider { min-height: 42px; color: var(--color-text-secondary); font-size: var(--font-size-sm); }
+.offer-card__amount { margin: 8px 0 12px; font-size: var(--font-size-2xl); font-weight: 850; }
+.offer-table,
+.handoff-table { width: 100%; border-collapse: collapse; font-size: var(--font-size-sm); }
+.offer-table td,
+.handoff-table td { padding: 8px 0; border-bottom: 1px solid var(--color-border-subtle); vertical-align: top; }
+.offer-table td:last-child,
+.handoff-table td:last-child { text-align: right; }
+.offer-card__warning { margin-top: 10px; color: var(--color-breach); font-size: 13px; }
+.offer-card__info { margin-top: 10px; color: var(--color-caution); font-size: 13px; }
+.offer-card__kfs-btn,
+.offer-card__select { width: 100%; margin-top: 12px; }
+.offer-card__kfs { overflow-x: auto; padding: 12px; background: var(--color-bg-secondary); white-space: pre-wrap; font-size: 11px; }
+.badge--risk-high { background: var(--color-breach-subtle); color: var(--color-breach); }
+.badge--risk-caution { background: var(--color-caution-subtle); color: #7c4a03; }
+.badge--risk-ok { background: var(--color-safe-subtle); color: var(--color-safe); }
+
+.eligibility-explanation__stages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0; }
+.stage { padding: 12px; border-radius: var(--radius-md); background: var(--color-bg-secondary); }
+.stage--active { border: 1px solid var(--color-accent); }
+.stage__step { font-size: 12px; color: var(--color-text-muted); }
+.stage__label { font-weight: 800; }
+.stage__desc { font-size: 12px; color: var(--color-text-secondary); }
+
+@media (max-width: 800px) {
+  .emergency-assist { padding: 0; background: var(--color-bg-surface); }
+  .emergency-assist__inner { min-height: 100dvh; border: 0; border-radius: 0; }
+  .offers-grid,
+  .eligibility-explanation__stages { grid-template-columns: 1fr; }
+}

@@ -1,10 +1,9 @@
 "use client";
 
-import type { ChatMessage, FutureReceipt, ScenarioComparison, ActionPlan, SafeToSpend } from "@/features/types";
+import type { ChatMessage, FutureReceipt, ScenarioComparison, ActionPlan } from "@/features/types";
 import FutureReceiptCard from "@/features/receipt/FutureReceiptCard";
 import ScenarioComparisonView from "@/features/scenarios/ScenarioComparison";
 import SafePurchasePlan from "@/features/plan/SafePurchasePlan";
-import SafeToSpendCard from "./SafeToSpendCard";
 import QuickFillChips from "./QuickFillChips";
 
 interface MessageBubbleProps {
@@ -12,7 +11,6 @@ interface MessageBubbleProps {
   receipt: FutureReceipt | null;
   comparison: ScenarioComparison | null;
   plan: ActionPlan | null;
-  safeToSpend: SafeToSpend | null;
   onQuickFill: (value: string) => void;
 }
 
@@ -21,7 +19,6 @@ export default function MessageBubble({
   receipt,
   comparison,
   plan,
-  safeToSpend,
   onQuickFill,
 }: MessageBubbleProps) {
   const isUser = message.role === "user";
@@ -69,35 +66,33 @@ export default function MessageBubble({
     );
   }
 
-  // Rich content: Safe to Spend
-  if (message.type === "safe-to-spend" && safeToSpend) {
-    return (
-      <div className="animate-fade-up">
-        <SafeToSpendCard data={safeToSpend} />
-      </div>
-    );
-  }
-
   // Text messages
   return (
     <div
-      className={`flex items-start gap-3 animate-fade-up ${isUser ? "flex-row-reverse" : ""}`}
+      className={`flex items-start gap-4 animate-fade-up ${isUser ? "flex-row-reverse" : ""}`}
     >
       {/* Avatar */}
-      {!isUser && (
-        <div className="w-7 h-7 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5">
-          P
+      {!isUser ? (
+        <div className="relative w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[16px] shadow-sm flex-shrink-0 mt-1">
+          🤖
+          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-sm">
+            <span className="text-[#3b82f6] text-[10px]">✨</span>
+          </div>
+        </div>
+      ) : (
+        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-[14px] shadow-sm flex-shrink-0 mt-1">
+          👤
         </div>
       )}
 
-      <div className={`max-w-[85%] ${isUser ? "items-end" : "items-start"}`}>
+      <div className={`max-w-[85%] flex flex-col ${isUser ? "items-end" : "items-start"}`}>
         <div
           className={`
-            px-4 py-3 rounded-2xl text-[14px] leading-relaxed
+            px-5 py-3.5 rounded-2xl text-[15px] leading-relaxed shadow-sm
             ${
               isUser
-                ? "bg-[var(--color-accent)] text-white rounded-tr-md"
-                : "bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] rounded-tl-md"
+                ? "bg-slate-100 text-slate-800 rounded-tr-sm"
+                : "bg-white border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] rounded-tl-sm"
             }
           `}
         >
@@ -106,10 +101,12 @@ export default function MessageBubble({
 
         {/* Quick-fill chips */}
         {message.type === "missing-context" && message.quickFillOptions && (
-          <QuickFillChips
-            options={message.quickFillOptions}
-            onSelect={onQuickFill}
-          />
+          <div className="mt-3">
+            <QuickFillChips
+              options={message.quickFillOptions}
+              onSelect={onQuickFill}
+            />
+          </div>
         )}
       </div>
     </div>

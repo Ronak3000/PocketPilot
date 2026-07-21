@@ -1,0 +1,125 @@
+/* ─────────────────────────────────────────────
+   PocketPilot Design Tokens
+   Dark-mode-first, warm neutrals, teal accent
+   ───────────────────────────────────────────── */
+
+:root {
+  /* ── Spacing scale ── */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ── Radii ── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* ── Shadows (dark-mode optimized) ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow-teal: 0 0 20px rgba(20, 184, 166, 0.15);
+
+  /* ── Typography ── */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.8125rem;
+  --font-size-base: 0.9375rem;
+  --font-size-lg: 1.0625rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+
+  /* ── Z-index scale ── */
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+
+  /* ── Transitions ── */
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-slow: 350ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Sidebar ── */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 72px;
+  --topbar-height: 56px;
+  --mobile-nav-height: 64px;
+  --chat-input-height: 72px;
+}
+
+/* ── Main Color Palette (Light Mode) ── */
+:root {
+  /* Backgrounds */
+  --color-bg-primary: #fafafb; /* Very slight off-white for the main app background */
+  --color-bg-secondary: #f4f5f7;
+  --color-bg-surface: #ffffff; /* Crisp white for cards/bubbles */
+  --color-bg-elevated: #ffffff;
+  --color-bg-hover: #f1f5f9;
+  --color-bg-active: #e2e8f0;
+
+  /* Borders */
+  --color-border-subtle: #f1f5f9;
+  --color-border-default: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+
+  /* Text */
+  --color-text-primary: #0f172a; /* Slate 900 for high contrast */
+  --color-text-secondary: #64748b; /* Slate 500 for subtext */
+  --color-text-muted: #94a3b8;
+  --color-text-disabled: #cbd5e1;
+
+  /* Accents (The vibrant blue from the mockup) */
+  --color-accent: #2563eb; /* Blue 600 */
+  --color-accent-hover: #1d4ed8;
+  --color-accent-subtle: #eff6ff; /* Blue 50 */
+  --color-accent-text: #2563eb;
+
+  /* Semantic colors */
+  --color-safe: #10b981; /* Emerald 500 */
+  --color-safe-subtle: #ecfdf5; /* Emerald 50 */
+  --color-caution: #f59e0b;
+  --color-caution-subtle: #fffbeb;
+  --color-warning: #ea580c;
+  --color-warning-subtle: #fff7ed;
+  --color-breach: #ef4444;
+  --color-breach-subtle: #fef2f2;
+
+  /* Inputs */
+  --color-input-bg: #ffffff;
+  --color-input-border: #e2e8f0;
+  --color-input-focus: #2563eb;
+
+  /* Premium soft shadows matching the mockup */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.06);
+  --shadow-xl: 0 20px 40px rgba(15, 23, 42, 0.08);
+  --shadow-glow-teal: 0 0 20px rgba(37, 99, 235, 0.15); /* Re-purposed to blue glow */
+}

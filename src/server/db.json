@@ -1,0 +1,16 @@
+{
+  "profile": null,
+  "constitution": null,
+  "lastDecision": null,
+  "lastComparison": null,
+  "lastReceipt": null,
+  "lastPlan": null,
+  "safeToSpend": null,
+  "history": [],
+  "memories": [],
+  "personalization": {
+    "memoryEnabled": true,
+    "humorEnabled": true,
+    "roastLevel": 0
+  }
+}

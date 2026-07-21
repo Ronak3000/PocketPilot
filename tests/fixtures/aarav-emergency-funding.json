@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "description": "Aarav emergency funding test fixture — hospital bill scenario",
+  "currency": "INR",
+  "moneyUnit": "paise",
+  "scenario": "medical",
+  "assumptions": {
+    "asOfDate": "2026-08-15",
+    "emergencyAlreadyOccurred": true,
+    "hasExistingInsurance": false,
+    "note": "Hospital bill already due; insurance claim unavailable or denied."
+  },
+  "profile": {
+    "name": "Aarav",
+    "currentBalancePaise": 7200000,
+    "monthlyIncomePaise": 4800000,
+    "nextIncomeDate": "2026-09-01",
+    "protectedBalanceFloorPaise": 1000000,
+    "protectedMonthlyExpensesPaise": 1900000,
+    "existingMonthlyEmiPaise": 350000,
+    "activeGoalMonthlyContributionPaise": 800000
+  },
+  "emergency": {
+    "totalNeededPaise": 12000000,
+    "alreadyAvailablePaise": 2000000,
+    "requiredByDate": "2026-08-25",
+    "fundingGapPaise": 10000000
+  },
+  "mockOffers": [
+    {
+      "id": "mock-offer-alpha",
+      "principalPaise": 10000000,
+      "annualRateBasisPoints": 1400,
+      "tenureMonths": 18,
+      "processingFeePaise": 100000,
+      "otherChargesPaise": 0,
+      "disbursalWindowDays": 3,
+      "description": "Low rate, longer tenure"
+    },
+    {
+      "id": "mock-offer-beta",
+      "principalPaise": 10000000,
+      "annualRateBasisPoints": 1800,
+      "tenureMonths": 12,
+      "processingFeePaise": 150000,
+      "otherChargesPaise": 0,
+      "disbursalWindowDays": 2,
+      "description": "Mid rate, standard tenure"
+    },
+    {
+      "id": "mock-offer-gamma",
+      "principalPaise": 10000000,
+      "annualRateBasisPoints": 2400,
+      "tenureMonths": 6,
+      "processingFeePaise": 200000,
+      "otherChargesPaise": 0,
+      "disbursalWindowDays": 1,
+      "description": "Higher rate, shorter tenure"
+    }
+  ],
+  "expectedOutputs": {
+    "mock-offer-alpha": {
+      "monthlyEmiPaise": 619339,
+      "totalFeesPaise": 100000,
+      "totalRepaymentPaise": 11248102,
+      "postLoanEmiRatioBasisPoints": 2019,
+      "lowestProjectedBalancePaise": 5100000,
+      "negativeBalanceDays": 0,
+      "goalDelayDays": 0,
+      "disbursalDate": "2026-08-18",
+      "finalRepaymentDate": "2028-02-18",
+      "arrivesByRequiredDate": true,
+      "constitutionCompliant": true,
+      "reasonCodes": ["AFFORDABILITY_FIT"]
+    },
+    "mock-offer-beta": {
+      "monthlyEmiPaise": 916800,
+      "totalFeesPaise": 150000,
+      "totalRepaymentPaise": 11151600,
+      "postLoanEmiRatioBasisPoints": 2639,
+      "lowestProjectedBalancePaise": 5050000,
+      "negativeBalanceDays": 0,
+      "goalDelayDays": 0,
+      "disbursalDate": "2026-08-17",
+      "finalRepaymentDate": "2027-08-17",
+      "arrivesByRequiredDate": true,
+      "constitutionCompliant": true,
+      "reasonCodes": ["AFFORDABILITY_FIT"]
+    },
+    "mock-offer-gamma": {
+      "monthlyEmiPaise": 1785258,
+      "totalFeesPaise": 200000,
+      "totalRepaymentPaise": 10911548,
+      "postLoanEmiRatioBasisPoints": 4448,
+      "lowestProjectedBalancePaise": 4788452,
+      "negativeBalanceDays": 0,
+      "goalDelayDays": 0,
+      "disbursalDate": "2026-08-16",
+      "finalRepaymentDate": "2027-02-16",
+      "arrivesByRequiredDate": true,
+      "constitutionCompliant": false,
+      "reasonCodes": ["POST_LOAN_EMI_RATIO_EXCEEDED"]
+    },
+    "safetyFirstOrder": ["mock-offer-beta", "mock-offer-alpha", "mock-offer-gamma"]
+  },
+  "unaffordableScenario": {
+    "description": "Balance too low relative to gap — projected negative balance",
+    "profile": {
+      "currentBalancePaise": 500000,
+      "monthlyIncomePaise": 1500000,
+      "nextIncomeDate": "2026-09-01",
+      "protectedBalanceFloorPaise": 200000,
+      "protectedMonthlyExpensesPaise": 1200000,
+      "existingMonthlyEmiPaise": 200000,
+      "activeGoalMonthlyContributionPaise": 100000
+    },
+    "emergency": {
+      "totalNeededPaise": 12000000,
+      "alreadyAvailablePaise": 0,
+      "requiredByDate": "2026-08-25",
+      "fundingGapPaise": 12000000
+    }
+  },
+  "nonCreditAlternatives": [
+    "hospital_payment_plan",
+    "employer_salary_advance",
+    "family_support",
+    "government_charity_scheme",
+    "regulated_credit_simulation"
+  ],
+  "insuranceBoundary": {
+    "newInsuranceInapplicable": true,
+    "preventionRoadmapOnly": true
+  }
+}

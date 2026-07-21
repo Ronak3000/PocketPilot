@@ -37,7 +37,7 @@ test.describe("PocketPilot Demo Flow", () => {
 
     // Should now be in chat
     await expect(page.getByText(/PocketPilot/)).toBeVisible();
-    await expect(page.getByPlaceholder("Ask about a purchase")).toBeVisible();
+    await expect(page.getByPlaceholder("Ask anything about money...")).toBeVisible();
   });
 
   test("should display greeting message in chat", async ({ page }) => {
@@ -48,7 +48,7 @@ test.describe("PocketPilot Demo Flow", () => {
     await page.getByRole("button", { name: /start using/i }).click();
 
     // Check greeting
-    await expect(page.getByText(/Hey Aarav/)).toBeVisible();
+    await expect(page.getByText(/Hi Aarav/)).toBeVisible();
   });
 
   test("should show demo purchase button", async ({ page }) => {
@@ -57,6 +57,6 @@ test.describe("PocketPilot Demo Flow", () => {
     }
     await page.getByRole("button", { name: /start using/i }).click();
 
-    await expect(page.getByText(/Galaxy S25 Ultra/)).toBeVisible();
+    await expect(page.getByRole("button", { name: /Check affordability/ })).toBeVisible();
   });
 });

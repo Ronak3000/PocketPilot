@@ -58,6 +58,51 @@
       "description": "Higher rate, shorter tenure"
     }
   ],
+  "expectedOutputs": {
+    "mock-offer-alpha": {
+      "monthlyEmiPaise": 619339,
+      "totalFeesPaise": 100000,
+      "totalRepaymentPaise": 11248102,
+      "postLoanEmiRatioBasisPoints": 2019,
+      "lowestProjectedBalancePaise": 5100000,
+      "negativeBalanceDays": 0,
+      "goalDelayDays": 0,
+      "disbursalDate": "2026-08-18",
+      "finalRepaymentDate": "2028-02-18",
+      "arrivesByRequiredDate": true,
+      "constitutionCompliant": true,
+      "reasonCodes": ["AFFORDABILITY_FIT"]
+    },
+    "mock-offer-beta": {
+      "monthlyEmiPaise": 916800,
+      "totalFeesPaise": 150000,
+      "totalRepaymentPaise": 11151600,
+      "postLoanEmiRatioBasisPoints": 2639,
+      "lowestProjectedBalancePaise": 5050000,
+      "negativeBalanceDays": 0,
+      "goalDelayDays": 0,
+      "disbursalDate": "2026-08-17",
+      "finalRepaymentDate": "2027-08-17",
+      "arrivesByRequiredDate": true,
+      "constitutionCompliant": true,
+      "reasonCodes": ["AFFORDABILITY_FIT"]
+    },
+    "mock-offer-gamma": {
+      "monthlyEmiPaise": 1785258,
+      "totalFeesPaise": 200000,
+      "totalRepaymentPaise": 10911548,
+      "postLoanEmiRatioBasisPoints": 4448,
+      "lowestProjectedBalancePaise": 4788452,
+      "negativeBalanceDays": 0,
+      "goalDelayDays": 0,
+      "disbursalDate": "2026-08-16",
+      "finalRepaymentDate": "2027-02-16",
+      "arrivesByRequiredDate": true,
+      "constitutionCompliant": false,
+      "reasonCodes": ["POST_LOAN_EMI_RATIO_EXCEEDED"]
+    },
+    "safetyFirstOrder": ["mock-offer-beta", "mock-offer-alpha", "mock-offer-gamma"]
+  },
   "unaffordableScenario": {
     "description": "Balance too low relative to gap — projected negative balance",
     "profile": {
@@ -74,15 +119,7 @@
       "alreadyAvailablePaise": 0,
       "requiredByDate": "2026-08-25",
       "fundingGapPaise": 12000000
-    },
-    "expectedReasonCodesForAlphaOffer": [
-      "HIGH_EXISTING_EMI_RATIO",
-      "INSUFFICIENT_REPAYMENT_BUFFER",
-      "NEGATIVE_BALANCE_PROJECTED",
-      "POST_LOAN_EMI_RATIO_EXCEEDED",
-      "PROTECTED_BALANCE_BREACH",
-      "PROTECTED_EXPENSE_AT_RISK"
-    ]
+    }
   },
   "nonCreditAlternatives": [
     "hospital_payment_plan",

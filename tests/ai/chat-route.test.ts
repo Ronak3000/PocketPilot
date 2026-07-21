@@ -25,8 +25,9 @@ describe("POST /api/chat", () => {
     expect(response.status).toBe(503);
     await expect(response.json()).resolves.toEqual({
       error:
-        "Google Generative AI is not configured. Add GOOGLE_GENERATIVE_AI_API_KEY to .env.local.",
+        "Google Generative AI API key is not configured. Add GOOGLE_GENERATIVE_AI_API_KEY to .env.local.",
     });
+
   });
 
   it("rejects malformed chat payloads before calling Gemini", async () => {

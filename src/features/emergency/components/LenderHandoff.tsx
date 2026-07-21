@@ -52,7 +52,7 @@ export function LenderHandoff({ offer, result, userName, onStartOver, onClose }:
             <tr><td>Processing Fee</td><td>{inr(offer.processingFeePaise)}</td></tr>
             <tr><td>Total Repayment</td><td>{inr(result.totalRepaymentPaise)}</td></tr>
             <tr><td>Final Repayment Date</td><td>{result.finalRepaymentDate}</td></tr>
-            <tr><td>Disbursal (estimate)</td><td>{offer.disbursalWindowDays} business days</td></tr>
+            <tr><td>Disbursal (estimate)</td><td>{result.disbursalDate}</td></tr>
           </tbody>
         </table>
       </div>

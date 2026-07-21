@@ -1,4 +1,5 @@
 import type { UserMemory } from "@/core/ai/memory";
+import type { EmergencyCategory } from "@/core/finance/emergency";
 
 export type ToneMode =
   | "EMERGENCY"
@@ -7,14 +8,6 @@ export type ToneMode =
   | "NEUTRAL"
   | "PLAYFUL"
   | "ROAST_LIGHT";
-
-export type EmergencyCategory =
-  | "medical"
-  | "family"
-  | "housing"
-  | "education"
-  | "income_disruption"
-  | "other";
 
 export interface PersonalizationSettings {
   memoryEnabled: boolean;
@@ -30,10 +23,10 @@ export const DEFAULT_PERSONALIZATION: PersonalizationSettings = {
 
 // ── Emergency term maps by category ──
 const MEDICAL_TERMS = [
-  "hospital", "medical", "emergency", "surgery", "medicine",
+  "hospital", "medical", "surgery", "medicine",
   "doctor", "ambulance", "icu", "treatment", "health crisis",
   "accident", "injury", "ward", "operation", "diagnosis",
-  "critical condition", "emer", "health emergency",
+  "critical condition", "health emergency",
 ];
 
 const FAMILY_TERMS = [
@@ -44,7 +37,7 @@ const FAMILY_TERMS = [
 
 const HOUSING_TERMS = [
   "eviction", "evicted", "homeless", "house fire", "flood damage",
-  "rent due", "rent overdue", "kicked out", "no place to stay",
+  "rent due", "rent is due", "rent overdue", "kicked out", "no place to stay",
   "shelter", "displaced",
 ];
 
@@ -61,18 +54,8 @@ const INCOME_DISRUPTION_TERMS = [
 ];
 
 const OTHER_EMERGENCY_TERMS = [
-  "urgent", "desperate", "help me", "i need money", "mujhe paisa chahiye",
-  "emergency fund", "immediate need", "right now", "crisis",
-];
-
-// All terms combined for quick boolean detection
-const ALL_EMERGENCY_TERMS = [
-  ...MEDICAL_TERMS,
-  ...FAMILY_TERMS,
-  ...HOUSING_TERMS,
-  ...EDUCATION_TERMS,
-  ...INCOME_DISRUPTION_TERMS,
-  ...OTHER_EMERGENCY_TERMS,
+  "financial emergency", "need money urgently", "i need money urgently",
+  "mujhe paisa chahiye", "immediate financial need", "financial crisis",
 ];
 
 const PAYMENT_TERMS = [
@@ -82,8 +65,8 @@ const PAYMENT_TERMS = [
 
 export function detectEmergencyCategory(text: string): EmergencyCategory | null {
   const lower = text.toLowerCase();
-  if (MEDICAL_TERMS.some((t) => lower.includes(t))) return "medical";
   if (FAMILY_TERMS.some((t) => lower.includes(t))) return "family";
+  if (MEDICAL_TERMS.some((t) => lower.includes(t))) return "medical";
   if (HOUSING_TERMS.some((t) => lower.includes(t))) return "housing";
   if (EDUCATION_TERMS.some((t) => lower.includes(t))) return "education";
   if (INCOME_DISRUPTION_TERMS.some((t) => lower.includes(t))) return "income_disruption";
@@ -98,7 +81,7 @@ export function selectTone(input: {
   belowProtectedFloor?: boolean;
 }): ToneMode {
   const text = input.text.toLowerCase();
-  if (ALL_EMERGENCY_TERMS.some((term) => text.includes(term))) return "EMERGENCY";
+  if (detectEmergencyCategory(input.text)) return "EMERGENCY";
   if (input.bufferQuality === "critical" || input.belowProtectedFloor) {
     return "SERIOUS";
   }
@@ -250,4 +233,3 @@ ${
       : "None."
   }`;
 }
-

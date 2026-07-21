@@ -11,20 +11,14 @@ export default function DashboardWidgets() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const fetchData = () => {
-      pocketPilotClient.getSafeToSpend().then((sts) => {
+    void Promise.all([
+      pocketPilotClient.getSafeToSpend(),
+      pocketPilotClient.getProfile(),
+    ]).then(([sts, loadedProfile]) => {
         setSafeToSpend(sts.safeAmountPaise);
-      }).catch(() => {});
-
-      pocketPilotClient.getProfile().then((p) => {
-        setProfile(p);
-      }).catch(() => {});
-    };
-
-    fetchData(); // Initial fetch
-    const interval = setInterval(fetchData, 3000); // Poll every 3 seconds
-
-    return () => clearInterval(interval);
+        setProfile(loadedProfile);
+      })
+      .catch(() => undefined);
   }, []);
 
   const displaySts = safeToSpend !== null 

@@ -33,8 +33,6 @@ export function EmergencyAcknowledgement({ category, onContinue, onDismiss }: Pr
 
   return (
     <div className="emergency-acknowledgement">
-      <div className="emergency-acknowledgement__icon" aria-hidden="true">⚠</div>
-
       <h1 className="emergency-acknowledgement__heading">{heading}</h1>
 
       <p className="emergency-acknowledgement__body">{body}</p>

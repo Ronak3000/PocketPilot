@@ -135,7 +135,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       "pocket-pilot-state",
       JSON.stringify({ view, profile, constitution, isOnboarded }),
     );
-  }, [state.view, state.profile, state.constitution, state.isOnboarded]);
+  }, [state]);
 
   return (
     <AppStateContext.Provider value={state}>

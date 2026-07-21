@@ -17,7 +17,6 @@ export default function HistoryPanel({ refreshKey = 0 }: HistoryPanelProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     async function load() {
       try {
         const history = await pocketPilotClient.getHistory();
@@ -27,8 +26,6 @@ export default function HistoryPanel({ refreshKey = 0 }: HistoryPanelProps) {
       }
     }
     load();
-  // refreshKey changes every time the user navigates to this panel
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshKey]);
 
   const typeLabels: Record<string, string> = {

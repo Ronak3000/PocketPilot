@@ -2,7 +2,7 @@
 
 // ── Screen 6: Mock Loan Offer Comparison ──
 // Transparent side-by-side display of simulated offers.
-// Sorted by total repayment (lowest cost first).
+// Sorted by deadline and financial safety, then total repayment.
 // NOT called "approval". Clearly labelled as simulation.
 
 import React, { useState } from "react";
@@ -26,10 +26,10 @@ function bpToPercent(bp: number): string {
 }
 
 function riskBadge(result: OfferAffordabilityResult): { label: string; cls: string } {
-  if (result.negativeBalanceDays > 0 || result.protectedBalanceBreach) {
+  if (!result.arrivesByRequiredDate || result.negativeBalanceDays > 0 || result.protectedBalanceBreach) {
     return { label: "High Risk", cls: "badge--risk-high" };
   }
-  if (result.postLoanEmiRatioBasisPoints > 4000) {
+  if (!result.constitutionCompliant) {
     return { label: "Caution", cls: "badge--risk-caution" };
   }
   return { label: "Manageable", cls: "badge--risk-ok" };
@@ -64,7 +64,7 @@ export function LoanOfferComparison({
 
       <p className="loan-offer-comparison__subheading">
         Funding gap: <strong>{inr(fundingGapPaise)}</strong>
-        &nbsp;· Offers sorted by lowest total cost.
+        &nbsp;· Safety and deadline first, then total cost.
       </p>
 
       <div className="loan-offer-comparison__assessment-note">
@@ -86,7 +86,7 @@ export function LoanOfferComparison({
               id={`offer-card-${result.offerId}`}
             >
               {idx === 0 && (
-                <div className="offer-card__tag">Lowest Total Cost</div>
+                <div className="offer-card__tag">Safest of shown</div>
               )}
 
               <div className="offer-card__provider">
@@ -123,7 +123,7 @@ export function LoanOfferComparison({
                   </tr>
                   <tr>
                     <td>Disbursal (estimate)</td>
-                    <td>{offer.disbursalWindowDays} days</td>
+                    <td>{result.disbursalDate}</td>
                   </tr>
                   <tr>
                     <td>Final repayment</td>
@@ -138,6 +138,16 @@ export function LoanOfferComparison({
                 <div className="offer-card__warning">
                   Warning: This loan may cause your balance to fall below your
                   protected floor.
+                </div>
+              )}
+              {!result.arrivesByRequiredDate && (
+                <div className="offer-card__warning">
+                  Estimated disbursal is after your required date.
+                </div>
+              )}
+              {!result.constitutionCompliant && (
+                <div className="offer-card__warning">
+                  This offer conflicts with a limit in your Money Constitution.
                 </div>
               )}
               {result.goalDelayDays && result.goalDelayDays > 0 && (

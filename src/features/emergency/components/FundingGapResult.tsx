@@ -61,8 +61,8 @@ export function FundingGapResult({
       {!hasGap && (
         <div className="funding-gap-result__notice funding-gap-result__notice--ok">
           You appear to have enough available. Consider whether you need a loan
-          at all — borrowing has costs. The options below are shown for
-          completeness.
+          at all — borrowing has costs. PocketPilot will not create a loan
+          comparison when there is no verified funding gap.
         </div>
       )}
 
@@ -86,7 +86,7 @@ export function FundingGapResult({
           className="btn btn--primary"
           onClick={onContinue}
         >
-          See options
+          {hasGap ? "See options" : "Done"}
         </button>
       </div>
     </div>

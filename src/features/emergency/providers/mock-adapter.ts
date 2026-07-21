@@ -4,6 +4,9 @@
 // Final approval belongs to the regulated lender.
 
 import type { FundingOffer, FundingProviderAdapter } from "./types";
+import { calculateEmi } from "@/core/finance/emi/calculate-emi";
+import { addPaise, multiplyPaise } from "@/core/finance/money/money";
+import { applyBasisPoints } from "@/core/finance/money/percentage";
 
 const DISCLAIMER =
   "This is a simulation for illustrative purposes only. " +
@@ -30,7 +33,7 @@ function buildKeyFactStatement(params: {
     `Monthly EMI: ${inr(params.monthlyEmiPaise)}`,
     `Processing Fee: ${inr(params.processingFeePaise)}`,
     `Total Repayment: ${inr(params.totalRepaymentPaise)}`,
-    `Disbursal: typically within 2–5 business days (indicative)`,
+    `Disbursal timing: see the simulated offer estimate (calendar days)`,
     `Final approval: Belongs to the regulated lender. This is not a loan offer.`,
   ].join("\n");
 }
@@ -49,21 +52,21 @@ export class MockFundingProviderAdapter implements FundingProviderAdapter {
 
     // ── Offer 1: Low Rate, Longer Tenure ──
     // 14% APR, 18 months
-    const offer1Emi = calcEmiApprox(principalPaise, 1400, 18);
-    const offer1ProcessingFee = Math.round(principalPaise * 0.01); // 1%
-    const offer1Total = offer1Emi * 18 + offer1ProcessingFee;
+    const offer1Emi = calculateEmi({ principalPaise, annualInterestBasisPoints: 1400, tenureMonths: 18 }).monthlyEmiPaise;
+    const offer1ProcessingFee = applyBasisPoints(principalPaise, 100);
+    const offer1Total = addPaise(multiplyPaise(offer1Emi, 18), offer1ProcessingFee);
 
     // ── Offer 2: Mid Rate, Standard Tenure ──
     // 18% APR, 12 months
-    const offer2Emi = calcEmiApprox(principalPaise, 1800, 12);
-    const offer2ProcessingFee = Math.round(principalPaise * 0.015); // 1.5%
-    const offer2Total = offer2Emi * 12 + offer2ProcessingFee;
+    const offer2Emi = calculateEmi({ principalPaise, annualInterestBasisPoints: 1800, tenureMonths: 12 }).monthlyEmiPaise;
+    const offer2ProcessingFee = applyBasisPoints(principalPaise, 150);
+    const offer2Total = addPaise(multiplyPaise(offer2Emi, 12), offer2ProcessingFee);
 
     // ── Offer 3: Higher Rate, Shorter Tenure ──
     // 24% APR, 6 months
-    const offer3Emi = calcEmiApprox(principalPaise, 2400, 6);
-    const offer3ProcessingFee = Math.round(principalPaise * 0.02); // 2%
-    const offer3Total = offer3Emi * 6 + offer3ProcessingFee;
+    const offer3Emi = calculateEmi({ principalPaise, annualInterestBasisPoints: 2400, tenureMonths: 6 }).monthlyEmiPaise;
+    const offer3ProcessingFee = applyBasisPoints(principalPaise, 200);
+    const offer3Total = addPaise(multiplyPaise(offer3Emi, 6), offer3ProcessingFee);
 
     const offers: FundingOffer[] = [
       {
@@ -145,23 +148,6 @@ export class MockFundingProviderAdapter implements FundingProviderAdapter {
 
     return offers;
   }
-}
-
-/**
- * Approximate EMI for display purposes in the Key Fact Statement.
- * Exact value is calculated by the finance engine in assessEmergencyAffordability.
- */
-function calcEmiApprox(
-  principalPaise: number,
-  annualRateBasisPoints: number,
-  tenureMonths: number,
-): number {
-  if (annualRateBasisPoints === 0) {
-    return Math.ceil(principalPaise / tenureMonths);
-  }
-  const r = annualRateBasisPoints / (12 * 10_000);
-  const power = Math.pow(1 + r, tenureMonths);
-  return Math.round((principalPaise * r * power) / (power - 1));
 }
 
 export const mockFundingProviderAdapter = new MockFundingProviderAdapter();

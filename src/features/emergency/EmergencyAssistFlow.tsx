@@ -1,190 +1,155 @@
 "use client";
 
-// ── Emergency Assist Flow Orchestrator ──
-// Wires all 8 screens together.
-// State machine: each step is explicit.
-
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import type { EmergencyCategory } from "@/core/finance/emergency";
+import { useCallback, useState } from "react";
 import {
   checkInsuranceBoundary,
-  compareEmergencyFundingOffers,
+  validateEmergencyContext,
+  type ConsentDecision,
+  type EmergencyCategory,
+  type EmergencyContext,
+  type OfferAffordabilityResult,
 } from "@/core/finance/emergency";
-import type { ConsentDecision, OfferAffordabilityResult } from "@/core/finance/emergency";
-import { mockFundingProviderAdapter } from "./providers/mock-adapter";
-import type { FundingOffer } from "./providers/types";
+import { requestEmergencyAssessment } from "./api";
+import { ConsentGate } from "./components/ConsentGate";
+import { EligibilityExplanation } from "./components/EligibilityExplanation";
 import { EmergencyAcknowledgement } from "./components/EmergencyAcknowledgement";
 import { EmergencyAmountForm } from "./components/EmergencyAmountForm";
-import { ConsentGate } from "./components/ConsentGate";
 import { FundingGapResult } from "./components/FundingGapResult";
-import { NonCreditAlternatives } from "./components/NonCreditAlternatives";
-import { LoanOfferComparison } from "./components/LoanOfferComparison";
-import { EligibilityExplanation } from "./components/EligibilityExplanation";
 import { LenderHandoff } from "./components/LenderHandoff";
+import { LoanOfferComparison } from "./components/LoanOfferComparison";
+import {
+  ManualFinancialContextForm,
+  type ManualFinancialContext,
+} from "./components/ManualFinancialContextForm";
+import { NonCreditAlternatives } from "./components/NonCreditAlternatives";
+import type { FundingOffer } from "./providers/types";
 
 type Step =
   | "acknowledge"
   | "amount"
   | "consent"
+  | "manual"
   | "funding_gap"
   | "alternatives"
   | "offers"
   | "eligibility"
-  | "handoff"
-  | "closed";
+  | "handoff";
 
-interface EmergencyAssistProps {
-  /** Emergency category detected from chat or user selection. */
-  category: EmergencyCategory;
-  /** Saved profile data for pre-filling (requires consent). */
-  savedProfile?: {
-    currentBalancePaise: number;
-    monthlyIncomePaise: number;
-    nextIncomeDate: string;
-    protectedBalanceFloorPaise: number;
-    protectedMonthlyExpensesPaise: number;
-    existingMonthlyEmiPaise: number;
-    activeGoalMonthlyContributionPaise: number;
-    name: string;
+interface SavedProfile extends ManualFinancialContext {
+  name: string;
+  activeGoal?: {
+    id: string;
+    targetAmountPaise: number;
+    currentAmountPaise: number;
+    contributionDayOfMonth: number;
   };
+  maximumEmiRatioBasisPoints?: number;
+  maximumTenureMonths?: number;
+}
+
+interface Props {
+  category: EmergencyCategory;
+  asOfDate: string;
+  savedProfile?: SavedProfile;
   onClose: () => void;
+}
+
+interface AmountData {
+  totalNeededPaise: number;
+  alreadyAvailablePaise: number;
+  requiredByDate: string;
+  hasExistingInsurance: boolean;
 }
 
 const SAVED_PROFILE_FIELD_LABELS = [
   "Current account balance",
-  "Monthly income",
-  "Next income date",
-  "Protected balance floor",
-  "Protected monthly expenses",
-  "Existing monthly EMIs",
-  "Savings goal contribution",
+  "Monthly income and next income date",
+  "Protected balance and essential expenses",
+  "Existing EMIs and savings-goal contribution",
+  "Money Constitution limits",
 ];
 
-export function EmergencyAssistFlow({ category, savedProfile, onClose }: EmergencyAssistProps) {
+export function EmergencyAssistFlow({ category, asOfDate, savedProfile, onClose }: Props) {
   const [step, setStep] = useState<Step>("acknowledge");
-  const [amountData, setAmountData] = useState<{
-    totalNeededPaise: number;
-    alreadyAvailablePaise: number;
-    requiredByDate: string;
-  } | null>(null);
+  const [amountData, setAmountData] = useState<AmountData | null>(null);
   const [fundingGapPaise, setFundingGapPaise] = useState(0);
   const [offerResults, setOfferResults] = useState<OfferAffordabilityResult[]>([]);
   const [offers, setOffers] = useState<FundingOffer[]>([]);
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const today = new Date().toISOString().split("T")[0];
-  const userName = savedProfile?.name ?? "there";
-
-  // Use a ref so handleAmountSubmit can reference handleConsentDecision before it is declared.
-  const handleConsentDecisionRef = useRef<((decision: ConsentDecision, data?: { totalNeededPaise: number; alreadyAvailablePaise: number; requiredByDate: string }) => Promise<void>) | undefined>(undefined);
-
-
-  const handleConsentDecision = useCallback(
-    async (
-      decision: ConsentDecision,
-      data?: { totalNeededPaise: number; alreadyAvailablePaise: number; requiredByDate: string },
-    ) => {
-      const resolved = data ?? amountData;
-      if (!resolved) return;
-
-      if (decision === "decline" || decision === "delete_assessment") {
-        onClose();
+  const runAssessment = useCallback(
+    async (financial: ManualFinancialContext, profile?: SavedProfile) => {
+      if (!amountData) return;
+      const context: EmergencyContext = {
+        category,
+        ...amountData,
+        ...financial,
+        asOfDate,
+        activeGoal: profile?.activeGoal,
+        maximumEmiRatioBasisPoints: profile?.maximumEmiRatioBasisPoints,
+        maximumTenureMonths: profile?.maximumTenureMonths,
+      };
+      const validation = validateEmergencyContext(context);
+      if (validation.status !== "COMPLETE") {
+        setError(validation.missingFieldQuestion ?? "More financial context is required.");
         return;
       }
 
-      const useProfile =
-        (decision === "allow_once" || decision === "temporary_chat") && savedProfile;
-
-      const ctx = useProfile
-        ? {
-            category,
-            totalNeededPaise: resolved.totalNeededPaise,
-            alreadyAvailablePaise: resolved.alreadyAvailablePaise,
-            requiredByDate: resolved.requiredByDate,
-            currentBalancePaise: savedProfile.currentBalancePaise,
-            monthlyIncomePaise: savedProfile.monthlyIncomePaise,
-            nextIncomeDate: savedProfile.nextIncomeDate,
-            protectedBalanceFloorPaise: savedProfile.protectedBalanceFloorPaise,
-            protectedMonthlyExpensesPaise: savedProfile.protectedMonthlyExpensesPaise,
-            existingMonthlyEmiPaise: savedProfile.existingMonthlyEmiPaise,
-            activeGoalMonthlyContributionPaise: savedProfile.activeGoalMonthlyContributionPaise,
-            asOfDate: today,
-          }
-        : {
-            // Manual entry — all zero until user provides values
-            category,
-            totalNeededPaise: resolved.totalNeededPaise,
-            alreadyAvailablePaise: resolved.alreadyAvailablePaise,
-            requiredByDate: resolved.requiredByDate,
-            currentBalancePaise: 0,
-            monthlyIncomePaise: 0,
-            nextIncomeDate: today,
-            protectedBalanceFloorPaise: 0,
-            protectedMonthlyExpensesPaise: 0,
-            existingMonthlyEmiPaise: 0,
-            activeGoalMonthlyContributionPaise: 0,
-            asOfDate: today,
-          };
-
       setIsLoading(true);
+      setError("");
       try {
-        const gap = Math.max(0, ctx.totalNeededPaise - ctx.alreadyAvailablePaise);
-        setFundingGapPaise(gap);
-
-        const rawOffers = await mockFundingProviderAdapter.listOffers({
-          principalPaise: gap,
-          asOfDate: today,
-        });
+        const { offers: rawOffers, comparison } = await requestEmergencyAssessment(
+          validation.context!,
+        );
+        setFundingGapPaise(comparison.fundingGapPaise);
         setOffers(rawOffers);
-
-        const comparison = compareEmergencyFundingOffers({ context: ctx, offers: rawOffers });
         setOfferResults(comparison.offers);
         setStep("funding_gap");
+      } catch (assessmentError) {
+        setError(
+          assessmentError instanceof Error
+            ? assessmentError.message
+            : "The assessment could not be completed.",
+        );
       } finally {
         setIsLoading(false);
       }
     },
-    [amountData, category, onClose, savedProfile, today],
+    [amountData, asOfDate, category],
   );
 
-  // Keep the ref in sync so handleAmountSubmit can call it without forward-ref issues
-  useEffect(() => {
-    handleConsentDecisionRef.current = handleConsentDecision;
-  }, [handleConsentDecision]);
+  function handleAmountSubmit(data: AmountData) {
+    setAmountData(data);
+    setStep(savedProfile ? "consent" : "manual");
+  }
 
-  const handleAmountSubmit = useCallback(
-    (data: { totalNeededPaise: number; alreadyAvailablePaise: number; requiredByDate: string }) => {
-      setAmountData(data);
-      if (savedProfile) {
-        setStep("consent");
-      } else {
-        void handleConsentDecisionRef.current?.("manual_entry", data);
-      }
-    },
-    [savedProfile],
-  );
+  function handleConsentDecision(decision: ConsentDecision) {
+    if (decision === "decline" || decision === "delete_assessment") {
+      onClose();
+      return;
+    }
+    if (decision === "manual_entry" || !savedProfile) {
+      setStep("manual");
+      return;
+    }
+    void runAssessment(savedProfile, savedProfile);
+  }
 
   const insuranceBoundary = checkInsuranceBoundary({
     emergencyAlreadyOccurred: true,
-    hasExistingInsurance: false,
+    hasExistingInsurance: amountData?.hasExistingInsurance ?? false,
   });
-
-  const selectedOffer = offers.find((o) => o.id === selectedOfferId) ?? null;
-  const selectedResult = offerResults.find((r) => r.offerId === selectedOfferId) ?? null;
-
-  if (step === "closed") {
-    return null;
-  }
+  const selectedOffer = offers.find((offer) => offer.id === selectedOfferId) ?? null;
+  const selectedResult =
+    offerResults.find((result) => result.offerId === selectedOfferId) ?? null;
 
   return (
     <div className="emergency-assist" role="dialog" aria-modal="true" aria-label="Emergency Assist">
       <div className="emergency-assist__inner">
-        {isLoading && (
-          <div className="emergency-assist__loading" aria-live="polite">
-            Running assessment...
-          </div>
-        )}
+        {error && <p className="emergency-assist__error" role="alert">{error}</p>}
+        {isLoading && <div className="emergency-assist__loading" aria-live="polite">Running assessment…</div>}
 
         {!isLoading && step === "acknowledge" && (
           <EmergencyAcknowledgement
@@ -193,32 +158,36 @@ export function EmergencyAssistFlow({ category, savedProfile, onClose }: Emergen
             onDismiss={onClose}
           />
         )}
-
         {!isLoading && step === "amount" && (
           <EmergencyAmountForm
+            asOfDate={asOfDate}
             onSubmit={handleAmountSubmit}
             onBack={() => setStep("acknowledge")}
           />
         )}
-
         {!isLoading && step === "consent" && (
           <ConsentGate
             fieldsToUse={SAVED_PROFILE_FIELD_LABELS}
             onDecision={handleConsentDecision}
           />
         )}
-
+        {!isLoading && step === "manual" && (
+          <ManualFinancialContextForm
+            asOfDate={asOfDate}
+            onSubmit={(financial) => void runAssessment(financial)}
+            onBack={() => setStep(savedProfile ? "consent" : "amount")}
+          />
+        )}
         {!isLoading && step === "funding_gap" && amountData && (
           <FundingGapResult
             totalNeededPaise={amountData.totalNeededPaise}
             alreadyAvailablePaise={amountData.alreadyAvailablePaise}
             fundingGapPaise={fundingGapPaise}
             requiredByDate={amountData.requiredByDate}
-            onContinue={() => setStep("alternatives")}
-            onBack={() => setStep("consent")}
+            onContinue={() => fundingGapPaise > 0 ? setStep("alternatives") : onClose()}
+            onBack={() => setStep(savedProfile ? "consent" : "manual")}
           />
         )}
-
         {!isLoading && step === "alternatives" && (
           <NonCreditAlternatives
             alternatives={insuranceBoundary.applicableAlternatives}
@@ -227,20 +196,15 @@ export function EmergencyAssistFlow({ category, savedProfile, onClose }: Emergen
             onBack={() => setStep("funding_gap")}
           />
         )}
-
         {!isLoading && step === "offers" && (
           <LoanOfferComparison
             offers={offers}
             offerResults={offerResults}
             fundingGapPaise={fundingGapPaise}
-            onSelectOffer={(id) => {
-              setSelectedOfferId(id);
-              setStep("eligibility");
-            }}
+            onSelectOffer={(offerId) => { setSelectedOfferId(offerId); setStep("eligibility"); }}
             onBack={() => setStep("alternatives")}
           />
         )}
-
         {!isLoading && step === "eligibility" && selectedResult && selectedOffer && (
           <EligibilityExplanation
             result={selectedResult}
@@ -249,12 +213,11 @@ export function EmergencyAssistFlow({ category, savedProfile, onClose }: Emergen
             onBack={() => setStep("offers")}
           />
         )}
-
         {!isLoading && step === "handoff" && selectedOffer && selectedResult && (
           <LenderHandoff
             offer={selectedOffer}
             result={selectedResult}
-            userName={userName}
+            userName={savedProfile?.name ?? "there"}
             onStartOver={() => setStep("acknowledge")}
             onClose={onClose}
           />

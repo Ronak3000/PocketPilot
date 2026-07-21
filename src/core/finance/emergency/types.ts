@@ -3,7 +3,7 @@
 // Dates: ISO YYYY-MM-DD.
 // Stable reason codes: never rename without CONTRACT_CHANGELOG entry.
 
-import type { IsoDate, Paise } from "../types";
+import type { BasisPoints, IsoDate, Paise } from "../types";
 
 // ── Emergency Category ──
 
@@ -58,13 +58,30 @@ export interface EmergencyContext {
   existingMonthlyEmiPaise: Paise;
   /** Active savings goal monthly contribution in paise (0 if none). */
   activeGoalMonthlyContributionPaise: Paise;
+  /** Optional active goal details. Omit when the user has no verified goal context. */
+  activeGoal?: {
+    id: string;
+    targetAmountPaise: Paise;
+    currentAmountPaise: Paise;
+    contributionDayOfMonth: number;
+  };
+  /** User Constitution limits. Omit when no verified Constitution is available. */
+  maximumEmiRatioBasisPoints?: BasisPoints;
+  maximumTenureMonths?: number;
   /** Simulation reference date (today). */
   asOfDate: IsoDate;
 }
 
 /** Required field labels for the INCOMPLETE flow. */
 export const EMERGENCY_CONTEXT_FIELD_LABELS: Record<
-  keyof Omit<EmergencyContext, "category" | "asOfDate">,
+  keyof Omit<
+    EmergencyContext,
+    | "category"
+    | "asOfDate"
+    | "activeGoal"
+    | "maximumEmiRatioBasisPoints"
+    | "maximumTenureMonths"
+  >,
   string
 > = {
   totalNeededPaise: "total amount needed (₹)",
@@ -105,6 +122,8 @@ export type EmergencyReasonCode =
   | "PROTECTED_EXPENSE_AT_RISK"
   | "INSUFFICIENT_REPAYMENT_BUFFER"
   | "GOAL_DELAYED"
+  | "DISBURSAL_AFTER_REQUIRED_DATE"
+  | "EMI_DURATION_EXCEEDED"
   | "OFFER_TERMS_INCOMPLETE"
   | "PROVIDER_REVIEW_REQUIRED"
   | "AFFORDABILITY_FIT";
@@ -154,6 +173,11 @@ export interface OfferAffordabilityResult {
   goalDelayDays: number | null;
   /** ISO date of final repayment. */
   finalRepaymentDate: IsoDate;
+  /** Expected disbursal date and whether it meets the stated emergency deadline. */
+  disbursalDate: IsoDate;
+  arrivesByRequiredDate: boolean;
+  /** True only when every supplied Constitution limit passes. */
+  constitutionCompliant: boolean;
   /** Ordered reason codes (severity, date, code). */
   reasonCodes: EmergencyReasonCode[];
 }
@@ -178,7 +202,7 @@ export interface EmergencyAffordabilityResult {
 // ── Offer Comparison ──
 
 export interface EmergencyOfferComparison {
-  /** Sorted by total repayment ascending (lowest cost first). */
+  /** Sorted by deadline and financial safety, then total repayment. */
   offers: OfferAffordabilityResult[];
   /** Funding gap amount. */
   fundingGapPaise: Paise;

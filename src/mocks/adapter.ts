@@ -1,8 +1,11 @@
 import type { PocketPilotClient } from "@/features/types";
 import { apiPocketPilotClient } from "./api-client";
+import { mockPocketPilotClient } from "./client";
 
 /**
- * PocketPilot client — always uses real API routes.
- * The API routes handle all data persistence and finance calculations.
+ * The public flag provides a deterministic demo without changing callers.
  */
-export const pocketPilotClient: PocketPilotClient = apiPocketPilotClient;
+export const pocketPilotClient: PocketPilotClient =
+  process.env.NEXT_PUBLIC_USE_MOCKS === "true"
+    ? mockPocketPilotClient
+    : apiPocketPilotClient;

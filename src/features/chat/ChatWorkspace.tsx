@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { pocketPilotClient } from "@/mocks/adapter";
+import { useEmergencyAssist } from "@/features/emergency/useEmergencyAssist";
 import type {
   ActionPlan,
   FutureReceipt,
@@ -13,6 +14,7 @@ import type {
 } from "@/features/types";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
+import { AccountStatusCard } from "./AccountStatusCard";
 
 import DashboardHeader from "../dashboard/DashboardHeader";
 import DashboardWidgets from "../dashboard/DashboardWidgets";
@@ -63,12 +65,11 @@ function getChatErrorMessage(error: Error): string {
 
 export default function ChatWorkspace() {
   const [userName, setUserName] = useState<string>("");
+  const { openForText, emergencyDialog } = useEmergencyAssist();
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Fetch the user's name on mount
   useEffect(() => {
-    pocketPilotClient.getProfile().then((profile) => {
-      setUserName(profile?.name || "there");
+    pocketPilotClient.getProfile().then((loadedProfile) => {
+      setUserName(loadedProfile?.name || "there");
     }).catch(() => {
       setUserName("Aarav");
     });
@@ -79,7 +80,6 @@ export default function ChatWorkspace() {
       transport: new DefaultChatTransport({ api: "/api/chat" }),
     });
 
-  // Inject greeting once we have the username
   useEffect(() => {
     if (userName && messages.length === 0) {
       setMessages([{
@@ -112,10 +112,18 @@ export default function ChatWorkspace() {
 
   // A custom submit handler that adapts to our ChatInput
   const handleSend = (text: string) => {
+    if (openForText(text)) {
+      setMessages((current) => [
+        ...current,
+        { id: crypto.randomUUID(), role: "user", parts: [{ type: "text", text }] },
+      ]);
+      return;
+    }
     sendMessage({ text });
   };
 
   return (
+    <>
     <div className="flex flex-col h-screen lg:h-[100dvh]">
       {/* Scrollable Main Area */}
       <div
@@ -161,11 +169,8 @@ export default function ChatWorkspace() {
                   {toolParts.map((part) => {
                     // ── calculatePurchase ──────────────────────────────────
                     if (part.type === "tool-calculatePurchase") {
-                      if (part.state === "output-available" || (part as any).state === "result") {
-                        const output = part.output || (part as any).result;
-                        if (!output) {
-                           return <div key={part.toolCallId} className="text-red-500 px-4 py-2">Error: Tool completed but no output received.</div>;
-                        }
+                      if (part.state === "output-available") {
+                        const output = part.output;
                         const { receipt, comparison, plan } = output;
                         return (
                           <div key={part.toolCallId} className="space-y-4">
@@ -198,10 +203,10 @@ export default function ChatWorkspace() {
                         );
                       }
                       
-                      if ((part as any).errorText || (part as any).error) {
+                      if (part.state === "output-error") {
                         return (
                           <div key={part.toolCallId} className="text-red-500 px-4 py-2">
-                            Engine Error: {(part as any).errorText || (part as any).error}
+                            Engine Error: {part.errorText}
                           </div>
                         );
                       }
@@ -221,20 +226,17 @@ export default function ChatWorkspace() {
 
                     // ── recordPurchase ─────────────────────────────────────
                     if (part.type === "tool-recordPurchase") {
-                      if (part.state === "output-available" || (part as any).state === "result") {
-                        const output = part.output || (part as any).result;
-                        if (!output) {
-                           return <div key={part.toolCallId} className="text-red-500 px-4 py-2">Error: Tool completed but no output received.</div>;
-                        }
+                      if (part.state === "output-available") {
+                        const output = part.output;
                         return (
                           <AccountStatusCard key={part.toolCallId} status={output} />
                         );
                       }
                       
-                      if ((part as any).errorText || (part as any).error) {
+                      if (part.state === "output-error") {
                         return (
                           <div key={part.toolCallId} className="text-red-500 px-4 py-2">
-                            Engine Error: {(part as any).errorText || (part as any).error}
+                            Engine Error: {part.errorText}
                           </div>
                         );
                       }
@@ -281,101 +283,10 @@ export default function ChatWorkspace() {
       {/* Input */}
       <ChatInput
         onSend={handleSend}
-        onDemoPurchase={handleDemoPurchase}
         showDemoButton={messages.length <= 1}
       />
     </div>
-  );
-}
-
-// ─── Account Status Card ──────────────────────────────────────────────────────
-// Rendered when the user reports a completed purchase (recordPurchase tool).
-
-function fmt(paise: number): string {
-  return "₹" + Math.floor(paise / 100).toLocaleString("en-IN");
-}
-
-function AccountStatusCard({ status }: { status: PostPurchaseStatus }) {
-  const { productName, amountPaise, newBalancePaise, recommendations } = status;
-
-  return (
-    <div
-      style={{
-        background: "var(--color-bg-surface)",
-        border: "1px solid var(--color-border-subtle)",
-        borderRadius: "16px",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-      }}
-    >
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <span style={{ fontSize: "22px" }}>🧾</span>
-        <div>
-          <p style={{ fontSize: "12px", color: "var(--color-text-muted)", margin: 0 }}>
-            Purchase recorded
-          </p>
-          <p style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-text-primary)", margin: 0 }}>
-            {productName} · {fmt(amountPaise)}
-          </p>
-        </div>
-      </div>
-
-      {/* New Balance */}
-      <div
-        style={{
-          background: "var(--color-bg-secondary)",
-          borderRadius: "12px",
-          padding: "14px",
-        }}
-      >
-        <p style={{ fontSize: "11px", color: "var(--color-text-muted)", margin: "0 0 4px" }}>
-          New Balance
-        </p>
-        <p style={{ fontSize: "20px", fontWeight: 800, color: "var(--color-text-primary)", margin: 0 }}>
-          {fmt(newBalancePaise)}
-        </p>
-      </div>
-
-      {/* Recommendations */}
-      {recommendations.length > 0 && (
-        <div>
-          <p
-            style={{
-              fontSize: "11px",
-              fontWeight: 600,
-              color: "var(--color-text-muted)",
-              margin: "0 0 8px",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-            }}
-          >
-            RECOMMENDATIONS
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {recommendations.map((rec, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "8px",
-                  background: "var(--color-bg-secondary)",
-                  padding: "10px",
-                  borderRadius: "8px",
-                }}
-              >
-                <span style={{ fontSize: "14px" }}>💡</span>
-                <p style={{ fontSize: "13px", margin: 0, color: "var(--color-text-secondary)", lineHeight: 1.4 }}>
-                  {rec}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+    {emergencyDialog}
+    </>
   );
 }

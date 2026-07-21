@@ -4,11 +4,10 @@ import React, { useState } from "react";
 
 interface ChatInputProps {
   onSend: (text: string) => void;
-  onDemoPurchase: () => void;
   showDemoButton: boolean;
 }
 
-export default function ChatInput({ onSend, onDemoPurchase, showDemoButton }: ChatInputProps) {
+export default function ChatInput({ onSend, showDemoButton }: ChatInputProps) {
   const [text, setText] = useState("");
 
   function handleSubmit(e: React.FormEvent) {

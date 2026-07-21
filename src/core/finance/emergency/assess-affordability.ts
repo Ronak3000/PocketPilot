@@ -1,300 +1,205 @@
-// ── Emergency Affordability Calculator ──
-// Pure deterministic function. Integer paise only (BigInt internally).
-// Reason codes are stable — do not rename without CONTRACT_CHANGELOG entry.
-
+import { calculateMinimumBalance } from "../cashflow/calculate-minimum-balance";
+import { calculateRiskDays } from "../cashflow/calculate-risk-days";
+import { addDays, addMonthsClamped, compareIsoDates } from "../dates/date-utils";
+import { calculateEmi } from "../emi/calculate-emi";
+import { calculateEmiRatio } from "../emi/calculate-emi-ratio";
+import { FinanceError } from "../errors";
+import { calculateGoalDelay } from "../goals/calculate-goal-delay";
+import {
+  addPaise,
+  assertNonNegativePaise,
+  multiplyPaise,
+} from "../money/money";
+import type { Paise } from "../types";
+import { buildEmergencyLedger } from "./build-emergency-ledger";
 import type {
   EmergencyAffordabilityInput,
   EmergencyAffordabilityResult,
+  EmergencyContext,
   EmergencyReasonCode,
   ExplicitLoanOffer,
   OfferAffordabilityResult,
 } from "./types";
-import type { IsoDate, Paise } from "../types";
 
-// ── Date Utilities (inline — no new dependency) ──
-
-function parseIso(date: IsoDate): { y: number; m: number; d: number } {
-  const [y, m, d] = date.split("-").map(Number);
-  return { y, m, d };
-}
-
-function addMonths(date: IsoDate, months: number): IsoDate {
-  const { y, m, d } = parseIso(date);
-  const target = new Date(Date.UTC(y, m - 1 + months, d));
-  // Clamp to last day of resulting month
-  const lastDay = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate();
-  const clampedDay = Math.min(d, lastDay);
-  const result = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth(), clampedDay));
-  return result.toISOString().split("T")[0];
-}
-
-function isoFromDate(d: Date): IsoDate {
-  return d.toISOString().split("T")[0];
-}
-
-// ── EMI Calculation (standard reducing-balance, half-up rounding) ──
-// Formula: EMI = P * r * (1+r)^n / ((1+r)^n - 1)
-// where r = annualRateBasisPoints / (12 * 10000)
-// Compatible with ES2017 target (no BigInt).
-
-function calcEmiPaise(
-  principalPaise: Paise,
-  annualRateBasisPoints: number,
-  tenureMonths: number,
-): Paise {
-  if (annualRateBasisPoints === 0 || tenureMonths === 0) {
-    // Zero-interest or single payment: equal installments
-    return Math.ceil(principalPaise / Math.max(1, tenureMonths));
+function validateContext(context: EmergencyContext): void {
+  const moneyFields = [
+    "totalNeededPaise",
+    "alreadyAvailablePaise",
+    "currentBalancePaise",
+    "monthlyIncomePaise",
+    "protectedBalanceFloorPaise",
+    "protectedMonthlyExpensesPaise",
+    "existingMonthlyEmiPaise",
+    "activeGoalMonthlyContributionPaise",
+  ] as const;
+  for (const field of moneyFields) assertNonNegativePaise(context[field], field);
+  if (compareIsoDates(context.requiredByDate, context.asOfDate) < 0) {
+    throw new FinanceError("INVALID_DATE_RANGE", "requiredByDate must not precede asOfDate");
   }
-  // Monthly rate as a fraction
-  const r = annualRateBasisPoints / (12 * 10_000);
-  const power = Math.pow(1 + r, tenureMonths);
-  // Half-up rounding to integer paise
-  return Math.round((principalPaise * r * power) / (power - 1));
+  if (compareIsoDates(context.nextIncomeDate, context.asOfDate) < 0) {
+    throw new FinanceError("INVALID_DATE_RANGE", "nextIncomeDate must not precede asOfDate");
+  }
+  if (
+    context.maximumEmiRatioBasisPoints !== undefined &&
+    (!Number.isSafeInteger(context.maximumEmiRatioBasisPoints) ||
+      context.maximumEmiRatioBasisPoints < 0)
+  ) {
+    throw new FinanceError("INVALID_INPUT", "maximumEmiRatioBasisPoints is invalid");
+  }
+  if (
+    context.maximumTenureMonths !== undefined &&
+    (!Number.isSafeInteger(context.maximumTenureMonths) || context.maximumTenureMonths <= 0)
+  ) {
+    throw new FinanceError("INVALID_INPUT", "maximumTenureMonths is invalid");
+  }
 }
 
+function validateOffer(offer: ExplicitLoanOffer, fundingGapPaise: Paise): void {
+  assertNonNegativePaise(offer.principalPaise, "offer.principalPaise");
+  assertNonNegativePaise(offer.processingFeePaise, "offer.processingFeePaise");
+  assertNonNegativePaise(offer.otherChargesPaise, "offer.otherChargesPaise");
+  if (offer.principalPaise !== fundingGapPaise) {
+    throw new FinanceError("INVALID_INPUT", "offer principal must equal the funding gap", {
+      offerId: offer.id,
+      fundingGapPaise,
+      principalPaise: offer.principalPaise,
+    });
+  }
+  if (!Number.isSafeInteger(offer.disbursalWindowDays) || offer.disbursalWindowDays < 0) {
+    throw new FinanceError("INVALID_INPUT", "disbursalWindowDays must be non-negative");
+  }
+}
 
-
-// ── Projected Balance Walk ──
-// Models: disbursal → emergency payment → fee → N monthly repayments.
-// Returns { lowestBalance, negativeBalanceDays, protectedBreach, expenseAtRisk, finalDate }
-
-interface BalanceWalkResult {
-  lowestBalancePaise: Paise;
+function buildReasonCodes(params: {
+  context: EmergencyContext;
+  offer: ExplicitLoanOffer;
+  arrivesByRequiredDate: boolean;
+  emiRatioBasisPoints: number;
   negativeBalanceDays: number;
   protectedBalanceBreach: boolean;
   protectedExpenseAtRisk: boolean;
-  finalRepaymentDate: IsoDate;
-}
-
-function projectBalance(params: {
-  startBalancePaise: Paise;
-  fundingGapPaise: Paise; // amount drawn from loan
-  processingFeePaise: Paise;
-  otherChargesPaise: Paise;
-  monthlyEmiPaise: Paise;
-  tenureMonths: number;
-  disbursalDate: IsoDate;
-  protectedBalanceFloorPaise: Paise;
-  monthlyIncomePaise: Paise;
-  monthlyOutflowsPaise: Paise; // protected expenses + existing EMI
-  activeGoalContributionPaise: Paise;
-}): BalanceWalkResult {
-  const {
-    startBalancePaise,
-    fundingGapPaise,
-    processingFeePaise,
-    otherChargesPaise,
-    monthlyEmiPaise,
-    tenureMonths,
-    disbursalDate,
-    protectedBalanceFloorPaise,
-    monthlyIncomePaise,
-    monthlyOutflowsPaise,
-    activeGoalContributionPaise,
-  } = params;
-
-  const totalUpfrontFees = processingFeePaise + otherChargesPaise;
-
-  // Day 0: receive loan, pay emergency, deduct upfront fees
-  let balance =
-    startBalancePaise +
-    fundingGapPaise -
-    fundingGapPaise - // emergency paid immediately
-    totalUpfrontFees;
-  // Simplification: disbursal covers the gap exactly; balance net effect = −upfrontFees
-  // after paying emergency with loan proceeds.
-
-  let lowestBalance = balance;
-  let negativeBalanceDays = balance < 0 ? 1 : 0;
-  let protectedBreach = balance < protectedBalanceFloorPaise;
-  let protectedExpenseAtRisk = false;
-  let finalDate = disbursalDate;
-
-  // Monthly walk for tenure + 1 buffer month
-  const totalMonthlyOut =
-    monthlyOutflowsPaise + activeGoalContributionPaise + monthlyEmiPaise;
-  const netMonthly = monthlyIncomePaise - totalMonthlyOut;
-
-  for (let i = 1; i <= tenureMonths; i++) {
-    balance += netMonthly;
-    const repaymentDate = addMonths(disbursalDate, i);
-    finalDate = repaymentDate;
-
-    if (balance < 0) negativeBalanceDays++;
-    if (balance < lowestBalance) lowestBalance = balance;
-    if (balance < protectedBalanceFloorPaise) protectedBreach = true;
-    // Check if outflows would exceed available balance in a given month
-    if (startBalancePaise + monthlyIncomePaise < monthlyOutflowsPaise) {
-      protectedExpenseAtRisk = true;
-    }
-  }
-
-  return {
-    lowestBalancePaise: lowestBalance,
-    negativeBalanceDays,
-    protectedBalanceBreach: protectedBreach,
-    protectedExpenseAtRisk,
-    finalRepaymentDate: finalDate,
-  };
-}
-
-// ── Build Reason Codes ──
-
-function buildReasonCodes(params: {
-  walk: BalanceWalkResult;
-  postLoanEmiRatioBasisPoints: number;
   goalDelayDays: number | null;
-  monthlyIncomePaise: Paise;
 }): EmergencyReasonCode[] {
+  const { context, offer } = params;
   const codes: EmergencyReasonCode[] = [];
-  const { walk, postLoanEmiRatioBasisPoints, goalDelayDays, monthlyIncomePaise } = params;
-
-  if (monthlyIncomePaise === 0) codes.push("MISSING_INCOME");
-  if (postLoanEmiRatioBasisPoints > 5000) codes.push("HIGH_EXISTING_EMI_RATIO");
-  if (postLoanEmiRatioBasisPoints > 4000) codes.push("POST_LOAN_EMI_RATIO_EXCEEDED");
-  if (walk.negativeBalanceDays > 0) codes.push("NEGATIVE_BALANCE_PROJECTED");
-  if (walk.protectedBalanceBreach) codes.push("PROTECTED_BALANCE_BREACH");
-  if (walk.protectedExpenseAtRisk) codes.push("PROTECTED_EXPENSE_AT_RISK");
-  if (walk.lowestBalancePaise < 0) codes.push("INSUFFICIENT_REPAYMENT_BUFFER");
-  if (goalDelayDays !== null && goalDelayDays > 0) codes.push("GOAL_DELAYED");
-
-  // If no adverse codes, mark as fit
+  if (context.monthlyIncomePaise === 0) codes.push("MISSING_INCOME");
+  if (!params.arrivesByRequiredDate) codes.push("DISBURSAL_AFTER_REQUIRED_DATE");
+  if (
+    context.maximumEmiRatioBasisPoints !== undefined &&
+    params.emiRatioBasisPoints > context.maximumEmiRatioBasisPoints
+  ) codes.push("POST_LOAN_EMI_RATIO_EXCEEDED");
+  if (
+    context.maximumTenureMonths !== undefined &&
+    offer.tenureMonths > context.maximumTenureMonths
+  ) codes.push("EMI_DURATION_EXCEEDED");
+  if (params.negativeBalanceDays > 0) codes.push("NEGATIVE_BALANCE_PROJECTED");
+  if (params.protectedBalanceBreach) codes.push("PROTECTED_BALANCE_BREACH");
+  if (params.protectedExpenseAtRisk) codes.push("PROTECTED_EXPENSE_AT_RISK");
+  if (params.goalDelayDays !== null && params.goalDelayDays > 0) codes.push("GOAL_DELAYED");
   if (codes.length === 0) codes.push("AFFORDABILITY_FIT");
-
-  // Stable ordering: alphabetical within each severity band
-  return [...new Set(codes)].sort();
+  return codes.sort();
 }
-
-// ── Assess Single Offer ──
 
 function assessOffer(
+  context: EmergencyContext,
   offer: ExplicitLoanOffer,
-  context: {
-    fundingGapPaise: Paise;
-    currentBalancePaise: Paise;
-    monthlyIncomePaise: Paise;
-    existingMonthlyEmiPaise: Paise;
-    monthlyProtectedExpensesPaise: Paise;
-    activeGoalMonthlyContributionPaise: Paise;
-    protectedBalanceFloorPaise: Paise;
-    asOfDate: IsoDate;
-  },
+  fundingGapPaise: Paise,
 ): OfferAffordabilityResult {
-  const {
-    fundingGapPaise,
-    currentBalancePaise,
-    monthlyIncomePaise,
-    existingMonthlyEmiPaise,
-    monthlyProtectedExpensesPaise,
-    activeGoalMonthlyContributionPaise,
-    protectedBalanceFloorPaise,
-    asOfDate,
-  } = context;
-
-  const monthlyEmiPaise = calcEmiPaise(
-    offer.principalPaise,
-    offer.annualRateBasisPoints,
-    offer.tenureMonths,
-  );
-
-  const totalFeesPaise = offer.processingFeePaise + offer.otherChargesPaise;
-  const totalRepaymentPaise =
-    monthlyEmiPaise * offer.tenureMonths + totalFeesPaise;
-
-  // Post-loan EMI ratio = (existing + new EMI) / income, in basis points
-  const totalEmi = existingMonthlyEmiPaise + monthlyEmiPaise;
-  const postLoanEmiRatioBasisPoints =
-    monthlyIncomePaise > 0
-      ? Math.round((totalEmi * 10_000) / monthlyIncomePaise)
-      : 99_999; // effectively unbounded when income unknown
-
-  // Disbursal assumed to happen on asOfDate + disbursalWindowDays
-  const disbursalDateObj = new Date(
-    Date.UTC(...(asOfDate.split("-").map(Number) as [number, number, number]))
-  );
-  disbursalDateObj.setUTCDate(
-    disbursalDateObj.getUTCDate() + offer.disbursalWindowDays,
-  );
-  const disbursalDate = isoFromDate(disbursalDateObj);
-
-  const walk = projectBalance({
-    startBalancePaise: currentBalancePaise,
-    fundingGapPaise,
-    processingFeePaise: offer.processingFeePaise,
-    otherChargesPaise: offer.otherChargesPaise,
-    monthlyEmiPaise,
+  validateOffer(offer, fundingGapPaise);
+  const monthlyEmiPaise = calculateEmi({
+    principalPaise: offer.principalPaise,
     tenureMonths: offer.tenureMonths,
+    annualInterestBasisPoints: offer.annualRateBasisPoints,
+  }).monthlyEmiPaise;
+  const totalFeesPaise = addPaise(offer.processingFeePaise, offer.otherChargesPaise);
+  const totalRepaymentPaise = addPaise(
+    multiplyPaise(monthlyEmiPaise, offer.tenureMonths),
+    totalFeesPaise,
+  );
+  const postLoanEmiRatioBasisPoints =
+    context.monthlyIncomePaise === 0
+      ? 99_999
+      : calculateEmiRatio({
+          monthlyIncomePaise: context.monthlyIncomePaise,
+          existingMonthlyEmiPaise: context.existingMonthlyEmiPaise,
+          newMonthlyEmiPaise: monthlyEmiPaise,
+        }).totalEmiBasisPoints;
+  const disbursalDate = addDays(context.asOfDate, offer.disbursalWindowDays);
+  const finalRepaymentDate = addMonthsClamped(disbursalDate, offer.tenureMonths);
+  const ledger = buildEmergencyLedger({
+    context,
+    offer,
+    monthlyEmiPaise,
     disbursalDate,
-    protectedBalanceFloorPaise,
-    monthlyIncomePaise,
-    monthlyOutflowsPaise:
-      monthlyProtectedExpensesPaise + existingMonthlyEmiPaise,
-    activeGoalContributionPaise: activeGoalMonthlyContributionPaise,
+    finalRepaymentDate,
   });
-
-  // Goal delay: rough estimate — each month of new EMI reduces goal contribution buffer
-  const goalDelayDays: number | null =
-    activeGoalMonthlyContributionPaise > 0
-      ? Math.round(
-          (monthlyEmiPaise / activeGoalMonthlyContributionPaise) *
-            offer.tenureMonths *
-            30,
-        )
-      : null;
-
+  const minimum = calculateMinimumBalance(ledger);
+  const risk = calculateRiskDays(ledger, context.protectedBalanceFloorPaise);
+  const protectedExpenseAtRisk = ledger.some(
+    (day) =>
+      day.closingBalancePaise < 0 && day.appliedEvents.some((event) => event.protected),
+  );
+  const missedGoalPeriods = ledger.filter(
+    (day) =>
+      day.closingBalancePaise < 0 &&
+      day.appliedEvents.some((event) => event.kind === "goal_contribution"),
+  ).length;
+  const goalDelayDays = context.activeGoal
+    ? calculateGoalDelay({
+        goal: {
+          ...context.activeGoal,
+          monthlyContributionPaise: context.activeGoalMonthlyContributionPaise,
+          startDate: context.asOfDate,
+        },
+        missedContributionPeriods: missedGoalPeriods,
+      }).goalDelayDays
+    : null;
+  const arrivesByRequiredDate = compareIsoDates(disbursalDate, context.requiredByDate) <= 0;
+  const protectedBalanceBreach = minimum.minimumBalancePaise < context.protectedBalanceFloorPaise;
+  const constitutionCompliant =
+    (context.maximumEmiRatioBasisPoints === undefined ||
+      postLoanEmiRatioBasisPoints <= context.maximumEmiRatioBasisPoints) &&
+    (context.maximumTenureMonths === undefined || offer.tenureMonths <= context.maximumTenureMonths);
   const reasonCodes = buildReasonCodes({
-    walk,
-    postLoanEmiRatioBasisPoints,
+    context,
+    offer,
+    arrivesByRequiredDate,
+    emiRatioBasisPoints: postLoanEmiRatioBasisPoints,
+    negativeBalanceDays: risk.negativeBalanceDays,
+    protectedBalanceBreach,
+    protectedExpenseAtRisk,
     goalDelayDays,
-    monthlyIncomePaise,
   });
-
   return {
     offerId: offer.id,
     monthlyEmiPaise,
     totalFeesPaise,
     totalRepaymentPaise,
     postLoanEmiRatioBasisPoints,
-    lowestProjectedBalancePaise: walk.lowestBalancePaise,
-    negativeBalanceDays: walk.negativeBalanceDays,
-    protectedBalanceBreach: walk.protectedBalanceBreach,
-    protectedExpenseAtRisk: walk.protectedExpenseAtRisk,
+    lowestProjectedBalancePaise: minimum.minimumBalancePaise,
+    negativeBalanceDays: risk.negativeBalanceDays,
+    protectedBalanceBreach,
+    protectedExpenseAtRisk,
     goalDelayDays,
-    finalRepaymentDate: walk.finalRepaymentDate,
+    finalRepaymentDate,
+    disbursalDate,
+    arrivesByRequiredDate,
+    constitutionCompliant,
     reasonCodes,
   };
 }
 
-// ── Public API ──
-
-/**
- * Deterministically assesses emergency affordability for each explicit offer.
- * Uses integer paise throughout. Never invents fees, rates or terms.
- */
 export function assessEmergencyAffordability(
   input: EmergencyAffordabilityInput,
 ): EmergencyAffordabilityResult {
-  const { context, offers } = input;
-
+  validateContext(input.context);
   const fundingGapPaise = Math.max(
     0,
-    context.totalNeededPaise - context.alreadyAvailablePaise,
+    input.context.totalNeededPaise - input.context.alreadyAvailablePaise,
   );
-
-  const offerResults = offers.map((offer) =>
-    assessOffer(offer, {
-      fundingGapPaise,
-      currentBalancePaise: context.currentBalancePaise,
-      monthlyIncomePaise: context.monthlyIncomePaise,
-      existingMonthlyEmiPaise: context.existingMonthlyEmiPaise,
-      monthlyProtectedExpensesPaise: context.protectedMonthlyExpensesPaise,
-      activeGoalMonthlyContributionPaise:
-        context.activeGoalMonthlyContributionPaise,
-      protectedBalanceFloorPaise: context.protectedBalanceFloorPaise,
-      asOfDate: context.asOfDate,
-    }),
-  );
-
-  return { fundingGapPaise, offerResults, asOfDate: context.asOfDate };
+  return {
+    fundingGapPaise,
+    offerResults: input.offers.map((offer) => assessOffer(input.context, offer, fundingGapPaise)),
+    asOfDate: input.context.asOfDate,
+  };
 }

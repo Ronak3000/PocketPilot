@@ -37,8 +37,8 @@ const REASON_EXPLANATIONS: Record<EmergencyReasonCode, { label: string; detail: 
     severity: "risk",
   },
   POST_LOAN_EMI_RATIO_EXCEEDED: {
-    label: "Total EMI ratio would exceed 40%",
-    detail: "Adding this EMI would take your total monthly loan repayments above 40% of income, which many lenders consider risky.",
+    label: "Total EMI ratio would exceed your limit",
+    detail: "Adding this EMI would take total monthly loan repayments above the limit in your Money Constitution.",
     severity: "risk",
   },
   NEGATIVE_BALANCE_PROJECTED: {
@@ -64,6 +64,16 @@ const REASON_EXPLANATIONS: Record<EmergencyReasonCode, { label: string; detail: 
   GOAL_DELAYED: {
     label: "Savings goal may be delayed",
     detail: "The EMI payments may reduce contributions to your savings goal, delaying when you reach it.",
+    severity: "caution",
+  },
+  DISBURSAL_AFTER_REQUIRED_DATE: {
+    label: "Funding may arrive too late",
+    detail: "The estimated disbursal date is after the date you said the money is required.",
+    severity: "risk",
+  },
+  EMI_DURATION_EXCEEDED: {
+    label: "Tenure exceeds your limit",
+    detail: "This repayment period is longer than the maximum in your Money Constitution.",
     severity: "caution",
   },
   OFFER_TERMS_INCOMPLETE: {

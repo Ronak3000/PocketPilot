@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/server/db";
-import type { FinancialProfile, MoneyConstitution, RuleCategory } from "@/features/types";
+import type { ConstitutionRule, FinancialProfile, MoneyConstitution, RuleCategory } from "@/features/types";
 import { randomUUID } from "crypto";
 
 /**
@@ -78,7 +78,7 @@ function buildConstitutionFromProfile(profile: FinancialProfile): MoneyConstitut
         icon: "🏠",
         createdAt: now,
       },
-    ] as const).filter((r) => r.enabled) as any[],
+    ] as ConstitutionRule[]).filter((rule) => rule.enabled),
     createdAt: now,
     updatedAt: now,
   };

@@ -20,7 +20,6 @@ import type {
 
 import {
   simulateScenario,
-  compareScenarios,
   evaluateConstitution,
   calculateSafeToSpend,
 } from "@/core/finance";
@@ -31,10 +30,8 @@ import type {
   PurchaseProposal,
   MoneyConstitution as EngineConstitution,
   ScenarioResult as EngineScenarioResult,
-  SafeToSpendInput,
   ConstitutionEvaluation as EngineConstitutionEvaluation,
   DailyLedgerEntry as EngineLedgerEntry,
-  IsoDate,
 } from "@/core/finance";
 
 // ───── Profile → Engine Events ─────

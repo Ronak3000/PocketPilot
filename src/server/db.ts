@@ -27,7 +27,10 @@ import type {
 // is never mutated. On first use the runtime file is seeded from the read-only
 // snapshot if it exists.
 const SEED_FILE = path.join(process.cwd(), "src", "server", "db.json");
-const DB_FILE = path.join(os.tmpdir(), "pocketpilot-db.json");
+const DB_FILE = path.join(
+  os.tmpdir(),
+  `pocketpilot-${path.basename(process.cwd())}-db.json`,
+);
 
 
 export interface DbSchema {

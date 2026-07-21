@@ -3,7 +3,7 @@
 // ── Screen 3: Consent Gate ──
 // Before using saved financial profile data, show exactly which fields
 // will be used and ask for explicit permission.
-// 5 choices: allow once / decline / manual entry / temporary chat / delete assessment.
+// 5 choices: allow once / decline / manual entry / temporary chat / discard assessment.
 
 import React from "react";
 import type { ConsentDecision } from "@/core/finance/emergency";
@@ -70,7 +70,7 @@ export function ConsentGate({ fieldsToUse, onDecision }: Props) {
           className="btn btn--ghost consent-gate__btn"
           onClick={() => onDecision("delete_assessment")}
         >
-          Delete this assessment and my saved data
+          Discard this assessment
         </button>
 
         <button

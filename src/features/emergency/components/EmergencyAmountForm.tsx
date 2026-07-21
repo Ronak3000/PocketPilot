@@ -5,38 +5,32 @@
 // No defaults — every value must be entered explicitly.
 
 import React, { useState } from "react";
+import { parseInrToPaise } from "../money-input";
 
 interface Props {
   onSubmit: (data: {
     totalNeededPaise: number;
     alreadyAvailablePaise: number;
     requiredByDate: string;
+    hasExistingInsurance: boolean;
   }) => void;
   onBack: () => void;
+  asOfDate: string;
 }
 
-function parseInr(value: string): number | null {
-  const num = parseFloat(value.replace(/,/g, ""));
-  if (isNaN(num) || num < 0) return null;
-  return Math.round(num * 100); // INR to paise
-}
-
-function today(): string {
-  return new Date().toISOString().split("T")[0];
-}
-
-export function EmergencyAmountForm({ onSubmit, onBack }: Props) {
+export function EmergencyAmountForm({ onSubmit, onBack, asOfDate }: Props) {
   const [totalNeeded, setTotalNeeded] = useState("");
   const [alreadyHave, setAlreadyHave] = useState("");
   const [byDate, setByDate] = useState("");
+  const [hasExistingInsurance, setHasExistingInsurance] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
-    const totalPaise = parseInr(totalNeeded);
-    const availablePaise = parseInr(alreadyHave);
+    const totalPaise = parseInrToPaise(totalNeeded);
+    const availablePaise = parseInrToPaise(alreadyHave);
 
     if (totalPaise === null || totalPaise <= 0) {
       newErrors.totalNeeded = "Please enter the total amount needed (in ₹).";
@@ -46,7 +40,7 @@ export function EmergencyAmountForm({ onSubmit, onBack }: Props) {
     }
     if (!byDate) {
       newErrors.byDate = "Please enter the date by which you need the money.";
-    } else if (byDate < today()) {
+    } else if (byDate < asOfDate) {
       newErrors.byDate = "The required-by date cannot be in the past.";
     }
 
@@ -59,6 +53,7 @@ export function EmergencyAmountForm({ onSubmit, onBack }: Props) {
       totalNeededPaise: totalPaise!,
       alreadyAvailablePaise: availablePaise!,
       requiredByDate: byDate,
+      hasExistingInsurance,
     });
   }
 
@@ -115,7 +110,7 @@ export function EmergencyAmountForm({ onSubmit, onBack }: Props) {
           id="required-by"
           type="date"
           className={`form-input ${errors.byDate ? "form-input--error" : ""}`}
-          min={today()}
+          min={asOfDate}
           value={byDate}
           onChange={(e) => { setByDate(e.target.value); setErrors((prev) => ({ ...prev, byDate: "" })); }}
         />
@@ -123,6 +118,16 @@ export function EmergencyAmountForm({ onSubmit, onBack }: Props) {
           <span className="form-error" role="alert">{errors.byDate}</span>
         )}
       </div>
+
+      <label className="form-checkbox" htmlFor="existing-insurance">
+        <input
+          id="existing-insurance"
+          type="checkbox"
+          checked={hasExistingInsurance}
+          onChange={(event) => setHasExistingInsurance(event.target.checked)}
+        />
+        I have an existing insurance policy that may apply
+      </label>
 
       <div className="emergency-amount-form__actions">
         <button type="button" className="btn btn--ghost" id="emergency-amount-back" onClick={onBack}>

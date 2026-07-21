@@ -7,7 +7,14 @@ import type {
   EmergencyContextResult,
 } from "./types";
 
-type RequiredKey = keyof Omit<EmergencyContext, "category" | "asOfDate">;
+type RequiredKey = keyof Omit<
+  EmergencyContext,
+  | "category"
+  | "asOfDate"
+  | "activeGoal"
+  | "maximumEmiRatioBasisPoints"
+  | "maximumTenureMonths"
+>;
 
 const FIELD_QUESTIONS: Record<RequiredKey, string> = {
   totalNeededPaise:

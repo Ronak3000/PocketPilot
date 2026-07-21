@@ -1,6 +1,6 @@
 import { tool } from "ai";
 import { z } from "zod";
-import { calculateSafeToSpend, type FinancialEvent } from "@/core/finance";
+import { calculateSafeToSpend } from "@/core/finance";
 import type {
   ExtractedDecision,
   FinancialProfile,
@@ -255,113 +255,6 @@ export function createChatTools(input: ChatToolsInput) {
   };
 }
 
-function recalculateSafeToSpend(
-  profile: FinancialProfile,
-  currentBalancePaise: number,
-): SafeToSpend {
-  const events = buildBasicEvents(profile);
-  try {
-    const result = calculateSafeToSpend({
-      startDate: isoToday(),
-      currentBalancePaise,
-      protectedBalanceFloorPaise: profile.protectedBalanceFloorPaise,
-      events,
-      protectedEventIds: events
-        .filter((event) => event.protected)
-        .map((event) => event.id),
-    });
-    return {
-      safeAmountPaise: result.safeToSpendPaise,
-      protectedAmountPaise: result.protectedCommitmentsPaise,
-      upcomingCommitmentPaise: result.protectedCommitmentsPaise,
-      bufferQuality: bufferQuality(
-        result.safeToSpendPaise,
-        profile.monthlySalaryPaise,
-      ),
-      confidence: 0.95,
-      lastCalculatedAt: new Date().toISOString(),
-    };
-  } catch {
-    const safeAmountPaise = Math.max(
-      0,
-      currentBalancePaise -
-        profile.protectedBalanceFloorPaise -
-        profile.rentPaise -
-        profile.familyTransferPaise,
-    );
-    return {
-      safeAmountPaise,
-      protectedAmountPaise: profile.rentPaise + profile.familyTransferPaise,
-      upcomingCommitmentPaise:
-        profile.rentPaise +
-        profile.familyTransferPaise +
-        profile.existingEmiPaise,
-      bufferQuality: bufferQuality(
-        safeAmountPaise,
-        profile.monthlySalaryPaise,
-      ),
-      confidence: 0.8,
-      lastCalculatedAt: new Date().toISOString(),
-    };
-  }
-}
-
-function buildBasicEvents(profile: FinancialProfile): FinancialEvent[] {
-  const startDate = isoToday();
-  const events: FinancialEvent[] = [
-    {
-      id: "evt-salary",
-      title: "Monthly Salary",
-      amountPaise: profile.monthlySalaryPaise,
-      direction: "inflow",
-      kind: "salary",
-      schedule: "recurring",
-      startDate,
-      frequency: "monthly",
-      dayOfMonth: profile.salaryDay,
-    },
-  ];
-  const addOutflow = (
-    id: string,
-    title: string,
-    amountPaise: number,
-    kind: FinancialEvent["kind"],
-    dayOfMonth: number,
-    protectedEvent = false,
-  ) => {
-    if (amountPaise <= 0) return;
-    events.push({
-      id,
-      title,
-      amountPaise,
-      direction: "outflow",
-      kind,
-      protected: protectedEvent,
-      schedule: "recurring",
-      startDate,
-      frequency: "monthly",
-      dayOfMonth,
-    });
-  };
-  addOutflow("evt-rent", "Rent", profile.rentPaise, "rent", 1, true);
-  addOutflow(
-    "evt-family",
-    "Family Transfer",
-    profile.familyTransferPaise,
-    "family_transfer",
-    5,
-    true,
-  );
-  addOutflow(
-    "evt-emi",
-    "Existing EMI",
-    profile.existingEmiPaise,
-    "existing_emi",
-    5,
-  );
-  return events;
-}
-
 function buildRecommendations(
   safeToSpend: SafeToSpend,
   monthlySalaryPaise: number,
@@ -389,19 +282,4 @@ function buildRecommendations(
     `Keep non-essential spending within ₹${monthlyBudget.toLocaleString("en-IN")} this month.`,
     "Keep the monthly savings target on track.",
   ];
-}
-
-function bufferQuality(
-  safeAmountPaise: number,
-  salaryPaise: number,
-): SafeToSpend["bufferQuality"] {
-  const ratio = salaryPaise > 0 ? safeAmountPaise / salaryPaise : 0;
-  if (ratio < 0.1) return "critical";
-  if (ratio < 0.2) return "tight";
-  if (ratio < 0.4) return "good";
-  return "excellent";
-}
-
-function isoToday(): string {
-  return new Date().toISOString().slice(0, 10);
 }

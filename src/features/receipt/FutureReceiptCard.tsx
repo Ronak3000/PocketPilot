@@ -12,8 +12,18 @@ interface FutureReceiptCardProps {
 export default function FutureReceiptCard({ receipt }: FutureReceiptCardProps) {
   const [showMath, setShowMath] = useState(false);
 
-  // Compute a mock score based on confidence for visual purposes (e.g., 0.85 -> 85)
-  const score = Math.round(receipt.confidence * 100);
+  // Compute a realistic affordability score based on the receipt's financial health indicators
+  let score = 100;
+  if (receipt.status === "SAFE") {
+    score = 95 - Math.min(15, receipt.lowBalanceDays);
+  } else if (receipt.status === "CAUTION") {
+    score = 75 - receipt.constitutionConflicts.length * 5;
+  } else if (receipt.status === "WARNING") {
+    score = 55 - receipt.constitutionConflicts.length * 5;
+  } else {
+    // BREACH
+    score = Math.max(0, 30 - (receipt.negativeBalanceDays || 0) * 2 - receipt.constitutionConflicts.length * 5);
+  }
   const scoreColor = score >= 80 ? "#10b981" : score >= 60 ? "#f59e0b" : "#ef4444";
   const scoreLabel = score >= 80 ? "Great fit" : score >= 60 ? "Okay fit" : "Risky";
 

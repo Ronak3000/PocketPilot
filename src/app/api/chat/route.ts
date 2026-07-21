@@ -1,4 +1,4 @@
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOpenAI } from "@ai-sdk/openai";
 import {
   convertToModelMessages,
   stepCountIs,
@@ -24,12 +24,12 @@ export const maxDuration = 120;
 
 export async function POST(req: Request) {
   try {
-    const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return Response.json(
         {
           error:
-            "Google Generative AI API key is not configured. Add GOOGLE_GENERATIVE_AI_API_KEY to .env.local.",
+            "OpenAI API key is not configured. Add OPENAI_API_KEY to .env.local.",
         },
         { status: 503 },
       );
@@ -111,10 +111,10 @@ export async function POST(req: Request) {
         profile.currentBalancePaise <= profile.protectedBalanceFloorPaise,
     });
 
-    const google = createGoogleGenerativeAI({ apiKey });
+    const openai = createOpenAI({ apiKey });
 
     const result = streamText({
-      model: google("gemini-3.5-flash"),
+      model: openai("gpt-4o"),
       messages: await convertToModelMessages(messages),
       system: buildChatSystemPrompt({
         name: profile.name,
@@ -124,7 +124,7 @@ export async function POST(req: Request) {
       }),
       stopWhen: stepCountIs(3),
       onError: ({ error }) => {
-        console.error("Gemini chat stream failed:", error);
+        console.error("OpenAI chat stream failed:", error);
       },
       tools: createChatTools({
         profile,

@@ -58,10 +58,7 @@ const OTHER_EMERGENCY_TERMS = [
   "mujhe paisa chahiye", "immediate financial need", "financial crisis",
 ];
 
-const PAYMENT_TERMS = [
-  "payment", "paid", "bought", "purchased", "spent", "transfer",
-  "upi", "transaction", "debited", "credited", "bank account",
-];
+
 
 export function detectEmergencyCategory(text: string): EmergencyCategory | null {
   const lower = text.toLowerCase();
@@ -85,10 +82,7 @@ export function selectTone(input: {
   if (input.bufferQuality === "critical" || input.belowProtectedFloor) {
     return "SERIOUS";
   }
-  if (
-    input.bufferQuality === "tight" ||
-    PAYMENT_TERMS.some((term) => text.includes(term))
-  ) {
+  if (input.bufferQuality === "tight") {
     return "SUPPORTIVE";
   }
   if (!input.settings.humorEnabled) return "NEUTRAL";

@@ -21,8 +21,8 @@ export default function DashboardWidgets() {
       .catch(() => undefined);
   }, []);
 
-  const displaySts = safeToSpend !== null 
-    ? `₹${Math.floor(safeToSpend / 100).toLocaleString("en-IN")}` 
+  const displaySts = safeToSpend !== null
+    ? `₹${Math.floor(safeToSpend / 100).toLocaleString("en-IN")}`
     : "Loading...";
 
   const targetPaise = profile?.emergencyFundGoalPaise || 1; // avoid /0
@@ -32,7 +32,7 @@ export default function DashboardWidgets() {
   return (
     <div className="mb-8 animate-fade-in">
       {/* Affordability Snapshot */}
-      <div 
+      <div
         onClick={() => dispatch({ type: "SET_VIEW", view: "constitution" })}
         className="bg-white border border-[var(--color-border-subtle)] rounded-[var(--radius-xl)] p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
       >
@@ -43,7 +43,7 @@ export default function DashboardWidgets() {
           </div>
           <span className="text-[var(--color-text-muted)] text-lg">&rsaquo;</span>
         </div>
-        
+
         <div className="mb-6">
           <p className="text-[12px] font-medium text-[var(--color-text-secondary)] mb-1">Safe to spend</p>
           <p className="text-[28px] font-bold text-[var(--color-safe)] leading-none">{displaySts}</p>

@@ -134,7 +134,7 @@ export default function ChatWorkspace() {
           {/* Static Dashboard Elements */}
           <DashboardHeader />
           {messages.length <= 1 && <DashboardWidgets />}
-          
+
           {/* Chat Messages */}
           <div className="mt-8 space-y-6">
           {messages.map((m) => {
@@ -202,7 +202,7 @@ export default function ChatWorkspace() {
                           </div>
                         );
                       }
-                      
+
                       if (part.state === "output-error") {
                         return (
                           <div key={part.toolCallId} className="text-red-500 px-4 py-2">
@@ -232,7 +232,7 @@ export default function ChatWorkspace() {
                           <AccountStatusCard key={part.toolCallId} status={output} />
                         );
                       }
-                      
+
                       if (part.state === "output-error") {
                         return (
                           <div key={part.toolCallId} className="text-red-500 px-4 py-2">

@@ -313,7 +313,7 @@ export function runFullAnalysis(
   // Derive a meaningful cheaper alternative: 70% of the actual product price
   const altPricePaise = Math.round(decision.pricePaise * 0.7);
   const isAltEmi = (decision.tenureMonths ?? 0) > 0;
-  
+
   const altDownPaise = isAltEmi ? Math.round(altPricePaise * 0.2) : altPricePaise;
   const altTenureMonths = isAltEmi ? decision.tenureMonths! : 0;
   const altPrincipal = altPricePaise - altDownPaise;

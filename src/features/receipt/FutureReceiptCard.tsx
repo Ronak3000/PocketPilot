@@ -19,7 +19,7 @@ export default function FutureReceiptCard({ receipt }: FutureReceiptCardProps) {
 
   return (
     <div className="bg-white border border-[var(--color-border-subtle)] rounded-[var(--radius-xl)] overflow-hidden shadow-md max-w-[800px] my-4">
-      
+
       {/* Top Header */}
       <div className="px-6 py-4 border-b border-[var(--color-border-subtle)] bg-slate-50 flex items-center gap-3">
         <h2 className="text-[14px] font-bold text-[var(--color-text-primary)]">Your Future Receipt</h2>
@@ -28,7 +28,7 @@ export default function FutureReceiptCard({ receipt }: FutureReceiptCardProps) {
 
       {/* Main Product Info & Score */}
       <div className="p-6 flex flex-col md:flex-row items-center gap-8 border-b border-[var(--color-border-subtle)]">
-        
+
         {/* Product Left */}
         <div className="flex flex-1 items-center gap-5">
           <div className="w-20 h-24 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-center flex-shrink-0">
@@ -117,7 +117,7 @@ export default function FutureReceiptCard({ receipt }: FutureReceiptCardProps) {
             <span className="font-bold text-[var(--color-text-primary)]">PocketPilot Advice:</span> {receipt.recommendation}
           </p>
         </div>
-        <button 
+        <button
           onClick={() => setShowMath(!showMath)}
           className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-[13px] font-bold rounded-lg transition-colors whitespace-nowrap"
         >
@@ -135,7 +135,7 @@ export default function FutureReceiptCard({ receipt }: FutureReceiptCardProps) {
               floorPaise={1_000_000}
             />
           </div>
-          
+
           {/* Conflicts */}
           {receipt.constitutionConflicts.length > 0 && (
             <div className="mb-6">

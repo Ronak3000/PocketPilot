@@ -4,18 +4,18 @@ import { useAppState, useAppDispatch } from "@/features/app-state";
 import type { AppView } from "@/features/types";
 
 const navItems: { id: AppView; label: string; icon: React.ReactNode }[] = [
-  { 
-    id: "chat", 
-    label: "Copilot", 
+  {
+    id: "chat",
+    label: "Copilot",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
       </svg>
-    ) 
+    )
   },
-  { 
-    id: "constitution", 
-    label: "Constitution", 
+  {
+    id: "constitution",
+    label: "Constitution",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -24,17 +24,17 @@ const navItems: { id: AppView; label: string; icon: React.ReactNode }[] = [
         <line x1="16" y1="17" x2="8" y2="17"></line>
         <polyline points="10 9 9 9 8 9"></polyline>
       </svg>
-    ) 
+    )
   },
-  { 
-    id: "history", 
-    label: "History", 
+  {
+    id: "history",
+    label: "History",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
-    ) 
+    )
   },
 ];
 
@@ -112,7 +112,7 @@ export default function Sidebar() {
         <div className="bg-white border border-[var(--color-border-subtle)] rounded-[var(--radius-xl)] p-4 shadow-sm relative overflow-hidden">
           {/* Subtle background glow */}
           <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4" />
-          
+
           <div className="relative z-10 flex flex-col items-start gap-3">
             {/* Robot Avatar Placeholder */}
             <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-[24px]">
@@ -122,7 +122,7 @@ export default function Sidebar() {
               <p className="text-[13px] font-medium text-[var(--color-text-primary)] leading-tight mb-3">
                 Here to help you<br/>spend smarter.
               </p>
-              <button 
+              <button
                 onClick={() => dispatch({ type: "RESET_DEMO" })}
                 className="flex items-center gap-1.5 text-[12px] font-semibold text-red-500 hover:text-red-600 transition-colors w-full p-2 bg-red-50 rounded-lg justify-center border border-red-100"
               >
@@ -139,4 +139,3 @@ export default function Sidebar() {
     </aside>
   );
 }
-

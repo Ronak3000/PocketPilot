@@ -17,7 +17,7 @@ export default function DashboardHeader() {
       {/* Left Greeting */}
       <div>
         <h1 className="text-[32px] font-bold text-[var(--color-text-primary)] tracking-tight leading-tight flex items-center gap-2">
-          Hey {userName}, 
+          Hey {userName},
           <span className="text-[#f59e0b] text-[24px]">✨</span>
         </h1>
         <h2 className="text-[32px] font-bold text-[var(--color-text-primary)] tracking-tight leading-tight mb-2">

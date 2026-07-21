@@ -22,4 +22,3 @@ export type {
   ConsentDecision,
   ConsentRequest,
 } from "./types";
-

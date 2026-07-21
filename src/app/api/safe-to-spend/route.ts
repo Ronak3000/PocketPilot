@@ -20,7 +20,7 @@ export async function GET() {
   try {
     const today = new Date().toISOString().split("T")[0];
     const events = profileToEvents(profile);
-    
+
     const stsResult = calculateSafeToSpend({
       startDate: today,
       currentBalancePaise: profile.currentBalancePaise,

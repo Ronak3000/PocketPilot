@@ -1,4 +1,5 @@
 import fs from "fs";
+import os from "os";
 import path from "path";
 import { randomUUID } from "crypto";
 import {
@@ -22,7 +23,12 @@ import type {
   HistoryEntry,
 } from "@/features/types";
 
-const DB_FILE = path.join(process.cwd(), "src", "server", "db.json");
+// Runtime writes go to the OS temp directory so git-tracked src/server/db.json
+// is never mutated. On first use the runtime file is seeded from the read-only
+// snapshot if it exists.
+const SEED_FILE = path.join(process.cwd(), "src", "server", "db.json");
+const DB_FILE = path.join(os.tmpdir(), "pocketpilot-db.json");
+
 
 export interface DbSchema {
   profile: FinancialProfile | null;
@@ -59,6 +65,14 @@ export class Database {
   }
 
   private readDb(): DbSchema {
+    // If the runtime file doesn't exist yet, seed it from the read-only snapshot.
+    if (!fs.existsSync(this.filePath) && fs.existsSync(SEED_FILE)) {
+      try {
+        fs.copyFileSync(SEED_FILE, this.filePath);
+      } catch (e) {
+        console.error("Failed to seed runtime db from snapshot", e);
+      }
+    }
     try {
       if (fs.existsSync(this.filePath)) {
         const fileContent = fs.readFileSync(this.filePath, "utf-8");
@@ -75,10 +89,11 @@ export class Database {
         };
       }
     } catch (e) {
-      console.error("Failed to read db.json, returning default", e);
+      console.error("Failed to read runtime db, returning default", e);
     }
     return { ...defaultDb, history: [] };
   }
+
 
   private writeDb() {
     fs.writeFileSync(

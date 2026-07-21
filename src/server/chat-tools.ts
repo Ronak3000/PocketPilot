@@ -21,44 +21,105 @@ export function createChatTools(input: ChatToolsInput) {
   return {
     calculatePurchase: tool({
       description:
-        "Runs deterministic cash-flow projections for a purchase the user has not made.",
+        "Runs deterministic cash-flow projections for a purchase the user has not made. " +
+        "Requires explicit price and, for EMI plans, the user-provided down payment, monthly EMI, " +
+        "tenure and processing fee. Never invent or assume these values — ask if missing.",
       inputSchema: z.object({
         productName: z.string().describe("The product the user wants to buy."),
         pricePaise: z
           .number()
           .int()
           .positive()
-          .describe("Total price in paise. Multiply INR by 100."),
-        emiMonths: z.number().int().positive().optional(),
+          .describe("Total listed price in paise. Multiply INR by 100."),
+        isEmiPlan: z
+          .boolean()
+          .describe("True when the user explicitly wants EMI financing."),
+        downPaymentPaise: z
+          .number()
+          .int()
+          .nonnegative()
+          .optional()
+          .describe(
+            "Down payment in paise as stated by the user. Required for EMI plans.",
+          ),
+        monthlyEmiPaise: z
+          .number()
+          .int()
+          .nonnegative()
+          .optional()
+          .describe(
+            "Monthly EMI in paise as stated by the user. Required for EMI plans.",
+          ),
+        tenureMonths: z
+          .number()
+          .int()
+          .positive()
+          .optional()
+          .describe(
+            "Loan tenure in months as stated by the user. Required for EMI plans.",
+          ),
+        processingFeePaise: z
+          .number()
+          .int()
+          .nonnegative()
+          .optional()
+          .describe(
+            "Processing fee in paise as stated by the user or lender. 0 when not applicable.",
+          ),
+        asOfDate: z
+          .string()
+          .optional()
+          .describe("ISO YYYY-MM-DD date for the simulation start. Defaults to today."),
       }),
-      execute: async ({ productName, pricePaise, emiMonths }) => {
-        const isEmiPlan = typeof emiMonths === "number" && emiMonths > 0;
-        const tenureMonths = isEmiPlan ? emiMonths : 0;
-        // For EMI: 20% down, rest financed over tenure at 0% (no-cost EMI)
-        // For full upfront: entire amount paid on day 1, no EMI, no processing fee
-        const downPaymentPaise = isEmiPlan
-          ? Math.floor(pricePaise * 0.2)
-          : pricePaise; // full upfront
-        const principalPaise = pricePaise - downPaymentPaise;
-        const emiAmountPaise = isEmiPlan && tenureMonths > 0
-          ? Math.floor(principalPaise / tenureMonths)
-          : 0;
-        // Processing fee (typically 1–2%) only applies to financed EMI plans
-        const processingFeePaise = isEmiPlan
-          ? Math.floor(pricePaise * 0.02)
-          : 0;
+      execute: async ({
+        productName,
+        pricePaise,
+        isEmiPlan,
+        downPaymentPaise,
+        monthlyEmiPaise,
+        tenureMonths,
+        processingFeePaise,
+        asOfDate,
+      }) => {
+        // Require explicit terms for EMI plans — never invent them.
+        if (isEmiPlan) {
+          const missing: string[] = [];
+          if (downPaymentPaise === undefined || downPaymentPaise === null)
+            missing.push("down payment");
+          if (monthlyEmiPaise === undefined || monthlyEmiPaise === null)
+            missing.push("monthly EMI");
+          if (!tenureMonths) missing.push("tenure in months");
+          if (processingFeePaise === undefined || processingFeePaise === null)
+            missing.push("processing fee (0 if none)");
+          if (missing.length > 0) {
+            return {
+              status: "INCOMPLETE",
+              missingFields: missing,
+              message: `Please share the ${missing[0]} for the ${productName} EMI plan so I can run the calculation accurately.`,
+            };
+          }
+        }
+
+        const resolvedDownPayment = isEmiPlan
+          ? (downPaymentPaise ?? 0)
+          : pricePaise;
+        const resolvedEmi = isEmiPlan ? (monthlyEmiPaise ?? 0) : 0;
+        const resolvedTenure = isEmiPlan ? (tenureMonths ?? 0) : 0;
+        const resolvedFee = isEmiPlan ? (processingFeePaise ?? 0) : 0;
+        const today = asOfDate ?? new Date().toISOString().split("T")[0];
+
         const decision: ExtractedDecision = {
           id: `decision-${Date.now()}`,
           decisionInputId: `input-${Date.now()}`,
           productName,
           pricePaise,
-          downPaymentPaise,
-          emiAmountPaise,
-          tenureMonths,
-          processingFeePaise,
+          downPaymentPaise: resolvedDownPayment,
+          emiAmountPaise: resolvedEmi,
+          tenureMonths: resolvedTenure,
+          processingFeePaise: resolvedFee,
           confidence: 1,
           missingFields: [],
-          createdAt: new Date().toISOString(),
+          createdAt: today + "T00:00:00.000Z",
         };
         const freshProfile = db.getProfile() ?? input.profile;
         const analysis = runFullAnalysis(
@@ -98,6 +159,7 @@ export function createChatTools(input: ChatToolsInput) {
         }
 
         return {
+          status: "OK",
           receipt: analysis.receipt,
           comparison: analysis.comparison,
           plan: analysis.plan,
@@ -105,6 +167,7 @@ export function createChatTools(input: ChatToolsInput) {
         };
       },
     }),
+
 
     recordPurchase: tool({
       description:
